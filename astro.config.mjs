@@ -10,6 +10,15 @@ export default defineConfig({
 	vite: {
 		plugins: [tailwindcss()],
 	},
+	image: {
+		remotePatterns: [
+			{
+				protocol: 'https',
+				hostname: 'images.unsplash.com',
+				pathname: '/**',
+			},
+		],
+	},
 	site: 'https://example.com',
 	integrations: [mdx(), sitemap()],
 	fonts: [
