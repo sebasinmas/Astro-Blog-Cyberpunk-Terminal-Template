@@ -5,8 +5,11 @@ import { homeProjects } from '../data/home';
 
 <section class="section container" id="projects" aria-labelledby="projects-heading">
 	<div class="section-head">
-		<h2 id="projects-heading">Proyectos_</h2>
-		<div class="rule" aria-hidden="true"></div>
+		<h2 id="projects-heading">PROYECTOS<span class="caret-blink" aria-hidden="true"></span></h2>
+		<div class="rule-wrap">
+			<pre class="rule-ascii rule-ascii--narrow" aria-hidden="true">─── SECTOR 7 ───</pre>
+			<pre class="rule-ascii rule-ascii--wide" aria-hidden="true">───[ SECTOR 7 // ARCHIVE ]─────────────────────────────────</pre>
+		</div>
 	</div>
 	<div class="grid">
 		{homeProjects.map((p) => <HomeProjectCard {...p} />)}
@@ -23,24 +26,85 @@ import { homeProjects } from '../data/home';
 
 	.section-head {
 		display: flex;
-		align-items: center;
-		gap: 1rem;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.5rem;
+		width: 100%;
+		min-width: 0;
+	}
+
+	@media (min-width: 640px) {
+		.section-head {
+			flex-direction: row;
+			align-items: center;
+			gap: 1rem;
+		}
 	}
 
 	h2 {
-		font-size: clamp(1.5rem, 3vw, 2rem);
+		font-size: clamp(1.5rem, 5vw, 2.15rem);
 		color: var(--color-on-surface);
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		flex-shrink: 0;
+		max-width: 100%;
 	}
 
-	.rule {
-		flex: 1;
-		height: 1px;
-		background-image: repeating-linear-gradient(
-			90deg,
-			var(--color-outline-variant) 0 2px,
-			transparent 2px 4px
-		);
-		opacity: 0.6;
+	.caret-blink {
+		display: inline-block;
+		width: 0.35rem;
+		height: 0.85em;
+		background: var(--color-secondary);
+		box-shadow: 0 0 10px rgba(5, 217, 232, 0.5);
+		animation: caret-blink 1s steps(1, end) infinite;
+	}
+
+	@keyframes caret-blink {
+		50% {
+			opacity: 0;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.caret-blink {
+			animation: none;
+			opacity: 1;
+		}
+	}
+
+	.rule-wrap {
+		width: 100%;
+		min-width: 0;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		overscroll-behavior-x: contain;
+	}
+
+	.rule-ascii {
+		margin: 0;
+		font-family: var(--font-mono);
+		line-height: 1.35;
+		color: var(--color-neon-dim);
+		text-shadow: 0 0 6px rgba(0, 143, 17, 0.3);
+		white-space: pre;
+		width: max-content;
+		max-width: 100%;
+		font-size: clamp(0.62rem, 2.8vw, 0.72rem);
+	}
+
+	.rule-ascii--wide {
+		display: none;
+	}
+
+	@media (min-width: 640px) {
+		.rule-ascii--narrow {
+			display: none;
+		}
+
+		.rule-ascii--wide {
+			display: block;
+		}
 	}
 
 	.grid {

@@ -2,75 +2,243 @@
 const year = new Date().getFullYear();
 ---
 
-<footer class="footer-wrap" id="footer">
-	<div class="footer-inner container">
-		<div class="brand">SebaSinMas</div>
-		<p class="copy">&copy; {year} SebaSinMas — Portfolio técnico</p>
-		<ul class="links">
-			<li><a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a></li>
-			<li><a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a></li>
-			<li><a href="https://github.com" target="_blank" rel="noreferrer">Source</a></li>
-		</ul>
+<footer class="footer-root" id="footer">
+	<div class="footer-shell container">
+		<div class="ascii-scroll" role="presentation">
+			<!-- Marco con CSS (sin Unicode box-drawing): el tipo suele no ser monoespaciado con ╔═╗ -->
+			<div class="crt-banner crt-banner--narrow" aria-hidden="true">
+				<p class="crt-banner__text">E.O.L. // SYS_OK — NO DISK</p>
+			</div>
+			<div class="crt-banner crt-banner--wide" aria-hidden="true">
+				<p class="crt-banner__text">
+					END OF LINE — Floppy not included. Synthwave batteries not included.
+				</p>
+			</div>
+		</div>
+
+		<div class="footer-panel">
+			<div class="brand-block">
+				<div class="brand">SebaSinMas</div>
+			</div>
+			<p class="copy">&copy; {year} SebaSinMas — Portfolio técnico // SYS_OK</p>
+			<ul class="links">
+				<li>
+					<a
+						href="https://github.com"
+						target="_blank"
+						rel="noreferrer"
+						aria-label="GitHub (abre en una pestaña nueva)">GitHub</a>
+				</li>
+				<li>
+					<a
+						href="https://linkedin.com"
+						target="_blank"
+						rel="noreferrer"
+						aria-label="LinkedIn (abre en una pestaña nueva)">LinkedIn</a>
+				</li>
+				<li>
+					<a
+						href="https://github.com"
+						target="_blank"
+						rel="noreferrer"
+						aria-label="Código fuente en GitHub (abre en una pestaña nueva)">Source</a>
+				</li>
+			</ul>
+		</div>
 	</div>
 </footer>
 
 <style>
-	.footer-wrap {
-		margin-top: 3rem;
-		margin-bottom: 2rem;
-		padding-inline: var(--space-page);
+	.footer-root {
+		margin-top: 2rem;
+		padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
 	}
 
-	.footer-inner {
+	.footer-shell {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 1rem;
+	}
+
+	.ascii-scroll {
+		margin-top: clamp(1.5rem, 4vw, 2.5rem);
+		max-width: 100%;
+		display: flex;
+		justify-content: center;
+		text-align: center;
+	}
+
+	.crt-banner {
+		position: relative;
+		display: inline-block;
+		max-width: 100%;
+		/* Capa exterior + interior siempre alineadas (no dependen del glifo ═) */
+		padding: 2px;
+		border: 1px solid var(--color-neon-dim);
+		background: color-mix(in srgb, var(--color-neon-dim) 8%, transparent);
+		box-shadow:
+			0 0 14px rgba(0, 143, 17, 0.15),
+			inset 0 0 24px rgba(0, 143, 17, 0.06);
+		transform: translateZ(0);
+		isolation: isolate;
+	}
+
+	.crt-banner__text {
+		margin: 0;
+		padding: 0.5rem 0.85rem;
+		border: 1px solid color-mix(in srgb, var(--color-neon-green) 55%, var(--color-neon-dim));
+		font-family: var(--font-mono);
+		font-size: clamp(0.68rem, 2.8vw, 0.82rem);
+		line-height: 1.45;
+		letter-spacing: 0.02em;
+		color: var(--color-neon-green);
+		text-align: center;
+		text-wrap: balance;
+		word-break: break-word;
+		overflow-wrap: anywhere;
+		text-shadow: 0 0 8px rgba(57, 255, 20, 0.35);
+	}
+
+	.crt-banner--wide {
+		display: none;
+		width: min(100%, 42rem);
+	}
+
+	.crt-banner--narrow {
+		display: inline-block;
+		width: min(100%, 22rem);
+	}
+
+	@media (min-width: 640px) {
+		.crt-banner--narrow {
+			display: none;
+		}
+
+		.crt-banner--wide {
+			display: inline-block;
+		}
+
+		.crt-banner__text {
+			font-size: clamp(0.62rem, 1.4vw, 0.75rem);
+			padding: 0.55rem 1rem;
+		}
+	}
+
+	.footer-panel {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.75rem;
-		padding: 2rem 1.25rem;
-		border: 1px solid color-mix(in srgb, var(--color-outline-variant) 40%, transparent);
-		background: color-mix(in srgb, var(--color-surface-lowest) 60%, transparent);
-		backdrop-filter: blur(12px);
-		box-shadow: 0 0 30px rgba(34, 211, 238, 0.1);
-		clip-path: var(--radius-pixel);
+		text-align: center;
+		gap: 1rem;
+		padding: clamp(1.35rem, 4vw, 2rem) clamp(1rem, 4vw, 1.35rem);
+		border: 1px solid color-mix(in srgb, var(--color-primary) 35%, var(--color-outline-variant));
+		background: color-mix(in srgb, var(--color-surface-lowest) 88%, transparent);
+		backdrop-filter: blur(10px);
+		box-shadow:
+			0 0 30px rgba(255, 42, 109, 0.08),
+			inset 0 0 40px rgba(5, 217, 232, 0.03);
+		border-radius: 0;
 	}
 
 	@media (min-width: 768px) {
-		.footer-inner {
+		.footer-panel {
 			flex-direction: row;
+			flex-wrap: wrap;
+			align-items: center;
 			justify-content: space-between;
+			text-align: start;
+			gap: 1rem 1.5rem;
+		}
+
+		.brand-block {
+			flex: 0 0 auto;
+		}
+
+		.copy {
+			flex: 1 1 12rem;
+			text-align: center;
+		}
+
+		.links {
+			flex: 0 0 auto;
+			justify-content: flex-end;
 		}
 	}
 
 	.brand {
-		font-family: var(--font-mono);
-		font-weight: 700;
-		font-size: 1.1rem;
+		font-family: var(--font-display);
+		font-size: clamp(1.2rem, 3.5vw, 1.35rem);
 		color: var(--color-primary);
+		text-shadow: 0 0 14px rgba(255, 42, 109, 0.45);
+		transition: text-shadow 0.2s ease;
+	}
+
+	.brand:hover {
+		text-shadow:
+			0 0 18px rgba(255, 42, 109, 0.65),
+			0 0 32px rgba(5, 217, 232, 0.25);
 	}
 
 	.copy {
 		margin: 0;
 		font-family: var(--font-mono);
-		font-size: 0.85rem;
+		font-size: clamp(0.75rem, 2.8vw, 0.82rem);
+		line-height: 1.45;
 		color: var(--color-on-surface-variant);
-		text-align: center;
+		max-width: 36rem;
 	}
 
 	.links {
 		display: flex;
-		gap: 1.25rem;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem 1rem;
 		list-style: none;
 		margin: 0;
 		padding: 0;
+		width: 100%;
+	}
+
+	@media (min-width: 768px) {
+		.links {
+			width: auto;
+		}
+	}
+
+	.links li {
+		display: flex;
 	}
 
 	.links a {
 		font-family: var(--font-mono);
-		font-size: 0.85rem;
+		font-size: clamp(0.8rem, 2.8vw, 0.85rem);
+		min-height: 44px;
+		min-width: 44px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.5rem 0.65rem;
 		color: var(--color-on-surface-variant);
+		border: 1px solid transparent;
+		border-radius: 0;
+		transition:
+			color 0.15s ease,
+			border-color 0.15s ease,
+			text-shadow 0.15s ease,
+			background 0.15s ease;
 	}
 
 	.links a:hover {
 		color: var(--color-secondary);
+		border-bottom-color: var(--color-secondary);
+		text-shadow: 0 0 10px rgba(5, 217, 232, 0.45);
+	}
+
+	.links a:focus-visible {
+		outline: 2px solid var(--color-neon-magenta);
+		outline-offset: 2px;
+		border-color: var(--color-secondary);
 	}
 </style>

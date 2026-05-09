@@ -17,21 +17,15 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
 	<head>
 		<BaseHead title={title} description={description} />
 	</head>
-	<body class="dither-bg">
+	<body class="crt-grid">
+		<div class="crt-vignette" aria-hidden="true"></div>
+		<div class="crt-overlay" aria-hidden="true"></div>
 		<a class="skip-link" href="#main">Saltar al contenido</a>
 		<AppHeader />
-		<main id="main" class="page-main">
+		<main id="main" class="page-main relative z-[1] flex flex-col gap-0 pb-8">
 			<slot />
 		</main>
 		<AppFooter />
 	</body>
 </html>
 
-<style>
-	.page-main {
-		display: flex;
-		flex-direction: column;
-		gap: 0;
-		padding-bottom: 2rem;
-	}
-</style>

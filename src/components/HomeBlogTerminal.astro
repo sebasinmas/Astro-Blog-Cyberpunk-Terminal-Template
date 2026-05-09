@@ -6,15 +6,16 @@ const posts = (await getCollection('blog'))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 	.slice(0, 3);
 
-const titleTw = 'Registro terminal';
+const titleTw = '$ ./tail_syslog.sh --limit 3';
 ---
 
 <section class="terminal container pixel-corners glow-shadow" id="blog" aria-labelledby="terminal-heading">
 	<div class="terminal-head">
 		<span class="material-symbols-outlined icon" aria-hidden="true">terminal</span>
 		<h2 id="terminal-heading">
-			<TypewriterText text={titleTw} durationSec={1.6} />
+			<TypewriterText text={titleTw} durationSec={1.8} />
 		</h2>
+		<span class="badge" title="Si parpadea, es culpa del VHS">REC</span>
 	</div>
 	<ul class="log">
 		{
@@ -23,7 +24,7 @@ const titleTw = 'Registro terminal';
 					<time datetime={post.data.pubDate.toISOString()}>
 						{post.data.pubDate.toLocaleDateString('es-ES')}
 					</time>
-					<a href={`/blog/${post.id}/`} class="line">
+					<a href={`/blog/${post.id}/`} class="line" data-gag={`sha1:${post.id.slice(0, 6)}…`}>
 						<span class="prompt">&gt;</span>
 						<span class="title">{post.data.title}</span>
 					</a>
@@ -32,7 +33,8 @@ const titleTw = 'Registro terminal';
 		}
 	</ul>
 	<p class="cursor-line" aria-hidden="true">
-		<span class="cursor">_</span>
+		<span class="prompt-static">root@neon:~$</span>
+		<span class="cursor-block"></span>
 	</p>
 </section>
 
@@ -40,32 +42,87 @@ const titleTw = 'Registro terminal';
 	.terminal {
 		margin-top: 2.5rem;
 		padding: 1.25rem;
-		border: 1px solid color-mix(in srgb, var(--color-outline-variant) 55%, transparent);
-		background: color-mix(in srgb, var(--color-surface-lowest) 90%, transparent);
-		backdrop-filter: blur(16px);
+		border: 1px solid color-mix(in srgb, var(--color-primary) 35%, var(--color-secondary));
+		background: color-mix(in srgb, var(--color-surface-lowest) 94%, transparent);
+		backdrop-filter: blur(14px);
+		position: relative;
+		overflow: hidden;
+		border-radius: 0;
+		box-shadow:
+			inset 0 0 60px rgba(5, 217, 232, 0.04),
+			0 0 30px rgba(255, 42, 109, 0.06);
+	}
+
+	.terminal::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: repeating-linear-gradient(
+			0deg,
+			transparent,
+			transparent 2px,
+			rgba(0, 0, 0, 0.12) 2px,
+			rgba(0, 0, 0, 0.12) 3px
+		);
+		pointer-events: none;
+		opacity: 0.4;
 	}
 
 	.terminal-head {
+		position: relative;
+		z-index: 1;
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
 		margin-bottom: 1.25rem;
 		padding-bottom: 0.65rem;
-		border-bottom: 1px solid color-mix(in srgb, var(--color-outline-variant) 35%, transparent);
+		border-bottom: 1px dashed color-mix(in srgb, var(--color-secondary) 45%, transparent);
+		flex-wrap: wrap;
 	}
 
 	.icon {
-		color: var(--color-secondary);
+		color: var(--color-neon-green);
 		font-size: 1.35rem;
+		filter: drop-shadow(0 0 6px rgba(57, 255, 20, 0.45));
 	}
 
 	h2 {
+		flex: 1;
+		min-width: 0;
 		font-size: 1.05rem;
 		color: var(--color-on-surface);
 		min-height: 1.3em;
+		font-family: var(--font-mono);
+		font-weight: 600;
+	}
+
+	.badge {
+		font-family: var(--font-mono);
+		font-size: 0.58rem;
+		letter-spacing: 0.15em;
+		padding: 0.2rem 0.45rem;
+		border: 1px solid var(--color-primary);
+		color: var(--color-primary);
+		background: rgba(255, 42, 109, 0.12);
+		animation: rec-pulse 1.2s steps(1, end) infinite;
+		border-radius: 0;
+	}
+
+	@keyframes rec-pulse {
+		50% {
+			opacity: 0.55;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.badge {
+			animation: none;
+		}
 	}
 
 	.log {
+		position: relative;
+		z-index: 1;
 		list-style: none;
 		margin: 0;
 		padding: 0;
@@ -85,36 +142,72 @@ const titleTw = 'Registro terminal';
 
 	time {
 		flex: 0 0 6.5rem;
-		color: var(--color-outline-variant);
+		color: var(--color-neon-muted);
 	}
 
 	.line {
+		position: relative;
 		display: inline-flex;
 		gap: 0.35rem;
 		color: var(--color-secondary);
 		text-decoration: none;
+		transition:
+			color 0.15s ease,
+			text-shadow 0.15s ease;
 	}
 
 	.line:hover {
-		color: var(--color-primary);
+		color: var(--color-neon-green);
+		text-shadow: 0 0 10px rgba(57, 255, 20, 0.45);
+	}
+
+	@media (min-width: 768px) {
+		.line:hover::after {
+			content: attr(data-gag);
+			position: absolute;
+			left: 0;
+			top: calc(100% + 0.25rem);
+			font-size: 0.58rem;
+			color: var(--color-neon-dim);
+			pointer-events: none;
+			white-space: nowrap;
+		}
 	}
 
 	.prompt {
 		flex-shrink: 0;
+		color: var(--color-primary);
 	}
 
 	.title {
 		text-decoration: underline;
+		text-decoration-color: color-mix(in srgb, var(--color-secondary) 50%, transparent);
 		text-underline-offset: 3px;
 	}
 
 	.cursor-line {
+		position: relative;
+		z-index: 1;
 		margin: 1rem 0 0;
 		font-family: var(--font-mono);
-		color: var(--color-primary);
+		font-size: 0.78rem;
+		color: var(--color-neon-green);
+		display: flex;
+		align-items: center;
+		gap: 0.35rem;
+		flex-wrap: wrap;
 	}
 
-	.cursor {
+	.prompt-static {
+		color: var(--color-neon-dim);
+	}
+
+	.cursor-block {
+		display: inline-block;
+		width: 0.55rem;
+		height: 1rem;
+		background: var(--color-neon-green);
+		box-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
 		animation: blink 1s steps(1, end) infinite;
 	}
 
@@ -125,7 +218,7 @@ const titleTw = 'Registro terminal';
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.cursor {
+		.cursor-block {
 			animation: none;
 			opacity: 1;
 		}

@@ -1,23 +1,51 @@
+@import 'tailwindcss';
+
+/* Neon synthwave + CRT terminal (Blood Dragon–inspired, not a copy) */
+@theme {
+	--font-display: 'VT323', ui-monospace, monospace;
+	--font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+	--color-crt-void: #020203;
+	--color-crt-bg: #050505;
+	--color-crt-panel: #0a0a10;
+	--color-neon-magenta: #ff2a6d;
+	--color-neon-cyan: #05d9e8;
+	--color-neon-green: #39ff14;
+	--color-neon-amber: #ffb000;
+	--color-neon-dim: #008f11;
+	--color-neon-muted: #3d5a4a;
+	--shadow-phosphor-magenta: 0 0 12px rgba(255, 42, 109, 0.45);
+	--shadow-phosphor-cyan: 0 0 12px rgba(5, 217, 232, 0.4);
+	--shadow-phosphor-green: 0 0 10px rgba(57, 255, 20, 0.35);
+}
+
 :root {
-	--color-bg: #0c1324;
-	--color-surface: #0c1324;
-	--color-surface-elevated: rgba(25, 31, 49, 0.65);
-	--color-surface-lowest: #070d1f;
-	--color-on-surface: #dce1fb;
-	--color-on-surface-variant: #c2c6d6;
-	--color-outline: #8c909f;
-	--color-outline-variant: #424754;
-	--color-primary: #adc6ff;
-	--color-secondary: #5de6ff;
-	--color-on-secondary-fixed: #001f25;
-	--color-secondary-fixed: #a2eeff;
-	--color-container-high: #23293c;
+	/* Puente con componentes existentes */
+	--color-bg: #050505;
+	--color-surface: #0a0a10;
+	--color-surface-elevated: rgba(12, 12, 20, 0.88);
+	--color-surface-lowest: #020203;
+	--color-on-surface: #e8fff0;
+	--color-on-surface-variant: #8fbc8f;
+	--color-outline: #5a7a6a;
+	--color-outline-variant: #1e2a24;
+	--color-primary: #ff2a6d;
+	--color-secondary: #05d9e8;
+	--color-on-secondary-fixed: #050505;
+	--color-secondary-fixed: #9ffffc;
+	--color-container-high: #12121c;
 	--container-max: 1200px;
 	--space-page: clamp(1rem, 4vw, 2.5rem);
-	--font-mono: 'Space Mono', ui-monospace, monospace;
-	--font-sans: 'Inter', system-ui, sans-serif;
-	--glow: 0 0 40px rgba(34, 211, 238, 0.15);
-	--radius-pixel: polygon(4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px), 0 4px);
+	--font-mono: 'JetBrains Mono', ui-monospace, monospace;
+	--font-sans: 'JetBrains Mono', ui-monospace, monospace;
+	--font-display: 'VT323', ui-monospace, monospace;
+	--glow: 0 0 28px rgba(5, 217, 232, 0.22), 0 0 56px rgba(255, 42, 109, 0.12);
+	--color-neon-magenta: #ff2a6d;
+	--color-neon-cyan: #05d9e8;
+	--color-neon-green: #39ff14;
+	--color-neon-amber: #ffb000;
+	--color-neon-dim: #008f11;
+	--color-neon-muted: #3d5a4a;
 }
 
 *,
@@ -39,26 +67,54 @@ html {
 body {
 	margin: 0;
 	min-height: 100vh;
-	font-family: var(--font-sans);
+	min-height: 100dvh;
+	font-family: var(--font-mono);
 	font-size: 16px;
-	line-height: 1.5;
+	line-height: 1.55;
 	color: var(--color-on-surface);
-	background: var(--color-bg);
+	background-color: var(--color-bg);
 	overflow-x: hidden;
+	padding-left: env(safe-area-inset-left, 0px);
+	padding-right: env(safe-area-inset-right, 0px);
+	padding-bottom: env(safe-area-inset-bottom, 0px);
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+	text-shadow: 0 0 1px rgba(57, 255, 20, 0.12);
 }
 
-body.dither-bg {
+/* Grid + dual tint: consola sobre vacío espacial */
+body.crt-grid {
 	background-color: var(--color-bg);
-	background-image: radial-gradient(circle at center, rgba(93, 230, 255, 0.05) 1px, transparent 1px);
-	background-size: 8px 8px;
+	background-image:
+		radial-gradient(ellipse 120% 80% at 50% -20%, rgba(255, 42, 109, 0.12), transparent 55%),
+		radial-gradient(ellipse 80% 50% at 100% 50%, rgba(5, 217, 232, 0.06), transparent 45%),
+		repeating-linear-gradient(
+			90deg,
+			transparent,
+			transparent 23px,
+			rgba(5, 217, 232, 0.04) 23px,
+			rgba(5, 217, 232, 0.04) 24px
+		),
+		repeating-linear-gradient(
+			0deg,
+			transparent,
+			transparent 23px,
+			rgba(255, 42, 109, 0.03) 23px,
+			rgba(255, 42, 109, 0.03) 24px
+		);
+	background-size: 100% 100%, 100% 100%, 24px 24px, 24px 24px;
 }
 
 h1,
 h2,
 h3 {
-	font-family: var(--font-mono);
-	letter-spacing: -0.02em;
+	font-family: var(--font-display);
+	font-weight: 400;
+	letter-spacing: 0.02em;
 	margin: 0;
+	text-shadow:
+		0 0 8px rgba(57, 255, 20, 0.35),
+		0 0 24px rgba(5, 217, 232, 0.15);
 }
 
 a {
@@ -71,8 +127,9 @@ a:hover {
 }
 
 :focus-visible {
-	outline: 2px solid var(--color-secondary);
+	outline: 2px solid var(--color-neon-magenta);
 	outline-offset: 3px;
+	box-shadow: 0 0 12px rgba(255, 42, 109, 0.35);
 }
 
 .skip-link {
@@ -87,6 +144,8 @@ a:hover {
 	font-size: 0.75rem;
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
+	border-radius: 0;
+	border: 1px solid var(--color-neon-magenta);
 }
 
 .skip-link:focus {
@@ -100,12 +159,53 @@ a:hover {
 	padding-inline: var(--space-page);
 }
 
-.pixel-corners {
-	clip-path: var(--radius-pixel);
+/* Sin redondeos estilo cursorrules */
+.pixel-corners,
+.crt-frame {
+	border-radius: 0;
 }
 
 .glow-shadow {
 	box-shadow: var(--glow);
+}
+
+.text-phosphor {
+	text-shadow:
+		0 0 6px rgba(57, 255, 20, 0.5),
+		0 0 14px rgba(5, 217, 232, 0.25);
+}
+
+/* Scanlines + vignette fijos */
+.crt-overlay {
+	pointer-events: none;
+	position: fixed;
+	inset: 0;
+	z-index: 10000;
+	background: repeating-linear-gradient(
+		0deg,
+		rgba(0, 0, 0, 0.22),
+		rgba(0, 0, 0, 0.22) 1px,
+		transparent 1px,
+		transparent 3px
+	);
+	mix-blend-mode: multiply;
+	opacity: 0.35;
+}
+
+.crt-vignette {
+	pointer-events: none;
+	position: fixed;
+	inset: 0;
+	z-index: 9999;
+	background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.65) 100%);
+	mix-blend-mode: multiply;
+	opacity: 0.9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.crt-overlay {
+		opacity: 0.15;
+	}
 }
 
 .sr-only {
