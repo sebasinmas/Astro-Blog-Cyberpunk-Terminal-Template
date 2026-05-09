@@ -1,6 +1,8 @@
 ---
+import { getCollection } from 'astro:content';
 import HomeProjectCard from './HomeProjectCard.astro';
-import { homeProjects } from '../data/home';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 ---
 
 <section class="section container" id="projects" aria-labelledby="projects-heading">
@@ -11,9 +13,34 @@ import { homeProjects } from '../data/home';
 			<pre class="rule-ascii rule-ascii--wide" aria-hidden="true">───[ SECTOR 7 // ARCHIVE ]─────────────────────────────────</pre>
 		</div>
 	</div>
-	<div class="grid">
-		{homeProjects.map((p) => <HomeProjectCard {...p} />)}
-	</div>
+
+	{
+		projects.length > 0 && (
+			<div class="carousel-wrap">
+				<div
+					class="carousel-viewport"
+					tabindex="0"
+					role="region"
+					aria-roledescription="carrusel"
+					aria-label="Proyectos destacados. Desliza horizontalmente para ver más."
+					data-carousel
+				>
+					<div class="carousel-track">
+						{projects.map((entry) => (
+							<div class="carousel-slide">
+								<HomeProjectCard
+									title={entry.data.title}
+									description={entry.data.description}
+									tags={entry.data.tags}
+									image={entry.data.image}
+								/>
+							</div>
+						))}
+					</div>
+				</div>
+			</div>
+		)
+	}
 </section>
 
 <style>
@@ -107,15 +134,116 @@ import { homeProjects } from '../data/home';
 		}
 	}
 
-	.grid {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 1.25rem;
+	/* ——— Carrusel ——— */
+	.carousel-wrap {
+		position: relative;
+		width: 100%;
+		min-width: 0;
+		container-type: inline-size;
+		container-name: proj-carousel;
 	}
 
-	@media (min-width: 768px) {
-		.grid {
-			grid-template-columns: repeat(2, 1fr);
+	/*
+		overflow-x: auto fuerza overflow-y distinto de visible → recorta translateY y box-shadow del hover.
+		Padding vertical da aire para el lift (-3px) y el glow sin barra rara en Y.
+	*/
+	.carousel-viewport {
+		position: relative;
+		overflow-x: auto;
+		overflow-y: hidden;
+		scroll-snap-type: x mandatory;
+		scroll-padding-inline: 0;
+		-webkit-overflow-scrolling: touch;
+		overscroll-behavior-x: contain;
+		overscroll-behavior-y: contain;
+		outline: none;
+		padding-block: 12px 14px;
+		scrollbar-width: thin;
+		scrollbar-color: color-mix(in srgb, var(--color-secondary) 85%, var(--color-primary))
+			color-mix(in srgb, var(--color-surface-lowest) 92%, transparent);
+	}
+
+	/* WebKit: barra con glow neón */
+	.carousel-viewport::-webkit-scrollbar {
+		height: 11px;
+	}
+
+	.carousel-viewport::-webkit-scrollbar-track {
+		background: linear-gradient(
+			180deg,
+			color-mix(in srgb, var(--color-surface-lowest) 95%, transparent),
+			color-mix(in srgb, var(--color-bg) 100%, transparent)
+		);
+		border: 1px solid color-mix(in srgb, var(--color-secondary) 28%, var(--color-outline-variant));
+		box-shadow:
+			inset 0 0 12px rgba(5, 217, 232, 0.08),
+			0 0 14px rgba(5, 217, 232, 0.12);
+	}
+
+	.carousel-viewport::-webkit-scrollbar-thumb {
+		background: linear-gradient(
+			90deg,
+			color-mix(in srgb, var(--color-primary) 75%, var(--color-secondary)),
+			var(--color-secondary),
+			color-mix(in srgb, var(--color-neon-green) 55%, var(--color-secondary))
+		);
+		border: 1px solid color-mix(in srgb, var(--color-secondary) 55%, transparent);
+		box-shadow:
+			0 0 10px rgba(5, 217, 232, 0.55),
+			0 0 18px rgba(255, 42, 109, 0.28),
+			inset 0 0 8px rgba(255, 255, 255, 0.12);
+	}
+
+	.carousel-viewport::-webkit-scrollbar-thumb:hover {
+		box-shadow:
+			0 0 14px rgba(5, 217, 232, 0.75),
+			0 0 22px rgba(255, 42, 109, 0.38),
+			inset 0 0 10px rgba(255, 255, 255, 0.15);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.carousel-viewport {
+			scroll-snap-type: none;
 		}
+	}
+
+	.carousel-viewport:focus-visible {
+		box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-secondary) 60%, transparent);
+	}
+
+	.carousel-track {
+		display: flex;
+		flex-direction: row;
+		align-items: stretch;
+		gap: 1.25rem;
+		padding-inline-end: 0.5rem;
+		width: max-content;
+		min-height: 1px;
+	}
+
+	.carousel-slide {
+		scroll-snap-align: start;
+		flex-shrink: 0;
+	}
+
+	/* Móvil: ~1 tarjeta + asomo del siguiente */
+	@container proj-carousel (max-width: 767px) {
+		.carousel-slide {
+			width: calc(100cqi * 0.9 - 0.5rem);
+			max-width: 22rem;
+		}
+	}
+
+	/* Desktop: ~2 tarjetas + asomo de la tercera */
+	@container proj-carousel (min-width: 768px) {
+		.carousel-slide {
+			width: calc((100cqi - 2.5rem) / 2.35);
+			min-width: 17rem;
+			max-width: 36rem;
+		}
+	}
+
+	.carousel-slide :global(.card) {
+		height: 100%;
 	}
 </style>
