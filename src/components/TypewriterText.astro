@@ -19,7 +19,10 @@ const steps = Math.max([...text].length, 1);
 	.tw-root {
 		display: inline-grid;
 		vertical-align: bottom;
+		width: 100%;
+		min-width: 0;
 		max-width: 100%;
+		box-sizing: border-box;
 	}
 
 	.tw-measure,
@@ -46,6 +49,36 @@ const steps = Math.max([...text].length, 1);
 		animation:
 			tw-reveal var(--tw-duration) steps(var(--tw-steps), end) forwards,
 			tw-caret 0.85s steps(1, end) infinite;
+	}
+
+	/*
+		Móvil: el typewriter (nowrap + width 0→100%) compite con un ancho estrecho y queda invisible o “aplastado”.
+		Ahí mostramos el texto completo, varias líneas, sin animación.
+	*/
+	@media (max-width: 767px) {
+		.tw-root {
+			display: block;
+			width: 100%;
+			vertical-align: unset;
+		}
+
+		.tw-measure {
+			display: none;
+		}
+
+		.tw-line {
+			display: block;
+			width: 100%;
+			min-width: 0;
+			overflow: visible;
+			white-space: normal;
+			overflow-wrap: anywhere;
+			word-break: break-word;
+			border-right: none;
+			box-shadow: none;
+			animation: none;
+			line-height: 1.45;
+		}
 	}
 
 	@keyframes tw-reveal {
