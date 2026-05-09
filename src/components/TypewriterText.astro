@@ -6,24 +6,41 @@ interface Props {
 }
 
 const { text, class: className, durationSec = 2.8 } = Astro.props;
-const steps = Math.max(text.length, 1);
+const steps = Math.max([...text].length, 1);
 ---
 
-<span
-	class:list={['typewriter', className]}
-	style={`--tw-steps: ${steps}; --tw-duration: ${durationSec}s`}
->
-	{text}
+<span class:list={['tw-root', className]} style={`--tw-steps: ${steps}; --tw-duration: ${durationSec}s`}>
+	<span class="tw-measure" aria-hidden="true">{text}</span>
+	<span class="tw-line">{text}</span>
 </span>
 
 <style>
-	.typewriter {
-		display: inline-block;
-		overflow: hidden;
-		white-space: nowrap;
-		font-family: var(--font-mono);
+	/* Grid: capa invisible define el ancho real del texto; la capa visible revela con width % (sin cortes por 1ch). */
+	.tw-root {
+		display: inline-grid;
 		vertical-align: bottom;
+		max-width: 100%;
+	}
+
+	.tw-measure,
+	.tw-line {
+		grid-area: 1 / 1;
+		font-family: var(--font-mono);
+		font-size: inherit;
+		line-height: inherit;
+		white-space: nowrap;
+	}
+
+	.tw-measure {
+		visibility: hidden;
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.tw-line {
+		overflow: hidden;
 		width: 0;
+		min-width: 0;
 		border-right: 2px solid var(--color-secondary);
 		animation:
 			tw-reveal var(--tw-duration) steps(var(--tw-steps), end) forwards,
@@ -32,7 +49,7 @@ const steps = Math.max(text.length, 1);
 
 	@keyframes tw-reveal {
 		to {
-			width: calc(var(--tw-steps) * 1ch);
+			width: 100%;
 		}
 	}
 
@@ -43,10 +60,8 @@ const steps = Math.max(text.length, 1);
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.typewriter {
-			width: auto;
-			max-width: none;
-			white-space: normal;
+		.tw-line {
+			width: 100%;
 			overflow: visible;
 			border-right: none;
 			animation: none;

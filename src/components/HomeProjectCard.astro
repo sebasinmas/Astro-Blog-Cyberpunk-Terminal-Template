@@ -1,4 +1,6 @@
 ---
+import Image from 'astro/components/Image.astro';
+
 interface Props {
 	title: string;
 	description: string;
@@ -12,7 +14,7 @@ const { title, description, tags, image } = Astro.props;
 <article class="card pixel-corners">
 	<div class="shine" aria-hidden="true"></div>
 	<div class="thumb">
-		<img src={image} alt="" loading="lazy" width="800" height="450" />
+		<Image src={image} alt={title} loading="eager" width="800" height="450" />
 	</div>
 	<div class="body">
 		<h3>{title}</h3>

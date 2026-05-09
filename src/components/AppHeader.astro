@@ -11,16 +11,16 @@
 				<span class="material-symbols-outlined" aria-hidden="true">menu</span>
 			</summary>
 			<div class="mobile-links">
-				<a href="#projects">Proyectos</a>
+				<a href="/#projects">Proyectos</a>
 				<a href="/blog/">Blog</a>
-				<a href="#contact">Contacto</a>
+				<a href="/#contact">Contacto</a>
 			</div>
 		</details>
 
 		<div class="desktop-links">
-			<a href="#projects">Proyectos</a>
+			<a href="/#projects">Proyectos</a>
 			<a href="/blog/">Blog</a>
-			<a href="#contact">Contacto</a>
+			<a href="/#contact">Contacto</a>
 		</div>
 
 		<div class="actions">
@@ -79,6 +79,7 @@
 		font-family: var(--font-mono);
 		font-size: 0.85rem;
 		color: var(--color-on-surface-variant);
+		transition: color 0.2s ease;
 	}
 
 	.desktop-links a:hover {
@@ -126,6 +127,11 @@
 		font-size: 0.8rem;
 		padding: 0.35rem 0;
 		color: var(--color-on-surface-variant);
+		transition: color 0.2s ease;
+	}
+
+	.mobile-links a:hover {
+		color: var(--color-secondary);
 	}
 
 	.actions {
