@@ -1,0 +1,352 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_TITLE } from '../consts';
+
+const title = `404 — ${SITE_TITLE}`;
+const description = 'Ruta no encontrada — buffer overrun en la matriz de rutas.';
+---
+
+<BaseLayout {title} {description}>
+	<section class="err-shell container" aria-labelledby="err-title">
+		<div class="crt-strip" role="presentation"></div>
+
+		<p class="syslog">
+			<span class="tag">[kern]</span>
+			<span class="lvl crit">CRIT</span>
+			<span class="ts">irq=0x404 · ttyS0</span>
+			<span class="msg">route_mmap(): segmentación — puntero NUL en pathname</span>
+		</p>
+
+		<div class="hex-row" aria-hidden="true">
+			<span>DE AD BE EF</span>
+			<span class="sep">│</span>
+			<span>CA FE BA BE</span>
+			<span class="sep">│</span>
+			<span>00 00 04 04</span>
+		</div>
+
+		<h1 id="err-title" class="err-heading">
+			<span class="err-code" aria-hidden="true">404</span>
+			<span class="err-glitch" data-text="SECTOR_NOT_FOUND">SECTOR_NOT_FOUND</span>
+		</h1>
+
+		<p class="deck">
+			La dirección que pediste no existe en este cassette. El daemon de routing devolvió <kbd
+				>ENOENT</kbd
+			>.
+		</p>
+
+		<pre class="fake-log" aria-hidden="true">
+$ trace_route --verbose
+&gt; GET /requested/path … <span class="blink">█</span>
+! syscall open() → -1 (No such file or directory)
+! stack: router.so+0x404 ← handler_main
+$ echo $?
+127</pre>
+
+		<div class="actions">
+			<a class="btn btn-magenta" href="/">./home.sh —reload</a>
+			<a class="btn btn-cyan" href="/blog/">./blog/index</a>
+		</div>
+
+		<p class="hint">
+			Si crees que es un bug, a la URL y abre un issue en el repo — o manda un fax al futuro.
+		</p>
+	</section>
+</BaseLayout>
+
+<style>
+	.err-shell {
+		position: relative;
+		margin-top: clamp(1rem, 4vw, 2rem);
+		padding: clamp(1.25rem, 4vw, 2rem);
+		border: 1px solid color-mix(in srgb, var(--color-secondary) 45%, var(--color-primary));
+		background: color-mix(in srgb, var(--color-surface-lowest) 92%, transparent);
+		box-shadow:
+			inset 0 0 48px rgba(5, 217, 232, 0.05),
+			0 0 32px rgba(255, 42, 109, 0.07);
+		overflow: hidden;
+	}
+
+	.crt-strip {
+		position: absolute;
+		inset: 0;
+		background: repeating-linear-gradient(
+			0deg,
+			transparent,
+			transparent 2px,
+			rgba(0, 0, 0, 0.11) 2px,
+			rgba(0, 0, 0, 0.11) 3px
+		);
+		pointer-events: none;
+		opacity: 0.35;
+	}
+
+	.syslog {
+		position: relative;
+		margin: 0 0 1rem;
+		font-family: var(--font-mono);
+		font-size: clamp(0.62rem, 2vw, 0.72rem);
+		line-height: 1.5;
+		color: var(--color-neon-dim);
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.35rem 0.65rem;
+	}
+
+	.tag {
+		color: var(--color-neon-muted);
+	}
+
+	.lvl {
+		padding: 0.08rem 0.35rem;
+		border: 1px solid var(--color-primary);
+		font-weight: 700;
+		font-size: 0.65em;
+		letter-spacing: 0.06em;
+	}
+
+	.lvl.crit {
+		color: var(--color-primary);
+		background: rgba(255, 42, 109, 0.12);
+		box-shadow: 0 0 10px rgba(255, 42, 109, 0.25);
+	}
+
+	.ts {
+		opacity: 0.85;
+	}
+
+	.msg {
+		flex: 1 1 14rem;
+		color: var(--color-on-surface-variant);
+	}
+
+	.hex-row {
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem 0.75rem;
+		font-family: var(--font-mono);
+		font-size: clamp(0.58rem, 1.8vw, 0.68rem);
+		color: var(--color-neon-green);
+		text-shadow: 0 0 8px rgba(57, 255, 20, 0.35);
+		margin-bottom: 1rem;
+		opacity: 0.85;
+	}
+
+	.sep {
+		color: var(--color-outline-variant);
+	}
+
+	.err-heading {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.35rem;
+		margin: 0 0 1rem;
+		font-family: var(--font-display);
+		line-height: 1.05;
+	}
+
+	.err-code {
+		font-size: clamp(3rem, 14vw, 5.5rem);
+		color: var(--color-secondary);
+		text-shadow:
+			0 0 12px rgba(5, 217, 232, 0.55),
+			-2px 0 rgba(255, 42, 109, 0.35),
+			2px 0 rgba(57, 255, 20, 0.25);
+		animation: err-pulse 2.5s ease-in-out infinite;
+	}
+
+	@keyframes err-pulse {
+		50% {
+			opacity: 0.82;
+			filter: saturate(1.15);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.err-code {
+			animation: none;
+		}
+	}
+
+	.err-glitch {
+		position: relative;
+		font-size: clamp(1.15rem, 4vw, 1.65rem);
+		letter-spacing: 0.06em;
+		color: var(--color-neon-green);
+		text-transform: uppercase;
+		text-shadow: 0 0 10px rgba(57, 255, 20, 0.45);
+	}
+
+	.err-glitch::before,
+	.err-glitch::after {
+		content: attr(data-text);
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		overflow: hidden;
+		opacity: 0.65;
+		pointer-events: none;
+	}
+
+	.err-glitch::before {
+		color: var(--color-primary);
+		transform: translate(-1px, 0);
+		clip-path: inset(0 0 55% 0);
+		animation: glitch-a 2.8s infinite linear alternate-reverse;
+	}
+
+	.err-glitch::after {
+		color: var(--color-secondary);
+		transform: translate(1px, 0);
+		clip-path: inset(45% 0 0 0);
+		animation: glitch-b 3.1s infinite linear alternate-reverse;
+	}
+
+	@keyframes glitch-a {
+		0%,
+		90%,
+		100% {
+			opacity: 0;
+		}
+		92% {
+			opacity: 0.55;
+		}
+	}
+
+	@keyframes glitch-b {
+		0%,
+		88%,
+		100% {
+			opacity: 0;
+		}
+		90% {
+			opacity: 0.5;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.err-glitch::before,
+		.err-glitch::after {
+			display: none;
+		}
+	}
+
+	.deck {
+		position: relative;
+		margin: 0 0 1.25rem;
+		max-width: 38rem;
+		font-size: clamp(0.92rem, 2.6vw, 1.02rem);
+		line-height: 1.55;
+		color: var(--color-on-surface-variant);
+	}
+
+	kbd {
+		font-family: var(--font-mono);
+		font-size: 0.85em;
+		padding: 0.12em 0.4em;
+		border: 1px solid color-mix(in srgb, var(--color-secondary) 40%, transparent);
+		background: var(--color-container-high);
+		color: var(--color-neon-green);
+		border-radius: 0;
+	}
+
+	.fake-log {
+		position: relative;
+		margin: 0 0 1.5rem;
+		padding: 1rem;
+		max-width: 100%;
+		overflow-x: auto;
+		font-family: var(--font-mono);
+		font-size: clamp(0.62rem, 2.2vw, 0.74rem);
+		line-height: 1.45;
+		color: var(--color-neon-dim);
+		background: rgba(0, 0, 0, 0.35);
+		border: 1px solid color-mix(in srgb, var(--color-outline-variant) 70%, transparent);
+		white-space: pre;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.blink {
+		animation: blink-caret 1s steps(1, end) infinite;
+		color: var(--color-neon-green);
+	}
+
+	@keyframes blink-caret {
+		50% {
+			opacity: 0;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.blink {
+			animation: none;
+			opacity: 1;
+		}
+	}
+
+	.actions {
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin-bottom: 1rem;
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 44px;
+		padding: 0.65rem 1.1rem;
+		font-family: var(--font-mono);
+		font-size: clamp(0.72rem, 2.4vw, 0.78rem);
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		text-decoration: none;
+		border-radius: 0;
+		transition:
+			background 0.18s ease,
+			color 0.18s ease,
+			box-shadow 0.18s ease;
+	}
+
+	.btn-magenta {
+		border: 1px solid var(--color-primary);
+		color: var(--color-primary);
+		background: transparent;
+	}
+
+	.btn-magenta:hover {
+		background: var(--color-primary);
+		color: var(--color-bg);
+		box-shadow: 0 0 20px rgba(255, 42, 109, 0.45);
+	}
+
+	.btn-cyan {
+		border: 1px solid var(--color-secondary);
+		color: var(--color-secondary);
+		background: transparent;
+	}
+
+	.btn-cyan:hover {
+		background: var(--color-secondary);
+		color: var(--color-on-secondary-fixed);
+		box-shadow: 0 0 22px rgba(5, 217, 232, 0.45);
+	}
+
+	.hint {
+		position: relative;
+		margin: 0;
+		font-size: clamp(0.78rem, 2.3vw, 0.85rem);
+		color: var(--color-outline);
+		max-width: 36rem;
+		line-height: 1.5;
+	}
+</style>
