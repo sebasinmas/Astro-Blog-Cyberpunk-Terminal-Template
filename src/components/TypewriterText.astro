@@ -1,0 +1,55 @@
+---
+interface Props {
+	text: string;
+	class?: string;
+	durationSec?: number;
+}
+
+const { text, class: className, durationSec = 2.8 } = Astro.props;
+const steps = Math.max(text.length, 1);
+---
+
+<span
+	class:list={['typewriter', className]}
+	style={`--tw-steps: ${steps}; --tw-duration: ${durationSec}s`}
+>
+	{text}
+</span>
+
+<style>
+	.typewriter {
+		display: inline-block;
+		overflow: hidden;
+		white-space: nowrap;
+		font-family: var(--font-mono);
+		vertical-align: bottom;
+		width: 0;
+		border-right: 2px solid var(--color-secondary);
+		animation:
+			tw-reveal var(--tw-duration) steps(var(--tw-steps), end) forwards,
+			tw-caret 0.85s steps(1, end) infinite;
+	}
+
+	@keyframes tw-reveal {
+		to {
+			width: calc(var(--tw-steps) * 1ch);
+		}
+	}
+
+	@keyframes tw-caret {
+		50% {
+			border-color: transparent;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.typewriter {
+			width: auto;
+			max-width: none;
+			white-space: normal;
+			overflow: visible;
+			border-right: none;
+			animation: none;
+		}
+	}
+</style>

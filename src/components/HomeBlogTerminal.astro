@@ -1,0 +1,133 @@
+---
+import { getCollection } from 'astro:content';
+import TypewriterText from './TypewriterText.astro';
+
+const posts = (await getCollection('blog'))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
+
+const titleTw = 'Registro terminal';
+---
+
+<section class="terminal container pixel-corners glow-shadow" id="blog" aria-labelledby="terminal-heading">
+	<div class="terminal-head">
+		<span class="material-symbols-outlined icon" aria-hidden="true">terminal</span>
+		<h2 id="terminal-heading">
+			<TypewriterText text={titleTw} durationSec={1.6} />
+		</h2>
+	</div>
+	<ul class="log">
+		{
+			posts.map((post) => (
+				<li>
+					<time datetime={post.data.pubDate.toISOString()}>
+						{post.data.pubDate.toLocaleDateString('es-ES')}
+					</time>
+					<a href={`/blog/${post.id}/`} class="line">
+						<span class="prompt">&gt;</span>
+						<span class="title">{post.data.title}</span>
+					</a>
+				</li>
+			))
+		}
+	</ul>
+	<p class="cursor-line" aria-hidden="true">
+		<span class="cursor">_</span>
+	</p>
+</section>
+
+<style>
+	.terminal {
+		margin-top: 2.5rem;
+		padding: 1.25rem;
+		border: 1px solid color-mix(in srgb, var(--color-outline-variant) 55%, transparent);
+		background: color-mix(in srgb, var(--color-surface-lowest) 90%, transparent);
+		backdrop-filter: blur(16px);
+	}
+
+	.terminal-head {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: 1.25rem;
+		padding-bottom: 0.65rem;
+		border-bottom: 1px solid color-mix(in srgb, var(--color-outline-variant) 35%, transparent);
+	}
+
+	.icon {
+		color: var(--color-secondary);
+		font-size: 1.35rem;
+	}
+
+	h2 {
+		font-size: 1.05rem;
+		color: var(--color-on-surface);
+		min-height: 1.3em;
+	}
+
+	.log {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.85rem;
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+	}
+
+	.log li {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 1rem;
+		align-items: baseline;
+	}
+
+	time {
+		flex: 0 0 6.5rem;
+		color: var(--color-outline-variant);
+	}
+
+	.line {
+		display: inline-flex;
+		gap: 0.35rem;
+		color: var(--color-secondary);
+		text-decoration: none;
+	}
+
+	.line:hover {
+		color: var(--color-primary);
+	}
+
+	.prompt {
+		flex-shrink: 0;
+	}
+
+	.title {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	.cursor-line {
+		margin: 1rem 0 0;
+		font-family: var(--font-mono);
+		color: var(--color-primary);
+	}
+
+	.cursor {
+		animation: blink 1s steps(1, end) infinite;
+	}
+
+	@keyframes blink {
+		50% {
+			opacity: 0;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.cursor {
+			animation: none;
+			opacity: 1;
+		}
+	}
+</style>

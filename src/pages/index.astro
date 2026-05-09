@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HomeBlogTerminal from '../components/HomeBlogTerminal.astro';
+import HomeContact from '../components/HomeContact.astro';
+import HomeHero from '../components/HomeHero.astro';
+import HomeProjects from '../components/HomeProjects.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+---
+
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<HomeHero />
+	<HomeProjects />
+	<HomeBlogTerminal />
+	<HomeContact />
+</BaseLayout>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>SebaSinMas _ Technical Portfolio</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#8c909f",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-secondary-fixed": "#001f25",
+                        "tertiary-container": "#e364a7",
+                        "on-primary-container": "#00285d",
+                        "on-background": "#dce1fb",
+                        "on-tertiary-fixed-variant": "#85145a",
+                        "surface-dim": "#0c1324",
+                        "inverse-surface": "#dce1fb",
+                        "on-tertiary": "#620040",
+                        "primary-container": "#4d8eff",
+                        "on-error": "#690005",
+                        "surface-container-lowest": "#070d1f",
+                        "tertiary-fixed-dim": "#ffafd3",
+                        "primary-fixed-dim": "#adc6ff",
+                        "surface-container-high": "#23293c",
+                        "surface-tint": "#adc6ff",
+                        "secondary": "#5de6ff",
+                        "error": "#ffb4ab",
+                        "on-secondary-container": "#00515d",
+                        "surface-variant": "#2e3447",
+                        "secondary-fixed": "#a2eeff",
+                        "tertiary": "#ffafd3",
+                        "error-container": "#93000a",
+                        "on-primary-fixed-variant": "#004395",
+                        "inverse-primary": "#005ac2",
+                        "surface-bright": "#33394c",
+                        "on-primary": "#002e6a",
+                        "secondary-container": "#00cbe6",
+                        "outline-variant": "#424754",
+                        "surface": "#0c1324",
+                        "on-primary-fixed": "#001a42",
+                        "primary-fixed": "#d8e2ff",
+                        "on-surface": "#dce1fb",
+                        "on-error-container": "#ffdad6",
+                        "primary": "#adc6ff",
+                        "on-tertiary-fixed": "#3d0026",
+                        "surface-container": "#191f31",
+                        "on-secondary": "#00363e",
+                        "on-tertiary-container": "#560038",
+                        "secondary-fixed-dim": "#2fd9f4",
+                        "on-secondary-fixed-variant": "#004e5a",
+                        "inverse-on-surface": "#2a3043",
+                        "surface-container-highest": "#2e3447",
+                        "surface-container-low": "#151b2d",
+                        "tertiary-fixed": "#ffd8e7",
+                        "background": "#0c1324"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "island-margin": "32px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "container-max": "1200px",
+                        "xl": "40px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Space Mono"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Space Mono"],
+                        "label-md": ["Space Mono"],
+                        "code-sm": ["Space Mono"],
+                        "headline-lg": ["Space Mono"],
+                        "headline-xl": ["Space Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", { "lineHeight": "1.4", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "code-sm": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .dither-bg {
+            background-image: radial-gradient(circle at center, rgba(93, 230, 255, 0.05) 1px, transparent 1px);
+            background-size: 8px 8px;
+        }
+
+        .pixel-corners {
+            clip-path: polygon(4px 0, calc(100% - 4px) 0,
+                    100% 4px, 100% calc(100% - 4px),
+                    calc(100% - 4px) 100%, 4px 100%,
+                    0 calc(100% - 4px), 0 4px);
+        }
+
+        .glow-shadow {
+            box-shadow: 0 0 40px rgba(34, 211, 238, 0.15);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background text-on-surface min-h-screen dither-bg font-body-md text-body-md overflow-x-hidden selection:bg-secondary selection:text-on-secondary-fixed relative">
+    <!-- TopAppBar -->
+    <nav
+        class="sticky top-sm z-50 flex justify-between items-center px-lg py-md max-w-container-max mx-auto mx-island-margin mt-sm rounded-none border border-outline-variant/30 border-b border-outline-variant/30 backdrop-blur-md shadow-[0_0_40px_rgba(34,211,238,0.15)] bg-surface/80 dark:bg-surface/80 backdrop-blur-xl">
+        <div class="font-headline-md text-headline-md font-bold text-secondary dark:text-secondary">SebaSinMas</div>
+        <div class="hidden md:flex gap-lg">
+            <a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-colors duration-200 active:scale-95 transition-transform duration-100"
+                href="#projects">Projects</a>
+            <a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-colors duration-200 active:scale-95 transition-transform duration-100"
+                href="#blog">Blog</a>
+            <a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-colors duration-200 active:scale-95 transition-transform duration-100"
+                href="#contact">Contact</a>
+        </div>
+        <div class="flex gap-md text-primary dark:text-primary">
+            <button
+                class="hover:text-secondary transition-colors duration-200 active:scale-95 transition-transform duration-100 flex items-center justify-center">
+                <span class="material-symbols-outlined">terminal</span>
+            </button>
+            <button
+                class="hover:text-secondary transition-colors duration-200 active:scale-95 transition-transform duration-100 flex items-center justify-center">
+                <span class="material-symbols-outlined">share</span>
+            </button>
+        </div>
+    </nav>
+    <main class="max-w-container-max mx-auto px-lg md:px-xl flex flex-col gap-xl mt-xl">
+        <!-- Hero Section -->
+        <section
+            class="bg-surface/60 backdrop-blur-xl border border-outline-variant/40 p-xl flex flex-col md:flex-row items-center gap-xl glow-shadow pixel-corners relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-secondary/10 rounded-full blur-[80px] -z-10"></div>
+            <div class="flex-1 flex flex-col gap-md z-10">
+                <div class="font-code-sm text-code-sm text-secondary mb-sm uppercase tracking-widest">System Online //
+                    User: SebaSinMas</div>
+                <h1 class="font-headline-xl text-headline-xl text-on-surface">Creative Developer &amp; <br /><span
+                        class="text-secondary">UI Engineer</span></h1>
+                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mt-md">Building high-fidelity
+                    digital experiences with precision and pixel-perfect aesthetics. Specializing in modern web
+                    architectures and immersive interfaces.</p>
+                <div class="flex gap-md mt-lg">
+                    <button
+                        class="bg-secondary text-on-secondary-fixed px-lg py-sm font-label-md text-label-md uppercase tracking-wider hover:bg-secondary-fixed transition-colors pixel-corners">Deploy
+                        Core</button>
+                    <button
+                        class="border border-secondary text-secondary px-lg py-sm font-label-md text-label-md uppercase tracking-wider hover:bg-secondary/10 transition-colors pixel-corners">Read
+                        Docs</button>
+                </div>
+            </div>
+            <div
+                class="w-48 h-48 md:w-64 md:h-64 border border-outline-variant/50 p-xs bg-surface-container-lowest/80 backdrop-blur-sm glow-shadow relative z-10">
+                <img alt="Hero Avatar" class="w-full h-full object-cover grayscale mix-blend-luminosity opacity-80"
+                    data-alt="A highly stylized, pixelated, retro-futurist portrait of a digital avatar facing forward, immersed in a dark, atmospheric environment. The lighting is dominated by sharp, glowing cyan and deep electric blue accents, creating a high-contrast cyberpunk aesthetic. The avatar's features are slightly abstracted by subtle digital noise and scanlines, emphasizing a technical, machine-like identity."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBM4mUbNUXxSObUjJDrBuew-JBjSQIKwhXGqNspfVPCKmLVmFk7sI52ndy35IRmTHgIwglPqkYmOxIlFToAXIkNSjZaRUitKSYGzGK61zArUdqwMrJ76qPSy8KBi8yaBU4SouTfeCBEqelj81mfpiaQabZOi8eWh0b79uWKzaWUk-Cw_wdUH4FTU64XWlDPVeHpJmitr152PmSq1x8_9nhSMHY_ptwKfr6RMd24JigojeuRNtFPYDV36cjFvD6XeSPHP8k_C5OPikI" />
+                <div class="absolute inset-0 border border-secondary/30 pointer-events-none"></div>
+            </div>
+        </section>
+        <!-- Projects Grid -->
+        <section class="flex flex-col gap-lg" id="projects">
+            <div class="flex items-center gap-md">
+                <h2 class="font-headline-lg text-headline-lg text-on-surface">Projects_</h2>
+                <div
+                    class="flex-1 h-px bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNCIgaGVpZ2h0PSI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIyIiBoZWlnaHQ9IjIiIGZpbGw9IiM0MjQ3NTQiLz48L3N2Zz4=')] opacity-50">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+                <!-- Project 1 -->
+                <div
+                    class="bg-surface/50 backdrop-blur-lg border border-outline-variant/30 p-lg flex flex-col gap-md hover:border-secondary/50 transition-colors group cursor-pointer pixel-corners relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-surface-container-lowest/80 z-0">
+                    </div>
+                    <div class="h-48 w-full border border-outline-variant/20 relative z-10 overflow-hidden">
+                        <img alt="Project 1"
+                            class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                            data-alt="A sleek, modern code editor interface displayed on a high-resolution monitor, set against a completely black, immersive background. The screen features glowing cyan syntax highlighting on deep midnight blue backgrounds, embodying a retro-futurist aesthetic. The lighting is minimal, focusing entirely on the crisp, monospaced text and sharp, glass-like UI panels floating within the digital workspace."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwPhlXf-A1REbNGHUNr1lfmUEr_5QZgoF5q3B11_QnueeGhy-3shASHAQ73UiOXOIIHA7DQ_gf2boDS8c9N7PiptY1SdYjr_p18fX2pWJvwsSbrb7GNBtBw4RnbFbTrFiL5-N_52ubUh_LVzGTchOFv4qM9JB9wCV2fXoAXNcPMOjUm64DxJzfdhgyBW0_ReIGKsaTY8iM5EsZerN2Cg1SxFCBMaNfbrCIZ66a8H-HGV1pG2LpilYFc9HbHIL8yepkoxDIovird5E" />
+                    </div>
+                    <div class="flex flex-col gap-xs z-10">
+                        <h3
+                            class="font-headline-md text-headline-md text-secondary group-hover:text-primary transition-colors">
+                            Nexus Protocol</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant text-sm">Decentralized data exchange
+                            interface built with Rust and WebGL.</p>
+                    </div>
+                    <div class="flex gap-sm z-10 mt-auto pt-md">
+                        <span
+                            class="bg-surface-container-high px-sm py-xs font-code-sm text-code-sm text-on-surface border border-outline-variant/30">WebGL</span>
+                        <span
+                            class="bg-surface-container-high px-sm py-xs font-code-sm text-code-sm text-on-surface border border-outline-variant/30">Rust</span>
+                    </div>
+                </div>
+                <!-- Project 2 -->
+                <div
+                    class="bg-surface/50 backdrop-blur-lg border border-outline-variant/30 p-lg flex flex-col gap-md hover:border-secondary/50 transition-colors group cursor-pointer pixel-corners relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-surface-container-lowest/80 z-0">
+                    </div>
+                    <div class="h-48 w-full border border-outline-variant/20 relative z-10 overflow-hidden">
+                        <img alt="Project 2"
+                            class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                            data-alt="An abstract representation of a complex neural network, composed of intricately connected glowing nodes and geometric lines floating in a dark, infinite void. The color palette features stark contrasts between deep, abyssal blacks and vibrant, electric blue energy pulses. The composition has a precise, technical feel, resembling an advanced architectural blueprint viewed through a futuristic holographic lens."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWgqZYXK-BPPiDyam-4CAAz31co3xT-gBFtmmD9EPE2v6y9ucaKXk1IbWyTAnJxvOvAeEtiuBZu0GV1aTjozLEA2Fo2_k3EcYvdZNu95Ua8OMKReCScUC5vevSgHa51uN7F5eawakQ0VQUqBs4mU-OpzR-rmPu8N6652gIjsjNL-CqZal4-Uv9JZ4WeJYfdaVma1HNb6oU4jjHxpUkrFfKc-VUa-5QlIhCoAZsbgSLf3XkLEXraIDLiJ-iBac1s2vpEOTi92o6Ghg" />
+                    </div>
+                    <div class="flex flex-col gap-xs z-10">
+                        <h3
+                            class="font-headline-md text-headline-md text-secondary group-hover:text-primary transition-colors">
+                            Synapse UI</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant text-sm">A glassmorphic design
+                            system library for next-gen React applications.</p>
+                    </div>
+                    <div class="flex gap-sm z-10 mt-auto pt-md">
+                        <span
+                            class="bg-surface-container-high px-sm py-xs font-code-sm text-code-sm text-on-surface border border-outline-variant/30">React</span>
+                        <span
+                            class="bg-surface-container-high px-sm py-xs font-code-sm text-code-sm text-on-surface border border-outline-variant/30">Tailwind</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Blog Terminal -->
+        <section
+            class="bg-surface-container-lowest/90 backdrop-blur-xl border border-outline-variant/50 p-lg glow-shadow pixel-corners"
+            id="blog">
+            <div class="flex items-center gap-md mb-lg border-b border-outline-variant/30 pb-sm">
+                <span class="material-symbols-outlined text-secondary">terminal</span>
+                <h2 class="font-headline-md text-headline-md text-on-surface">Terminal Log</h2>
+            </div>
+            <div class="flex flex-col gap-md font-code-sm text-code-sm">
+                <div class="flex gap-md group cursor-pointer">
+                    <span class="text-outline-variant w-24 flex-shrink-0">2024-10-24</span>
+                    <span class="text-secondary group-hover:text-primary transition-colors">&gt; Analyzing Glassmorphism
+                        performance in WebGL</span>
+                </div>
+                <div class="flex gap-md group cursor-pointer">
+                    <span class="text-outline-variant w-24 flex-shrink-0">2024-09-12</span>
+                    <span class="text-secondary group-hover:text-primary transition-colors">&gt; Building custom dither
+                        patterns with CSS</span>
+                </div>
+                <div class="flex gap-md group cursor-pointer">
+                    <span class="text-outline-variant w-24 flex-shrink-0">2024-08-05</span>
+                    <span class="text-secondary group-hover:text-primary transition-colors">&gt; The architecture of
+                        Island-based UI design</span>
+                </div>
+                <div class="flex gap-md mt-sm">
+                    <span class="text-primary animate-pulse">_</span>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer
+        class="flex flex-col md:flex-row justify-between items-center px-lg py-xl max-w-container-max mx-auto mt-xl mx-island-margin mb-island-margin rounded-none border border-outline-variant/20 border-t border-outline-variant/20 shadow-[0_0_30px_rgba(34,211,238,0.1)] bg-surface-container-lowest/60 dark:bg-surface-container-lowest/60 backdrop-blur-lg">
+        <div class="font-headline-md text-headline-md text-primary">SebaSinMas</div>
+        <div class="font-label-md text-label-md text-on-surface-variant my-md md:my-0">
+            © 2024 SebaSinMas _ Technical Portfolio
+        </div>
+        <div class="flex gap-lg">
+            <a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-all cursor-pointer"
+                href="#">GitHub</a>
+            <a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-all cursor-pointer"
+                href="#">LinkedIn</a>
+            <a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-all cursor-pointer"
+                href="#">Source</a>
+        </div>
+    </footer>
+</body>
+
+</html>

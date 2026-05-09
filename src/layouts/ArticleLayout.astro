@@ -1,0 +1,156 @@
+---
+import FormattedDate from '../components/FormattedDate.astro';
+
+interface Props {
+	title: string;
+	description: string;
+	pubDate: Date;
+	updatedDate?: Date;
+	heroImage?: string;
+}
+
+const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+---
+
+<article class="article container">
+	<header class="article-head">
+		<p class="meta">
+			<a href="/blog/">Blog</a>
+			<span aria-hidden="true"> / </span>
+			<FormattedDate date={pubDate} />
+		</p>
+		<h1>{title}</h1>
+		<p class="deck">{description}</p>
+		{
+			updatedDate && (
+				<p class="updated">
+					Actualizado el <FormattedDate date={updatedDate} />
+				</p>
+			)
+		}
+	</header>
+	{heroImage && <img class="hero-img pixel-corners" src={heroImage} alt="" loading="eager" />}
+	<div class="prose">
+		<slot />
+	</div>
+</article>
+
+<style>
+	.article {
+		padding-top: 2rem;
+		padding-bottom: 3rem;
+	}
+
+	.article-head {
+		max-width: 40rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.meta {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--color-on-surface-variant);
+	}
+
+	.meta a {
+		color: var(--color-secondary);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	h1 {
+		font-size: clamp(1.75rem, 4vw, 2.75rem);
+		margin: 0.5rem 0;
+		line-height: 1.15;
+		color: var(--color-on-surface);
+	}
+
+	.deck {
+		margin: 0;
+		font-size: 1.05rem;
+		color: var(--color-on-surface-variant);
+	}
+
+	.updated {
+		margin: 0.75rem 0 0;
+		font-size: 0.85rem;
+		font-style: italic;
+		color: var(--color-outline);
+	}
+
+	.hero-img {
+		width: 100%;
+		max-height: 22rem;
+		object-fit: cover;
+		border: 1px solid var(--color-outline-variant);
+		margin-bottom: 2rem;
+	}
+
+	.prose {
+		max-width: 40rem;
+		color: var(--color-on-surface-variant);
+		font-size: 1rem;
+		line-height: 1.7;
+	}
+
+	.prose :global(h2),
+	.prose :global(h3) {
+		font-family: var(--font-mono);
+		color: var(--color-on-surface);
+		margin: 2rem 0 0.75rem;
+		font-size: 1.15rem;
+	}
+
+	.prose :global(p) {
+		margin: 0 0 1rem;
+	}
+
+	.prose :global(ul),
+	.prose :global(ol) {
+		margin: 0 0 1rem 1.25rem;
+		padding: 0;
+	}
+
+	.prose :global(code) {
+		font-family: var(--font-mono);
+		font-size: 0.88em;
+		padding: 0.1em 0.35em;
+		background: var(--color-container-high);
+		border: 1px solid var(--color-outline-variant);
+	}
+
+	.prose :global(pre) {
+		padding: 1rem;
+		overflow-x: auto;
+		background: var(--color-surface-lowest);
+		border: 1px solid var(--color-outline-variant);
+		clip-path: var(--radius-pixel);
+	}
+
+	.prose :global(pre code) {
+		padding: 0;
+		border: 0;
+		background: none;
+	}
+
+	.prose :global(blockquote) {
+		margin: 1rem 0;
+		padding-left: 1rem;
+		border-left: 3px solid var(--color-secondary);
+		color: var(--color-on-surface);
+	}
+
+	.prose :global(a) {
+		color: var(--color-secondary);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	.prose :global(img) {
+		max-width: 100%;
+		height: auto;
+		border: 1px solid var(--color-outline-variant);
+	}
+</style>

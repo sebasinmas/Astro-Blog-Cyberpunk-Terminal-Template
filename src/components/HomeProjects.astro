@@ -1,0 +1,57 @@
+---
+import HomeProjectCard from './HomeProjectCard.astro';
+import { homeProjects } from '../data/home';
+---
+
+<section class="section container" id="projects" aria-labelledby="projects-heading">
+	<div class="section-head">
+		<h2 id="projects-heading">Proyectos_</h2>
+		<div class="rule" aria-hidden="true"></div>
+	</div>
+	<div class="grid">
+		{homeProjects.map((p) => <HomeProjectCard {...p} />)}
+	</div>
+</section>
+
+<style>
+	.section {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		margin-top: 2.5rem;
+	}
+
+	.section-head {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	h2 {
+		font-size: clamp(1.5rem, 3vw, 2rem);
+		color: var(--color-on-surface);
+	}
+
+	.rule {
+		flex: 1;
+		height: 1px;
+		background-image: repeating-linear-gradient(
+			90deg,
+			var(--color-outline-variant) 0 2px,
+			transparent 2px 4px
+		);
+		opacity: 0.6;
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1.25rem;
+	}
+
+	@media (min-width: 768px) {
+		.grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+</style>
