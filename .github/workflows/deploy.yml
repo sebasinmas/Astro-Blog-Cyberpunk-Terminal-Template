@@ -1,0 +1,93 @@
+# CI/CD: build Astro → rsync de dist/ al VPS → opcional Docker Compose.
+#
+# Secrets (GitHub → repo → Settings → Secrets and variables → Actions):
+#
+# Obligatorios:
+#   VPS_HOST               Dominio o IP del servidor
+#   VPS_USER               Usuario SSH
+#   VPS_SSH_PRIVATE_KEY    Clave privada PEM (entera, incl. -----BEGIN … -----END)
+#   VPS_DEPLOY_PATH        Ruta absoluta donde monta el volumen estático (ej. /srv/portfolio/html)
+#
+# Opcional (recomendado):
+#   VPS_SSH_KNOWN_HOSTS    Salida de: ssh-keyscan -H TU_HOST
+#
+# Opcional (Docker después del rsync):
+#   VPS_COMPOSE_PATH       Directorio en el VPS donde está docker-compose.yml
+#   VPS_COMPOSE_CMD        Comando remoto (default si vacío: docker compose up -d --remove-orphans)
+
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      VPS_HOST: ${{ secrets.VPS_HOST }}
+      VPS_USER: ${{ secrets.VPS_USER }}
+      VPS_DEPLOY_PATH: ${{ secrets.VPS_DEPLOY_PATH }}
+      VPS_COMPOSE_PATH: ${{ secrets.VPS_COMPOSE_PATH }}
+      VPS_COMPOSE_CMD: ${{ secrets.VPS_COMPOSE_CMD }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.VPS_SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          if [ -n "${SSH_KNOWN_HOSTS:-}" ]; then
+            printf '%s\n' "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+          else
+            echo "::warning::Define VPS_SSH_KNOWN_HOSTS para anclar la huella del host (ssh-keyscan -H)."
+            ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
+          fi
+
+      - name: Rsync dist to VPS
+        run: |
+          set -euo pipefail
+          : "${VPS_HOST:?VPS_HOST secret}"
+          : "${VPS_USER:?VPS_USER secret}"
+          : "${VPS_DEPLOY_PATH:?VPS_DEPLOY_PATH secret}"
+          rsync -az --delete --checksum \
+            -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes" \
+            dist/ "${VPS_USER}@${VPS_HOST}:${VPS_DEPLOY_PATH}/"
+
+      - name: Docker Compose on VPS (opcional)
+        run: |
+          set -euo pipefail
+          if [ -z "${VPS_COMPOSE_PATH:-}" ]; then
+            echo "VPS_COMPOSE_PATH no definido — omitiendo paso Docker."
+            exit 0
+          fi
+          REMOTE_CMD="${VPS_COMPOSE_CMD:-docker compose up -d --remove-orphans}"
+          ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes \
+            "${VPS_USER}@${VPS_HOST}" \
+            "set -euo pipefail; cd '${VPS_COMPOSE_PATH}'; ${REMOTE_CMD}"
