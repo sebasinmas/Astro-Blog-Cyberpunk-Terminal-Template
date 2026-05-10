@@ -24,7 +24,12 @@ const projects = defineCollection({
 			title: z.string(),
 			description: z.string(),
 			tags: z.array(z.string()),
-			image: z.string().url(),
+			/** Tarjeta y hero por defecto: URL remota o ruta bajo `src/assets/imgs/projects/`. */
+			image: z.string(),
+			pubDate: z.coerce.date(),
+			updatedDate: z.coerce.date().optional(),
+			/** Banner distinto al thumbnail de tarjeta (mismas reglas que `image`). */
+			heroImage: z.string().optional(),
 			order: z.number().default(0),
 		}),
 });

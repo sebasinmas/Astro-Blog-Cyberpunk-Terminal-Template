@@ -33,6 +33,7 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
 									description={entry.data.description}
 									tags={entry.data.tags}
 									image={entry.data.image}
+									slug={entry.id}
 								/>
 							</div>
 						))}
@@ -243,6 +244,7 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
 		}
 	}
 
+	.carousel-slide :global(.card-wrap),
 	.carousel-slide :global(.card) {
 		height: 100%;
 	}
