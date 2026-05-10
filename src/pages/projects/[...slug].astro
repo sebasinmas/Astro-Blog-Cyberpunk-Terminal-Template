@@ -1,0 +1,39 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { resolveProjectImage } from '../../utils/resolveProjectImage';
+
+export async function getStaticPaths() {
+	const entries = await getCollection('projects');
+	return entries.map((entry) => ({
+		params: { slug: entry.id },
+		props: entry,
+	}));
+}
+
+type Props = CollectionEntry<'projects'>;
+
+const project = Astro.props;
+const { Content } = await render(project);
+
+const bannerRef = project.data.heroImage ?? project.data.image;
+const heroImage = resolveProjectImage(bannerRef);
+---
+
+<BaseLayout title={project.data.title} description={project.data.description}>
+	<ArticleLayout
+		title={project.data.title}
+		description={project.data.description}
+		pubDate={project.data.pubDate}
+		updatedDate={project.data.updatedDate}
+		heroImage={heroImage}
+		crumbHref="/#projects"
+		crumbLabel="Proyectos"
+		backHref="/#projects"
+		backLabel="Volver a proyectos"
+		tags={project.data.tags}
+	>
+		<Content />
+	</ArticleLayout>
+</BaseLayout>
