@@ -6,5 +6,8 @@ tags:
   - Astro
   - Docker
 image: https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80
+pubDate: '2024-08-20'
 order: 3
 ---
+
+Próxima publicación: diagrama del pipeline, integración con proveedor edge y capturas del tablero en vivo.

@@ -1,32 +1,61 @@
 ---
 import Image from 'astro/components/Image.astro';
+import { resolveProjectImage } from '../utils/resolveProjectImage';
 
 interface Props {
 	title: string;
 	description: string;
 	tags: readonly string[];
 	image: string;
+	slug: string;
 }
 
-const { title, description, tags, image } = Astro.props;
+const { title, description, tags, image, slug } = Astro.props;
+const resolved = resolveProjectImage(image);
 ---
 
-<article class="card pixel-corners">
-	<div class="shine" aria-hidden="true"></div>
-	<div class="corner-glow" aria-hidden="true"></div>
-	<div class="thumb">
-		<Image src={image} alt={title} loading="eager" width="800" height="450" />
-	</div>
-	<div class="body">
-		<h3>{title}</h3>
-		<p>{description}</p>
-		<ul class="tags">
-			{tags.map((t) => <li>{t}</li>)}
-		</ul>
-	</div>
-</article>
+<a class="card-wrap" href={`/projects/${slug}/`}>
+	<article class="card pixel-corners">
+		<div class="shine" aria-hidden="true"></div>
+		<div class="corner-glow" aria-hidden="true"></div>
+		<div class="thumb">
+			{
+				typeof resolved === 'string' ? (
+					<Image src={resolved} alt={title} loading="eager" width={800} height={450} />
+				) : (
+					<Image
+						src={resolved}
+						alt={title}
+						loading="eager"
+						width={resolved.width}
+						height={resolved.height}
+					/>
+				)
+			}
+		</div>
+		<div class="body">
+			<h3>{title}</h3>
+			<p>{description}</p>
+			<ul class="tags">
+				{tags.map((t) => <li>{t}</li>)}
+			</ul>
+		</div>
+	</article>
+</a>
 
 <style>
+	.card-wrap {
+		display: block;
+		height: 100%;
+		text-decoration: none;
+		color: inherit;
+		outline-offset: 4px;
+	}
+
+	.card-wrap:focus-visible .card {
+		box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-secondary) 60%, transparent);
+	}
+
 	.card {
 		position: relative;
 		display: flex;
