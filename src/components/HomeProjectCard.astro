@@ -21,12 +21,12 @@ const resolved = resolveProjectImage(image);
 		<div class="thumb">
 			{
 				typeof resolved === 'string' ? (
-					<Image src={resolved} alt={title} loading="eager" width={800} height={450} />
+					<Image src={resolved} alt={title} loading="lazy" width={800} height={450} />
 				) : (
 					<Image
 						src={resolved}
 						alt={title}
-						loading="eager"
+						loading="lazy"
 						width={resolved.width}
 						height={resolved.height}
 					/>
