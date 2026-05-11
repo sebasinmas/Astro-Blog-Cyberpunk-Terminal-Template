@@ -27,8 +27,15 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 		</div>
 	</div>
 	<figure class="hero-figure">
-		<Image src={pfp} alt="SebaSinMas" width="256" height="256" loading="eager" />
-		<Image src={pfp2} alt="SebaSinMas pixel art" width="256" height="256" loading="eager" />
+		<Image src={pfp} alt="SebaSinMas" width="256" height="256" loading="eager" fetchpriority="high" />
+		<Image
+			src={pfp2}
+			alt="SebaSinMas pixel art"
+			width="256"
+			height="256"
+			loading="lazy"
+			fetchpriority="low"
+		/>
 	</figure>
 </section>
 
