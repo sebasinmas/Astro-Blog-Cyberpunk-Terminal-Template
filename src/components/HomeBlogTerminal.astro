@@ -11,7 +11,12 @@ const titleTw = '$ ./tail_syslog.sh --limit 3';
 
 <section class="terminal container pixel-corners glow-shadow" id="blog" aria-labelledby="terminal-heading">
 	<div class="terminal-head">
-		<span class="material-symbols-outlined icon" aria-hidden="true">terminal</span>
+		<svg class="icon-terminal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+			<path
+				fill="currentColor"
+				d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6v-2zm0 4h8v2H6v-2z"
+			></path>
+		</svg>
 		<h2 id="terminal-heading">
 			<TypewriterText text={titleTw} durationSec={1.8} />
 		</h2>
@@ -80,9 +85,12 @@ const titleTw = '$ ./tail_syslog.sh --limit 3';
 		flex-wrap: wrap;
 	}
 
-	.icon {
+	.icon-terminal {
+		display: block;
+		width: 1.35rem;
+		height: 1.35rem;
+		flex-shrink: 0;
 		color: var(--color-neon-green);
-		font-size: 1.35rem;
 		filter: drop-shadow(0 0 6px rgba(57, 255, 20, 0.45));
 	}
 
