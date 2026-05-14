@@ -8,7 +8,9 @@
 		<details class="mobile-menu">
 			<summary class="menu-toggle">
 				<span class="sr-only">Abrir menú</span>
-				<span class="material-symbols-outlined" aria-hidden="true">menu</span>
+				<svg class="icon-nav" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+					<path fill="currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+				</svg>
 			</summary>
 			<div class="mobile-links">
 				<a href="/#projects" class="nav-link" data-cmd="./portfolio.sh --list">Proyectos</a>
@@ -25,7 +27,12 @@
 
 		<div class="actions">
 			<a href="/blog/" class="icon-btn" aria-label="Ir al blog (vista terminal)" title="RUN: blog_viewer.bin">
-				<span class="material-symbols-outlined" aria-hidden="true">terminal</span>
+				<svg class="icon-nav" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+					<path
+						fill="currentColor"
+						d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6v-2zm0 4h8v2H6v-2z"
+					></path>
+				</svg>
 			</a>
 			<a
 				href="https://github.com/sebasinmas"
@@ -239,10 +246,12 @@
 		}
 	}
 
-	.icon-github {
+	.icon-github,
+	.icon-nav {
 		display: block;
 		width: 22px;
 		height: 22px;
+		flex-shrink: 0;
 	}
 
 	@media (min-width: 768px) {
