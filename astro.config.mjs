@@ -19,7 +19,7 @@ export default defineConfig({
 			},
 		],
 	},
-	site: 'https://example.com',
+	site: 'https://sebasinmas.site',
 	integrations: [mdx(), sitemap()],
 	fonts: [
 		{
