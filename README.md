@@ -1,4 +1,4 @@
-# Portfolio Astro para gente caritativa
+# Portfolio en Astro VHS/CRT
 
 Template de portfolio personal hecho con Astro 6, Tailwind CSS 4 y una estética de terminal CRT/synthwave. La idea del repo es que puedas clonarlo, cambiar identidad, proyectos, artículos y datos de contacto, y publicar tu propio portfolio estático sin montar un backend.
 
@@ -50,7 +50,6 @@ npm run preview
 .
 ├── .github/workflows/deploy.yml      # Build y deploy a VPS por SSH/rsync
 ├── public/                           # Archivos públicos servidos desde /
-├── stitch/                           # Prototipo HTML de referencia visual
 ├── src/
 │   ├── assets/                       # Imágenes y fuentes procesadas por Astro
 │   │   └── imgs/
