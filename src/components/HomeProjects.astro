@@ -1,8 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
+import { type CollectionEntry, getCollection } from 'astro:content';
 import HomeProjectCard from './HomeProjectCard.astro';
 
-const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const projects: CollectionEntry<'projects'>[] = (await getCollection('projects')).sort(
+	(a: CollectionEntry<'projects'>, b: CollectionEntry<'projects'>) => a.data.order - b.data.order,
+);
 ---
 
 <section class="section container" id="projects" aria-labelledby="projects-heading">
@@ -26,7 +28,7 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
 					data-carousel
 				>
 					<div class="carousel-track">
-						{projects.map((entry) => (
+						{projects.map((entry: CollectionEntry<'projects'>) => (
 							<div class="carousel-slide">
 								<HomeProjectCard
 									title={entry.data.title}
@@ -158,7 +160,8 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
 		overscroll-behavior-x: contain;
 		overscroll-behavior-y: auto;
 		outline: none;
-		padding-block: 12px 14px;
+		padding-block: 16px 20px;
+		padding-inline: 4px 6px;
 		scrollbar-width: thin;
 		scrollbar-color: color-mix(in srgb, var(--color-secondary) 85%, var(--color-primary))
 			color-mix(in srgb, var(--color-surface-lowest) 92%, transparent);

@@ -7,34 +7,35 @@ const description = 'Ruta no encontrada — buffer overrun en la matriz de rutas
 ---
 
 <BaseLayout {title} {description}>
-	<section class="err-shell container" aria-labelledby="err-title">
-		<div class="crt-strip" role="presentation"></div>
+	<div class="container">
+		<section class="err-shell pixel-corners" aria-labelledby="err-title">
+			<div class="crt-strip" role="presentation"></div>
 
-		<p class="syslog">
-			<span class="tag">[kern]</span>
-			<span class="lvl crit">CRIT</span>
-			<span class="ts">irq=0x404 · ttyS0</span>
-			<span class="msg">route_mmap(): segmentación — puntero NUL en pathname</span>
-		</p>
+			<p class="syslog">
+				<span class="tag">[kern]</span>
+				<span class="lvl crit">CRIT</span>
+				<span class="ts">irq=0x404 · ttyS0</span>
+				<span class="msg">route_mmap(): segmentación — puntero NUL en pathname</span>
+			</p>
 
-		<div class="hex-row" aria-hidden="true">
-			<span>DE AD BE EF</span>
-			<span class="sep">│</span>
-			<span>CA FE BA BE</span>
-			<span class="sep">│</span>
-			<span>00 00 04 04</span>
-		</div>
+			<div class="hex-row" aria-hidden="true">
+				<span>DE AD BE EF</span>
+				<span class="sep">│</span>
+				<span>CA FE BA BE</span>
+				<span class="sep">│</span>
+				<span>00 00 04 04</span>
+			</div>
 
-		<h1 id="err-title" class="err-heading">
-			<span class="err-code" aria-hidden="true">404</span>
-			<span class="err-glitch" data-text="SECTOR_NOT_FOUND">SECTOR_NOT_FOUND</span>
-		</h1>
+			<h1 id="err-title" class="err-heading">
+				<span class="err-code" aria-hidden="true">404</span>
+				<span class="err-glitch" data-text="SECTOR_NOT_FOUND">SECTOR_NOT_FOUND</span>
+			</h1>
 
-		<p class="deck">
-			La URL solicitada no existe en este volumen. El daemon de routing devolvió <kbd>ENOENT</kbd>.
-		</p>
+			<p class="deck">
+				La URL solicitada no existe en este volumen. El daemon de routing devolvió <kbd>ENOENT</kbd>.
+			</p>
 
-		<pre class="fake-log" aria-hidden="true">
+			<pre class="fake-log" aria-hidden="true">
 $ trace_route --verbose
 &gt; GET /requested/path … <span class="blink">█</span>
 ! syscall open() → -1 (No such file or directory)
@@ -42,20 +43,22 @@ $ trace_route --verbose
 $ echo $?
 127</pre>
 
-		<div class="actions">
-			<a class="btn btn-magenta" href="/">./home.sh —reload</a>
-			<a class="btn btn-cyan" href="/blog/">./blog/index</a>
-		</div>
+			<div class="actions">
+				<a class="btn btn-magenta" href="/">./home.sh —reload</a>
+				<a class="btn btn-cyan" href="/blog/">./blog/index</a>
+			</div>
 
-		<p class="hint">
-			Si detectas un fallo, copia la URL y abre un issue en el repositorio.
-		</p>
-	</section>
+			<p class="hint">
+				Si detectas un fallo, copia la URL y abre un issue en el repositorio.
+			</p>
+		</section>
+	</div>
 </BaseLayout>
 
 <style>
 	.err-shell {
 		position: relative;
+		width: 100%;
 		margin-top: clamp(1rem, 4vw, 2rem);
 		padding: clamp(1.25rem, 4vw, 2rem);
 		border: 1px solid color-mix(in srgb, var(--color-secondary) 45%, var(--color-primary));

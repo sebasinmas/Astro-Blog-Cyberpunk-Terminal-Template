@@ -6,40 +6,48 @@ import Image from 'astro/components/Image.astro';
 const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986';
 ---
 
-<section class="hero container glow-shadow pixel-corners" aria-labelledby="hero-title">
-	<div class="glow-blob glow-blob-a" aria-hidden="true"></div>
-	<div class="glow-blob glow-blob-b" aria-hidden="true"></div>
-	<div class="hero-copy">
-		<p class="eyebrow">
-			<TypewriterText text={eyebrow} durationSec={3.2} />
-		</p>
-		<h1 id="hero-title" class="text-phosphor">
-			Software engineer, estudiante y <span class="accent">gamer</span><span class="heading-caret" aria-hidden="true"></span>
-		</h1>
-		<p class="lead">
-			Desarrollador de software, estudiante, gamer y amante de la tecnología.
-		</p>
-		<div class="cta">
-			<a class="btn btn-magenta pixel-corners" href="/#projects" data-gag="RUN portfolio.exe /fullscreen"
-				>Ver proyectos</a
-			>
-			<a class="btn btn-cyan pixel-corners" href="/blog/" data-gag="LOAD blog_tape.vhs">Leer blog</a>
+<section class="hero-wrap container" aria-labelledby="hero-title">
+	<div class="hero glow-shadow pixel-corners">
+		<div class="glow-bg" aria-hidden="true">
+			<div class="glow-blob glow-blob-a"></div>
+			<div class="glow-blob glow-blob-b"></div>
 		</div>
+		<div class="hero-copy">
+			<p class="eyebrow">
+				<TypewriterText text={eyebrow} durationSec={3.2} />
+			</p>
+			<h1 id="hero-title" class="text-phosphor">
+				Software engineer, estudiante y <span class="accent">gamer</span><span class="heading-caret" aria-hidden="true"></span>
+			</h1>
+			<p class="lead">
+				Desarrollador de software, estudiante, gamer y amante de la tecnología.
+			</p>
+			<div class="cta">
+				<a class="btn btn-magenta pixel-corners" href="/#projects" data-gag="RUN portfolio.exe /fullscreen"
+					>Ver proyectos</a
+				>
+				<a class="btn btn-cyan pixel-corners" href="/blog/" data-gag="LOAD blog_tape.vhs">Leer blog</a>
+			</div>
+		</div>
+		<figure class="hero-figure">
+			<Image src={pfp} alt="SebaSinMas" width="256" height="256" loading="eager" fetchpriority="high" />
+			<Image
+				src={pfp2}
+				alt="SebaSinMas pixel art"
+				width="256"
+				height="256"
+				loading="lazy"
+				fetchpriority="low"
+			/>
+		</figure>
 	</div>
-	<figure class="hero-figure">
-		<Image src={pfp} alt="SebaSinMas" width="256" height="256" loading="eager" fetchpriority="high" />
-		<Image
-			src={pfp2}
-			alt="SebaSinMas pixel art"
-			width="256"
-			height="256"
-			loading="lazy"
-			fetchpriority="low"
-		/>
-	</figure>
 </section>
 
 <style>
+	.hero-wrap {
+		margin-top: clamp(1rem, 3vw, 2rem);
+	}
+
 	.hero {
 		position: relative;
 		display: flex;
@@ -48,7 +56,6 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 		   centrado desborda → overflow-x del body recorta la primera letra */
 		align-items: stretch;
 		gap: clamp(1.25rem, 4vw, 2rem);
-		margin-top: clamp(1rem, 3vw, 2rem);
 		padding: clamp(1rem, 4vw, 2rem);
 		padding-bottom: clamp(1.25rem, 5vw, 2rem);
 		overflow: visible;
@@ -58,13 +65,20 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 		border-radius: 0;
 	}
 
-	/* Solo escritorio: fila + halos recortados */
+	/* Solo escritorio: fila */
 	@media (min-width: 900px) {
 		.hero {
-			overflow: hidden;
 			flex-direction: row;
 			align-items: center;
 		}
+	}
+
+	.glow-bg {
+		position: absolute;
+		inset: 0;
+		overflow: hidden;
+		pointer-events: none;
+		z-index: 0;
 	}
 
 	.glow-blob {
