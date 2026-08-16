@@ -10,7 +10,7 @@ const projects: CollectionEntry<'projects'>[] = (await getCollection('projects')
 <section class="section container" id="projects" aria-labelledby="projects-heading">
 	<div class="section-head">
 		<h2 id="projects-heading">PROYECTOS<span class="caret-blink" aria-hidden="true"></span></h2>
-		<div class="rule-wrap">
+		<div class="rule-wrap" role="presentation">
 			<pre class="rule-ascii rule-ascii--narrow" aria-hidden="true">─── SECTOR 7 ───</pre>
 			<pre class="rule-ascii rule-ascii--wide" aria-hidden="true">───[ SECTOR 7 // ARCHIVE ]─────────────────────────────────</pre>
 		</div>
@@ -79,14 +79,17 @@ const projects: CollectionEntry<'projects'>[] = (await getCollection('projects')
 		gap: 0.35rem;
 		flex-shrink: 0;
 		max-width: 100%;
+		text-shadow:
+			0 0 10px rgba(5, 217, 232, 0.35),
+			0 0 24px rgba(57, 255, 20, 0.15);
 	}
 
 	.caret-blink {
 		display: inline-block;
 		width: 0.35rem;
 		height: 0.85em;
-		background: var(--color-secondary);
-		box-shadow: 0 0 10px rgba(5, 217, 232, 0.5);
+		background: var(--color-primary);
+		box-shadow: 0 0 10px rgba(5, 217, 232, 0.55);
 		animation: caret-blink 1s steps(1, end) infinite;
 	}
 
@@ -146,10 +149,6 @@ const projects: CollectionEntry<'projects'>[] = (await getCollection('projects')
 		container-name: proj-carousel;
 	}
 
-	/*
-		overflow-x: auto fuerza overflow-y distinto de visible → recorta translateY y box-shadow del hover.
-		Padding vertical da aire para el lift (-3px) y el glow sin barra rara en Y.
-	*/
 	.carousel-viewport {
 		position: relative;
 		overflow-x: auto;
@@ -163,13 +162,12 @@ const projects: CollectionEntry<'projects'>[] = (await getCollection('projects')
 		padding-block: 16px 20px;
 		padding-inline: 4px 6px;
 		scrollbar-width: thin;
-		scrollbar-color: color-mix(in srgb, var(--color-secondary) 85%, var(--color-primary))
-			color-mix(in srgb, var(--color-surface-lowest) 92%, transparent);
+		scrollbar-color: var(--color-primary) color-mix(in srgb, var(--color-surface-lowest) 92%, transparent);
 	}
 
 	/* WebKit: barra con glow neón */
 	.carousel-viewport::-webkit-scrollbar {
-		height: 11px;
+		height: 10px;
 	}
 
 	.carousel-viewport::-webkit-scrollbar-track {
@@ -178,31 +176,22 @@ const projects: CollectionEntry<'projects'>[] = (await getCollection('projects')
 			color-mix(in srgb, var(--color-surface-lowest) 95%, transparent),
 			color-mix(in srgb, var(--color-bg) 100%, transparent)
 		);
-		border: 1px solid color-mix(in srgb, var(--color-secondary) 28%, var(--color-outline-variant));
-		box-shadow:
-			inset 0 0 12px rgba(5, 217, 232, 0.08),
-			0 0 14px rgba(5, 217, 232, 0.12);
+		border: 1px solid color-mix(in srgb, var(--color-primary) 25%, var(--color-outline-variant));
+		box-shadow: inset 0 0 10px rgba(5, 217, 232, 0.06);
 	}
 
 	.carousel-viewport::-webkit-scrollbar-thumb {
 		background: linear-gradient(
 			90deg,
-			color-mix(in srgb, var(--color-primary) 75%, var(--color-secondary)),
-			var(--color-secondary),
-			color-mix(in srgb, var(--color-neon-green) 55%, var(--color-secondary))
+			var(--color-primary),
+			color-mix(in srgb, var(--color-secondary) 85%, var(--color-primary))
 		);
-		border: 1px solid color-mix(in srgb, var(--color-secondary) 55%, transparent);
-		box-shadow:
-			0 0 10px rgba(5, 217, 232, 0.55),
-			0 0 18px rgba(255, 42, 109, 0.28),
-			inset 0 0 8px rgba(255, 255, 255, 0.12);
+		border: 1px solid color-mix(in srgb, var(--color-primary) 60%, transparent);
+		box-shadow: 0 0 10px rgba(5, 217, 232, 0.45);
 	}
 
 	.carousel-viewport::-webkit-scrollbar-thumb:hover {
-		box-shadow:
-			0 0 14px rgba(5, 217, 232, 0.75),
-			0 0 22px rgba(255, 42, 109, 0.38),
-			inset 0 0 10px rgba(255, 255, 255, 0.15);
+		box-shadow: 0 0 16px rgba(5, 217, 232, 0.7);
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -212,7 +201,7 @@ const projects: CollectionEntry<'projects'>[] = (await getCollection('projects')
 	}
 
 	.carousel-viewport:focus-visible {
-		box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-secondary) 60%, transparent);
+		box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 60%, transparent);
 	}
 
 	.carousel-track {
@@ -230,7 +219,7 @@ const projects: CollectionEntry<'projects'>[] = (await getCollection('projects')
 		flex-shrink: 0;
 	}
 
-	/* Móvil: ~1 tarjeta + asomo del siguiente */
+	/* Móvil */
 	@container proj-carousel (max-width: 767px) {
 		.carousel-slide {
 			width: calc(100cqi * 0.9 - 0.5rem);
@@ -238,7 +227,7 @@ const projects: CollectionEntry<'projects'>[] = (await getCollection('projects')
 		}
 	}
 
-	/* Desktop: ~2 tarjetas + asomo de la tercera */
+	/* Desktop */
 	@container proj-carousel (min-width: 768px) {
 		.carousel-slide {
 			width: calc((100cqi - 2.5rem) / 2.35);

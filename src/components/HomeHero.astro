@@ -20,13 +20,13 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 				Software engineer, estudiante y <span class="accent">gamer</span><span class="heading-caret" aria-hidden="true"></span>
 			</h1>
 			<p class="lead">
-				Desarrollador de software, estudiante, gamer y amante de la tecnología.
+				Desarrollador de software, estudiante, gamer y apasionado por construir interfaces rápidas, estéticas y bien estructuradas.
 			</p>
 			<div class="cta">
-				<a class="btn btn-magenta pixel-corners" href="/#projects" data-gag="RUN portfolio.exe /fullscreen"
+				<a class="btn btn-primary pixel-corners" href="/#projects" data-gag="RUN portfolio.exe /fullscreen"
 					>Ver proyectos</a
 				>
-				<a class="btn btn-cyan pixel-corners" href="/blog/" data-gag="LOAD blog_tape.vhs">Leer blog</a>
+				<a class="btn btn-secondary pixel-corners" href="/blog/" data-gag="LOAD blog_tape.vhs">Leer bitácora</a>
 			</div>
 		</div>
 		<figure class="hero-figure">
@@ -52,15 +52,13 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		/* stretch: si center, hero-copy toma ancho intrínseco (typewriter nowrap) y en móvil el bloque
-		   centrado desborda → overflow-x del body recorta la primera letra */
 		align-items: stretch;
 		gap: clamp(1.25rem, 4vw, 2rem);
-		padding: clamp(1rem, 4vw, 2rem);
-		padding-bottom: clamp(1.25rem, 5vw, 2rem);
+		padding: clamp(1.25rem, 4vw, 2.25rem);
+		padding-bottom: clamp(1.5rem, 5vw, 2.25rem);
 		overflow: visible;
-		border: 1px solid color-mix(in srgb, var(--color-secondary) 40%, var(--color-primary));
-		background: color-mix(in srgb, var(--color-surface) 75%, transparent);
+		border: 1px solid color-mix(in srgb, var(--color-primary) 35%, var(--color-outline-variant));
+		background: color-mix(in srgb, var(--color-surface) 80%, transparent);
 		backdrop-filter: blur(16px);
 		border-radius: 0;
 	}
@@ -95,7 +93,7 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 		right: -1rem;
 		width: 18rem;
 		height: 18rem;
-		background: rgba(255, 42, 109, 0.22);
+		background: rgba(5, 217, 232, 0.16);
 	}
 
 	.glow-blob-b {
@@ -103,7 +101,7 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 		left: -2rem;
 		width: 14rem;
 		height: 14rem;
-		background: rgba(5, 217, 232, 0.14);
+		background: rgba(57, 255, 20, 0.1);
 	}
 
 	.hero-copy {
@@ -124,14 +122,14 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 		font-size: clamp(0.62rem, 1.8vw, 0.72rem);
 		text-transform: uppercase;
 		letter-spacing: 0.12em;
-		color: var(--color-neon-amber);
+		color: var(--color-neon-green);
 		min-height: 1.5em;
 		width: 100%;
 		max-width: 100%;
 		overflow-x: auto;
 		overflow-y: visible;
 		-webkit-overflow-scrolling: touch;
-		text-shadow: 0 0 8px rgba(255, 176, 0, 0.35);
+		text-shadow: 0 0 8px rgba(57, 255, 20, 0.35);
 	}
 
 	@media (max-width: 767px) {
@@ -166,7 +164,7 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 		height: 0.95em;
 		margin-left: 0.2rem;
 		vertical-align: baseline;
-		background: var(--color-neon-green);
+		background: var(--color-secondary);
 		box-shadow: 0 0 12px rgba(57, 255, 20, 0.55);
 		animation: caret-blink 1.05s steps(1, end) infinite;
 	}
@@ -187,8 +185,8 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 	.accent {
 		color: var(--color-primary);
 		text-shadow:
-			0 0 10px rgba(255, 42, 109, 0.55),
-			0 0 22px rgba(5, 217, 232, 0.2);
+			0 0 10px rgba(5, 217, 232, 0.6),
+			0 0 24px rgba(5, 217, 232, 0.25);
 	}
 
 	.lead {
@@ -204,7 +202,7 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 	.cta {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.75rem;
+		gap: 0.85rem;
 		row-gap: 0.85rem;
 		margin-top: 0.5rem;
 		margin-bottom: 0;
@@ -218,7 +216,7 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 		.cta {
 			flex-direction: column;
 			align-items: stretch;
-			padding-inline: clamp(0.35rem, 3vw, 0.85rem);
+			padding-inline: 0;
 			gap: 1rem;
 			margin-top: 0.75rem;
 		}
@@ -236,50 +234,54 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		padding: 0.65rem 1.25rem;
+		padding: 0.7rem 1.35rem;
 		min-height: 44px;
 		font-family: var(--font-mono);
-		font-size: clamp(0.72rem, 2.8vw, 0.8rem);
-		font-weight: 600;
+		font-size: clamp(0.74rem, 2.8vw, 0.82rem);
+		font-weight: 700;
 		text-transform: uppercase;
-		letter-spacing: 0.1em;
+		letter-spacing: 0.08em;
 		cursor: pointer;
-		background: transparent;
 		border-radius: 0;
 		transition:
-			background 0.18s ease,
-			color 0.18s ease,
-			box-shadow 0.18s ease,
-			border-color 0.18s ease;
+			background 0.2s ease,
+			color 0.2s ease,
+			box-shadow 0.2s ease,
+			border-color 0.2s ease,
+			transform 0.2s ease;
 	}
 
-	.btn-magenta {
+	.btn-primary {
 		border: 1px solid var(--color-primary);
-		color: var(--color-primary);
+		background: var(--color-primary);
+		color: var(--color-bg);
+		box-shadow: 0 0 18px rgba(5, 217, 232, 0.35);
 	}
 
-	.btn-cyan {
-		border: 1px solid var(--color-secondary);
+	.btn-secondary {
+		border: 1px solid color-mix(in srgb, var(--color-secondary) 75%, transparent);
+		background: color-mix(in srgb, var(--color-surface-lowest) 75%, transparent);
 		color: var(--color-secondary);
 	}
 
 	@media (hover: hover) and (pointer: fine) {
-		.btn-magenta:hover {
-			background: var(--color-primary);
-			color: var(--color-bg);
+		.btn-primary:hover {
+			background: #38bdf8;
+			border-color: #38bdf8;
 			box-shadow:
-				0 0 20px rgba(255, 42, 109, 0.55),
-				inset 0 0 20px rgba(5, 217, 232, 0.15);
+				0 0 28px rgba(5, 217, 232, 0.65),
+				inset 0 0 12px rgba(255, 255, 255, 0.3);
+			transform: translateY(-2px);
 		}
 
-		.btn-cyan:hover {
-			background: var(--color-secondary);
-			color: var(--color-on-secondary-fixed);
-			box-shadow: 0 0 22px rgba(5, 217, 232, 0.5);
+		.btn-secondary:hover {
+			border-color: var(--color-secondary);
+			background: rgba(57, 255, 20, 0.12);
+			color: var(--color-on-surface);
+			box-shadow: 0 0 20px rgba(57, 255, 20, 0.35);
+			transform: translateY(-2px);
 		}
-	}
 
-	@media (min-width: 768px) and (hover: hover) and (pointer: fine) {
 		.btn:hover::after {
 			content: attr(data-gag);
 			position: absolute;
@@ -295,6 +297,12 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 		}
 	}
 
+	@media (prefers-reduced-motion: reduce) {
+		.btn:hover {
+			transform: none;
+		}
+	}
+
 	.hero-figure {
 		position: relative;
 		width: min(100%, 256px);
@@ -305,8 +313,8 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 			filter 0.35s ease;
 		overflow: hidden;
 		z-index: 1;
-		border: 1px solid color-mix(in srgb, var(--color-secondary) 50%, transparent);
-		box-shadow: 0 0 24px rgba(5, 217, 232, 0.12);
+		border: 1px solid color-mix(in srgb, var(--color-primary) 40%, var(--color-outline-variant));
+		box-shadow: 0 0 24px rgba(5, 217, 232, 0.15);
 		touch-action: manipulation;
 		-webkit-tap-highlight-color: transparent;
 	}
@@ -337,11 +345,12 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 		border-radius: 0;
 	}
 
-	/* Hover 3D / overlay: solo ratón o stylus real — en táctil :hover se queda “pegado” */
+	/* Hover 3D / overlay: solo ratón o stylus real */
 	@media (hover: hover) and (pointer: fine) {
 		.hero-figure:hover {
-			transform: perspective(1000px) rotateX(8deg) translateY(-6px) translateZ(0);
-			filter: saturate(1.15) contrast(1.05);
+			transform: perspective(1000px) rotateX(6deg) translateY(-4px) translateZ(0);
+			filter: saturate(1.1) contrast(1.05);
+			box-shadow: 0 0 32px rgba(5, 217, 232, 0.3);
 		}
 
 		.hero-figure::before {
@@ -353,9 +362,8 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 			background-image: linear-gradient(
 				to bottom,
 				transparent 10%,
-				rgba(255, 42, 109, 0.15) 45%,
-				rgba(5, 217, 232, 0.12) 70%,
-				rgba(0, 0, 0, 0.85) 100%
+				rgba(5, 217, 232, 0.15) 50%,
+				rgba(4, 7, 10, 0.85) 100%
 			);
 			opacity: 0;
 			transition: opacity 0.35s ease;
@@ -368,7 +376,7 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 		}
 
 		.hero-figure:hover img:first-child {
-			filter: hue-rotate(-8deg);
+			filter: hue-rotate(-5deg);
 		}
 
 		.hero-figure:hover img:last-child {
@@ -377,7 +385,7 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 		}
 	}
 
-	/* Táctil: al mantener pulsado se ve la variante pixel / overlay (sin depender de :hover) */
+	/* Táctil */
 	@media (hover: none) {
 		.hero-figure::before {
 			content: '';
@@ -388,9 +396,8 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 			background-image: linear-gradient(
 				to bottom,
 				transparent 10%,
-				rgba(255, 42, 109, 0.15) 45%,
-				rgba(5, 217, 232, 0.12) 70%,
-				rgba(0, 0, 0, 0.85) 100%
+				rgba(5, 217, 232, 0.15) 50%,
+				rgba(4, 7, 10, 0.85) 100%
 			);
 			opacity: 0;
 			transition: opacity 0.2s ease;
@@ -408,7 +415,7 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 		}
 
 		.hero-figure:active img:first-child {
-			filter: hue-rotate(-8deg);
+			filter: hue-rotate(-5deg);
 		}
 
 		.hero-figure:active img:last-child {
@@ -418,6 +425,7 @@ const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986
 	}
 
 	@media (prefers-reduced-motion: reduce) {
+		.hero-figure:hover,
 		.hero-figure:active {
 			transform: none;
 		}

@@ -62,14 +62,15 @@
 		border: 1px solid
 			color-mix(
 				in srgb,
-				var(--color-primary) 40%,
+				var(--color-primary) 35%,
 				var(--color-outline-variant)
 			);
-		background: color-mix(in srgb, var(--color-surface) 72%, transparent);
+		background: color-mix(in srgb, var(--color-surface) 75%, transparent);
 		backdrop-filter: blur(12px);
 		border-radius: 0;
 		position: relative;
 		overflow: hidden;
+		box-shadow: var(--glow);
 	}
 
 	.contact::after {
@@ -81,7 +82,7 @@
 		height: 100%;
 		background: linear-gradient(
 			270deg,
-			rgba(255, 42, 109, 0.06),
+			rgba(5, 217, 232, 0.05),
 			transparent 70%
 		);
 		pointer-events: none;
@@ -96,6 +97,9 @@
 		gap: 0.35rem;
 		position: relative;
 		z-index: 1;
+		text-shadow:
+			0 0 10px rgba(5, 217, 232, 0.35),
+			0 0 20px rgba(57, 255, 20, 0.15);
 	}
 
 	.caret-blink {
@@ -103,7 +107,7 @@
 		width: 0.35rem;
 		height: 0.85em;
 		background: var(--color-primary);
-		box-shadow: 0 0 10px rgba(255, 42, 109, 0.55);
+		box-shadow: 0 0 10px rgba(5, 217, 232, 0.6);
 		animation: caret-blink 1s steps(1, end) infinite;
 	}
 
@@ -164,8 +168,8 @@
 	}
 
 	.label:hover {
-		color: var(--color-neon-amber);
-		text-shadow: 0 0 8px rgba(255, 176, 0, 0.35);
+		color: var(--color-primary);
+		text-shadow: 0 0 8px rgba(5, 217, 232, 0.4);
 	}
 
 	.label::after {
@@ -203,11 +207,11 @@
 		margin: -0.05rem -0.2rem;
 		background: transparent;
 		border-radius: 2px;
-		color: var(--color-secondary);
+		color: var(--color-primary);
 		text-decoration: underline;
 		text-decoration-color: color-mix(
 			in srgb,
-			var(--color-secondary) 40%,
+			var(--color-primary) 40%,
 			transparent
 		);
 		text-underline-offset: 3px;
@@ -221,10 +225,10 @@
 
 	.channels a:hover {
 		color: var(--color-bg);
-		background: var(--color-secondary);
+		background: var(--color-primary);
 		text-decoration: underline;
 		text-decoration-color: transparent;
-		box-shadow: 0 0 16px rgba(5, 217, 232, 0.45);
+		box-shadow: 0 0 16px rgba(5, 217, 232, 0.5);
 		text-shadow: none;
 	}
 </style>

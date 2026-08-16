@@ -57,14 +57,14 @@ const titleTw = '$ ./tail_syslog.sh --limit 3';
 		position: relative;
 		width: 100%;
 		padding: 1.25rem;
-		border: 1px solid color-mix(in srgb, var(--color-primary) 35%, var(--color-secondary));
+		border: 1px solid color-mix(in srgb, var(--color-primary) 35%, var(--color-outline-variant));
 		background: color-mix(in srgb, var(--color-surface-lowest) 94%, transparent);
 		backdrop-filter: blur(14px);
 		overflow: hidden;
 		border-radius: 0;
 		box-shadow:
 			inset 0 0 60px rgba(5, 217, 232, 0.04),
-			0 0 30px rgba(255, 42, 109, 0.06);
+			0 0 30px rgba(5, 217, 232, 0.06);
 	}
 
 	.terminal::before {
@@ -90,7 +90,7 @@ const titleTw = '$ ./tail_syslog.sh --limit 3';
 		gap: 0.75rem;
 		margin-bottom: 1.25rem;
 		padding-bottom: 0.65rem;
-		border-bottom: 1px dashed color-mix(in srgb, var(--color-secondary) 45%, transparent);
+		border-bottom: 1px dashed color-mix(in srgb, var(--color-primary) 35%, transparent);
 		flex-wrap: wrap;
 	}
 
@@ -99,7 +99,7 @@ const titleTw = '$ ./tail_syslog.sh --limit 3';
 		width: 1.35rem;
 		height: 1.35rem;
 		flex-shrink: 0;
-		color: var(--color-neon-green);
+		color: var(--color-secondary);
 		filter: drop-shadow(0 0 6px rgba(57, 255, 20, 0.45));
 	}
 
@@ -118,9 +118,9 @@ const titleTw = '$ ./tail_syslog.sh --limit 3';
 		font-size: 0.58rem;
 		letter-spacing: 0.15em;
 		padding: 0.2rem 0.45rem;
-		border: 1px solid var(--color-primary);
-		color: var(--color-primary);
-		background: rgba(255, 42, 109, 0.12);
+		border: 1px solid var(--color-secondary);
+		color: var(--color-secondary);
+		background: rgba(57, 255, 20, 0.12);
 		animation: rec-pulse 1.2s steps(1, end) infinite;
 		border-radius: 0;
 	}
@@ -159,14 +159,14 @@ const titleTw = '$ ./tail_syslog.sh --limit 3';
 
 	time {
 		flex: 0 0 6.5rem;
-		color: var(--color-neon-muted);
+		color: var(--color-neon-dim);
 	}
 
 	.line {
 		position: relative;
 		display: inline-flex;
 		gap: 0.35rem;
-		color: var(--color-secondary);
+		color: var(--color-primary);
 		text-decoration: none;
 		transition:
 			color 0.15s ease,
@@ -174,7 +174,7 @@ const titleTw = '$ ./tail_syslog.sh --limit 3';
 	}
 
 	.line:hover {
-		color: var(--color-neon-green);
+		color: var(--color-secondary);
 		text-shadow: 0 0 10px rgba(57, 255, 20, 0.45);
 	}
 
@@ -193,12 +193,12 @@ const titleTw = '$ ./tail_syslog.sh --limit 3';
 
 	.prompt {
 		flex-shrink: 0;
-		color: var(--color-primary);
+		color: var(--color-secondary);
 	}
 
 	.title {
 		text-decoration: underline;
-		text-decoration-color: color-mix(in srgb, var(--color-secondary) 50%, transparent);
+		text-decoration-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
 		text-underline-offset: 3px;
 	}
 

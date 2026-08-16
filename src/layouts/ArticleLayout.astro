@@ -25,7 +25,7 @@ const {
 	updatedDate,
 	heroImage,
 	crumbHref = '/blog/',
-	crumbLabel = 'Blog',
+	crumbLabel = 'Bitácora',
 	backHref,
 	backLabel = 'Volver',
 	tags,
@@ -177,9 +177,9 @@ const isBlog = variant === 'blog';
 		font-size: 0.78rem;
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
-		color: var(--color-secondary);
+		color: var(--color-primary);
 		text-decoration: none;
-		border: 1px solid color-mix(in srgb, var(--color-secondary) 35%, var(--color-outline-variant));
+		border: 1px solid color-mix(in srgb, var(--color-primary) 35%, var(--color-outline-variant));
 		padding: 0.4rem 0.85rem;
 		background: color-mix(in srgb, var(--color-surface-lowest) 80%, transparent);
 		backdrop-filter: blur(8px);
@@ -192,8 +192,8 @@ const isBlog = variant === 'blog';
 	}
 
 	.back-link:hover {
-		border-color: var(--color-secondary);
-		box-shadow: 0 0 16px rgba(5, 217, 232, 0.25);
+		border-color: var(--color-primary);
+		box-shadow: 0 0 16px rgba(5, 217, 232, 0.3);
 		color: var(--color-on-surface);
 		transform: translateX(-2px);
 	}
@@ -207,7 +207,7 @@ const isBlog = variant === 'blog';
 	.back-icon {
 		font-size: 1rem;
 		line-height: 1;
-		color: var(--color-neon-green);
+		color: var(--color-secondary);
 	}
 
 	.article-head {
@@ -241,13 +241,13 @@ const isBlog = variant === 'blog';
 		font-weight: 700;
 		letter-spacing: 0.1em;
 		background: rgba(57, 255, 20, 0.1);
-		border: 1px solid color-mix(in srgb, var(--color-neon-green) 60%, transparent);
-		color: var(--color-neon-green);
+		border: 1px solid color-mix(in srgb, var(--color-secondary) 60%, transparent);
+		color: var(--color-secondary);
 		text-shadow: 0 0 8px rgba(57, 255, 20, 0.35);
 	}
 
 	.badge-time {
-		color: var(--color-neon-amber);
+		color: var(--color-primary);
 		font-size: 0.75rem;
 		letter-spacing: 0.04em;
 	}
@@ -267,7 +267,7 @@ const isBlog = variant === 'blog';
 	}
 
 	.meta-project a {
-		color: var(--color-secondary);
+		color: var(--color-primary);
 		text-decoration: underline;
 		text-underline-offset: 3px;
 	}
@@ -282,8 +282,8 @@ const isBlog = variant === 'blog';
 		align-items: baseline;
 		gap: 0.25rem;
 		text-shadow:
-			0 0 10px rgba(5, 217, 232, 0.25),
-			0 0 24px rgba(57, 255, 20, 0.12);
+			0 0 10px rgba(5, 217, 232, 0.35),
+			0 0 24px rgba(57, 255, 20, 0.15);
 	}
 
 	.heading-caret {
@@ -291,7 +291,7 @@ const isBlog = variant === 'blog';
 		width: 0.4rem;
 		height: 0.85em;
 		align-self: center;
-		background: var(--color-secondary);
+		background: var(--color-primary);
 		box-shadow: 0 0 12px rgba(5, 217, 232, 0.45);
 		animation: caret-blink 1s steps(1, end) infinite;
 	}
@@ -377,10 +377,10 @@ const isBlog = variant === 'blog';
 		margin-inline: auto;
 		max-height: 24rem;
 		object-fit: cover;
-		border: 1px solid color-mix(in srgb, var(--color-secondary) 35%, var(--color-outline-variant));
+		border: 1px solid color-mix(in srgb, var(--color-primary) 35%, var(--color-outline-variant));
 		margin-bottom: 2rem;
 		border-radius: 0;
-		box-shadow: 0 0 28px rgba(5, 217, 232, 0.1);
+		box-shadow: 0 0 28px rgba(5, 217, 232, 0.12);
 	}
 
 	.article--project .hero-img {
@@ -405,12 +405,12 @@ const isBlog = variant === 'blog';
 
 	.prose :global(h2) {
 		font-family: var(--font-display);
-		color: var(--color-secondary);
+		color: var(--color-primary);
 		margin: 2.5rem 0 1rem;
 		font-size: clamp(1.45rem, 3.5vw, 1.85rem);
 		letter-spacing: 0.03em;
-		text-shadow: 0 0 12px rgba(5, 217, 232, 0.3);
-		border-bottom: 1px dashed color-mix(in srgb, var(--color-secondary) 35%, transparent);
+		text-shadow: 0 0 12px rgba(5, 217, 232, 0.35);
+		border-bottom: 1px dashed color-mix(in srgb, var(--color-primary) 35%, transparent);
 		padding-bottom: 0.4rem;
 	}
 
@@ -455,7 +455,7 @@ const isBlog = variant === 'blog';
 		padding: 1.25rem;
 		overflow-x: auto;
 		background: var(--color-surface-lowest);
-		border: 1px solid color-mix(in srgb, var(--color-secondary) 35%, var(--color-primary));
+		border: 1px solid color-mix(in srgb, var(--color-primary) 35%, var(--color-secondary));
 		border-radius: 0;
 		box-shadow:
 			inset 0 0 40px rgba(5, 217, 232, 0.04),
@@ -479,7 +479,7 @@ const isBlog = variant === 'blog';
 		border-left: 3px solid var(--color-primary);
 		background: color-mix(in srgb, var(--color-surface) 60%, transparent);
 		color: var(--color-on-surface);
-		box-shadow: inset 8px 0 24px -16px rgba(255, 42, 109, 0.35);
+		box-shadow: inset 8px 0 24px -16px rgba(5, 217, 232, 0.35);
 		border-radius: 0;
 	}
 
@@ -488,7 +488,7 @@ const isBlog = variant === 'blog';
 	}
 
 	.prose :global(a) {
-		color: var(--color-secondary);
+		color: var(--color-primary);
 		text-decoration: underline;
 		text-underline-offset: 3px;
 		transition:
@@ -497,14 +497,14 @@ const isBlog = variant === 'blog';
 	}
 
 	.prose :global(a:hover) {
-		color: var(--color-neon-green);
+		color: var(--color-secondary);
 		text-shadow: 0 0 10px rgba(57, 255, 20, 0.45);
 	}
 
 	.prose :global(img) {
 		max-width: 100%;
 		height: auto;
-		border: 1px solid color-mix(in srgb, var(--color-secondary) 30%, var(--color-outline-variant));
+		border: 1px solid color-mix(in srgb, var(--color-primary) 30%, var(--color-outline-variant));
 		border-radius: 0;
 		margin: 1.5rem 0;
 		box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
@@ -528,7 +528,7 @@ const isBlog = variant === 'blog';
 		margin-inline: auto;
 		margin-top: 3rem;
 		padding-top: 1.5rem;
-		border-top: 1px solid color-mix(in srgb, var(--color-secondary) 30%, var(--color-outline-variant));
+		border-top: 1px solid color-mix(in srgb, var(--color-primary) 30%, var(--color-outline-variant));
 	}
 
 	.article--project .article-footer {
@@ -577,20 +577,21 @@ const isBlog = variant === 'blog';
 	}
 
 	.btn-footer:hover {
-		border-color: var(--color-secondary);
-		color: var(--color-secondary);
+		border-color: var(--color-primary);
+		color: var(--color-primary);
 		box-shadow: 0 0 14px rgba(5, 217, 232, 0.25);
 	}
 
 	.btn-footer--accent {
-		border-color: color-mix(in srgb, var(--color-primary) 50%, transparent);
+		border-color: var(--color-primary);
 		color: var(--color-primary);
+		background: rgba(5, 217, 232, 0.08);
 	}
 
 	.btn-footer--accent:hover {
 		border-color: var(--color-primary);
-		color: var(--color-on-surface);
-		background: rgba(255, 42, 109, 0.15);
-		box-shadow: 0 0 18px rgba(255, 42, 109, 0.35);
+		color: var(--color-bg);
+		background: var(--color-primary);
+		box-shadow: 0 0 18px rgba(5, 217, 232, 0.5);
 	}
 </style>
