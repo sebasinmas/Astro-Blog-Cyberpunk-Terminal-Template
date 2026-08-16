@@ -14,15 +14,26 @@ type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
 const { Content } = await render(post);
+
+const wordCount = post.body ? post.body.trim().split(/\s+/).filter(Boolean).length : 0;
+const readingMinutes = Math.max(1, Math.ceil(wordCount / 200));
+const readingTime = `${readingMinutes} min`;
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout title={`${post.data.title} — Bitácora`} description={post.data.description}>
 	<ArticleLayout
+		variant="blog"
 		title={post.data.title}
 		description={post.data.description}
 		pubDate={post.data.pubDate}
 		updatedDate={post.data.updatedDate}
 		heroImage={post.data.heroImage}
+		crumbHref="/blog/"
+		crumbLabel="Bitácora"
+		backHref="/blog/"
+		backLabel="Volver a la bitácora"
+		readingTime={readingTime}
+		tags={post.data.tags}
 	>
 		<Content />
 	</ArticleLayout>
