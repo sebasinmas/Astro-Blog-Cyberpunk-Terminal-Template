@@ -6,52 +6,49 @@
 
 @import 'tailwindcss';
 
-/* Neon synthwave + CRT terminal (Blood Dragon–inspired, not a copy) */
+/* Cyber-Terminal Palette: Celeste / Cyan (#05d9e8) + Verde Terminal (#39ff14) + Obsidiana (#04070a) */
 @theme {
 	--font-display: 'VT323', ui-monospace, monospace;
 	--font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
-	--color-crt-void: #020203;
-	--color-crt-bg: #050505;
-	--color-crt-panel: #0a0a10;
-	--color-neon-magenta: #ff2a6d;
+	--color-crt-void: #020508;
+	--color-crt-bg: #04070a;
+	--color-crt-panel: #090e15;
 	--color-neon-cyan: #05d9e8;
 	--color-neon-green: #39ff14;
-	--color-neon-amber: #ffb000;
 	--color-neon-dim: #008f11;
-	--color-neon-muted: #3d5a4a;
-	--shadow-phosphor-magenta: 0 0 12px rgba(255, 42, 109, 0.45);
-	--shadow-phosphor-cyan: 0 0 12px rgba(5, 217, 232, 0.4);
+	--color-neon-muted: #1e3a2c;
+	--shadow-phosphor-cyan: 0 0 12px rgba(5, 217, 232, 0.45);
 	--shadow-phosphor-green: 0 0 10px rgba(57, 255, 20, 0.35);
 }
 
 :root {
-	/* Puente con componentes existentes */
-	--color-bg: #050505;
-	--color-surface: #0a0a10;
-	--color-surface-elevated: rgba(12, 12, 20, 0.88);
-	--color-surface-lowest: #020203;
-	--color-on-surface: #e8fff0;
-	--color-on-surface-variant: #8fbc8f;
-	--color-outline: #5a7a6a;
-	--color-outline-variant: #1e2a24;
-	--color-primary: #ff2a6d;
-	--color-secondary: #05d9e8;
-	--color-on-secondary-fixed: #050505;
+	--color-bg: #04070a;
+	--color-surface: #090e15;
+	--color-surface-elevated: rgba(10, 16, 24, 0.88);
+	--color-surface-lowest: #020508;
+	--color-on-surface: #f0fdf4;
+	--color-on-surface-variant: #8fa398;
+	--color-outline: #2d4a3e;
+	--color-outline-variant: #14241d;
+	--color-primary: #05d9e8;
+	--color-secondary: #39ff14;
+	--color-on-secondary-fixed: #04070a;
 	--color-secondary-fixed: #9ffffc;
-	--color-container-high: #12121c;
+	--color-container-high: #0d1520;
 	--container-max: 1200px;
 	--space-page: clamp(1rem, 4vw, 2.5rem);
 	--font-mono: 'JetBrains Mono', ui-monospace, monospace;
 	--font-sans: 'JetBrains Mono', ui-monospace, monospace;
 	--font-display: 'VT323', ui-monospace, monospace;
-	--glow: 0 0 28px rgba(5, 217, 232, 0.22), 0 0 56px rgba(255, 42, 109, 0.12);
-	--color-neon-magenta: #ff2a6d;
+	--glow: 0 0 24px rgba(5, 217, 232, 0.22), 0 0 48px rgba(57, 255, 20, 0.08);
+	--glow-cyan: 0 0 20px rgba(5, 217, 232, 0.4), 0 0 40px rgba(5, 217, 232, 0.15);
+	--glow-green: 0 0 16px rgba(57, 255, 20, 0.4), 0 0 32px rgba(57, 255, 20, 0.15);
+	--glow-subtle: 0 0 20px rgba(5, 217, 232, 0.12);
 	--color-neon-cyan: #05d9e8;
 	--color-neon-green: #39ff14;
-	--color-neon-amber: #ffb000;
 	--color-neon-dim: #008f11;
-	--color-neon-muted: #3d5a4a;
+	--color-neon-muted: #1e3a2c;
 }
 
 *,
@@ -88,25 +85,25 @@ body {
 	text-shadow: 0 0 1px rgba(57, 255, 20, 0.12);
 }
 
-/* Grid + dual tint: consola sobre vacío espacial */
+/* Grid + dual tint: consola sobre vacío espacial (Obsidiana + Cyan + Esmeralda) */
 body.crt-grid {
 	background-color: var(--color-bg);
 	background-image:
-		radial-gradient(ellipse 120% 80% at 50% -20%, rgba(255, 42, 109, 0.12), transparent 55%),
-		radial-gradient(ellipse 80% 50% at 100% 50%, rgba(5, 217, 232, 0.06), transparent 45%),
+		radial-gradient(ellipse 120% 80% at 50% -20%, rgba(5, 217, 232, 0.12), transparent 55%),
+		radial-gradient(ellipse 80% 50% at 100% 50%, rgba(57, 255, 20, 0.05), transparent 45%),
 		repeating-linear-gradient(
 			90deg,
 			transparent,
 			transparent 23px,
-			rgba(5, 217, 232, 0.04) 23px,
-			rgba(5, 217, 232, 0.04) 24px
+			rgba(5, 217, 232, 0.035) 23px,
+			rgba(5, 217, 232, 0.035) 24px
 		),
 		repeating-linear-gradient(
 			0deg,
 			transparent,
 			transparent 23px,
-			rgba(255, 42, 109, 0.03) 23px,
-			rgba(255, 42, 109, 0.03) 24px
+			rgba(57, 255, 20, 0.025) 23px,
+			rgba(57, 255, 20, 0.025) 24px
 		);
 	background-size: 100% 100%, 100% 100%, 24px 24px, 24px 24px;
 }
@@ -129,13 +126,13 @@ a {
 }
 
 a:hover {
-	color: var(--color-secondary);
+	color: var(--color-primary);
 }
 
 :focus-visible {
-	outline: 2px solid var(--color-neon-magenta);
+	outline: 2px solid var(--color-primary);
 	outline-offset: 3px;
-	box-shadow: 0 0 12px rgba(255, 42, 109, 0.35);
+	box-shadow: 0 0 12px rgba(5, 217, 232, 0.45);
 }
 
 .skip-link {
@@ -144,14 +141,15 @@ a:hover {
 	top: 0.75rem;
 	z-index: 100;
 	padding: 0.5rem 1rem;
-	background: var(--color-secondary);
-	color: var(--color-on-secondary-fixed);
+	background: var(--color-primary);
+	color: var(--color-bg);
 	font-family: var(--font-mono);
 	font-size: 0.75rem;
+	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
 	border-radius: 0;
-	border: 1px solid var(--color-neon-magenta);
+	border: 1px solid var(--color-secondary);
 }
 
 .skip-link:focus {
@@ -165,7 +163,7 @@ a:hover {
 	padding-inline: var(--space-page);
 }
 
-/* Sin redondeos estilo cursorrules */
+/* Sin redondeos estilo retro-terminal */
 .pixel-corners,
 .crt-frame {
 	border-radius: 0;
@@ -195,7 +193,7 @@ a:hover {
 		transparent 3px
 	);
 	mix-blend-mode: multiply;
-	opacity: 0.35;
+	opacity: 0.3;
 }
 
 .crt-vignette {
@@ -203,14 +201,14 @@ a:hover {
 	position: fixed;
 	inset: 0;
 	z-index: 9999;
-	background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.65) 100%);
+	background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.7) 100%);
 	mix-blend-mode: multiply;
 	opacity: 0.9;
 }
 
 @media (prefers-reduced-motion: reduce) {
 	.crt-overlay {
-		opacity: 0.15;
+		opacity: 0.12;
 	}
 }
 

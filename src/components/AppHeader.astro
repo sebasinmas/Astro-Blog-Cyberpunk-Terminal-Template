@@ -14,19 +14,19 @@
 			</summary>
 			<div class="mobile-links">
 				<a href="/#projects" class="nav-link" data-cmd="./portfolio.sh --list">Proyectos</a>
-				<a href="/blog/" class="nav-link" data-cmd="cat ./blog/*.md">Blog</a>
+				<a href="/blog/" class="nav-link" data-cmd="cat ./blog/*.md">Bitácora</a>
 				<a href="/#contact" class="nav-link" data-cmd="mail —compose">Contacto</a>
 			</div>
 		</details>
 
 		<div class="desktop-links">
 			<a href="/#projects" class="nav-link" data-cmd="./portfolio.sh --list">Proyectos</a>
-			<a href="/blog/" class="nav-link" data-cmd="cat ./blog/*.md">Blog</a>
+			<a href="/blog/" class="nav-link" data-cmd="cat ./blog/*.md">Bitácora</a>
 			<a href="/#contact" class="nav-link" data-cmd="mail —compose">Contacto</a>
 		</div>
 
 		<div class="actions">
-			<a href="/blog/" class="icon-btn" aria-label="Ir al blog (vista terminal)" title="RUN: blog_viewer.bin">
+			<a href="/blog/" class="icon-btn" aria-label="Ir a la bitácora (vista terminal)" title="RUN: blog_viewer.bin">
 				<svg class="icon-nav" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
 					<path
 						fill="currentColor"
@@ -68,7 +68,7 @@
 		justify-content: space-between;
 		gap: 1rem;
 		padding: 0.85rem 1.25rem;
-		border: 1px solid color-mix(in srgb, var(--color-secondary) 55%, var(--color-primary));
+		border: 1px solid color-mix(in srgb, var(--color-primary) 35%, var(--color-outline-variant));
 		background: color-mix(in srgb, var(--color-surface-lowest) 92%, transparent);
 		backdrop-filter: blur(14px);
 		box-shadow: var(--glow);
@@ -79,10 +79,10 @@
 		font-family: var(--font-display);
 		font-size: 1.35rem;
 		line-height: 1;
-		color: var(--color-secondary);
+		color: var(--color-primary);
 		text-shadow:
-			0 0 10px rgba(5, 217, 232, 0.5),
-			0 0 24px rgba(255, 42, 109, 0.25);
+			0 0 10px rgba(5, 217, 232, 0.45),
+			0 0 20px rgba(5, 217, 232, 0.2);
 		position: relative;
 		transition:
 			color 0.2s ease,
@@ -90,10 +90,10 @@
 	}
 
 	.brand:hover {
-		color: var(--color-primary);
+		color: var(--color-on-surface);
 		text-shadow:
-			0 0 12px rgba(255, 42, 109, 0.55),
-			0 0 28px rgba(5, 217, 232, 0.25);
+			0 0 14px rgba(5, 217, 232, 0.75),
+			0 0 24px rgba(57, 255, 20, 0.35);
 	}
 
 	@media (min-width: 768px) {
@@ -130,8 +130,8 @@
 	}
 
 	.desktop-links .nav-link:hover {
-		color: var(--color-neon-green);
-		text-shadow: 0 0 8px rgba(57, 255, 20, 0.45);
+		color: var(--color-primary);
+		text-shadow: 0 0 8px rgba(5, 217, 232, 0.45);
 	}
 
 	@media (min-width: 768px) {
@@ -167,7 +167,7 @@
 
 	.mobile-menu summary:hover {
 		color: var(--color-secondary);
-		text-shadow: 0 0 10px rgba(5, 217, 232, 0.45);
+		text-shadow: 0 0 10px rgba(57, 255, 20, 0.45);
 	}
 
 	.mobile-menu summary::-webkit-details-marker {
@@ -193,7 +193,7 @@
 		min-width: 12rem;
 		padding: 0.75rem;
 		background: var(--color-surface-lowest);
-		border: 1px solid var(--color-secondary);
+		border: 1px solid var(--color-primary);
 		border-radius: 0;
 		box-shadow: 0 0 20px rgba(5, 217, 232, 0.15);
 	}
@@ -210,7 +210,7 @@
 	}
 
 	.mobile-links a:hover {
-		color: var(--color-neon-green);
+		color: var(--color-primary);
 	}
 
 	.actions {
@@ -240,8 +240,8 @@
 	@media (hover: hover) and (pointer: fine) {
 		.icon-btn:hover {
 			color: var(--color-bg);
-			background: var(--color-secondary);
-			border-color: var(--color-secondary);
+			background: var(--color-primary);
+			border-color: var(--color-primary);
 			box-shadow: 0 0 14px rgba(5, 217, 232, 0.45);
 		}
 	}
