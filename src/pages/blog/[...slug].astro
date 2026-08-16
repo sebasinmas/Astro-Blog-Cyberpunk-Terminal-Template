@@ -20,7 +20,15 @@ const readingMinutes = Math.max(1, Math.ceil(wordCount / 200));
 const readingTime = `${readingMinutes} min`;
 ---
 
-<BaseLayout title={`${post.data.title} — Bitácora`} description={post.data.description}>
+<BaseLayout
+	title={`${post.data.title} — Bitácora`}
+	description={post.data.description}
+	image={`/open-graph/blog/${post.id}.png`}
+	type="article"
+	publishedDate={post.data.pubDate}
+	updatedDate={post.data.updatedDate}
+	tags={post.data.tags}
+>
 	<ArticleLayout
 		variant="blog"
 		title={post.data.title}

@@ -21,7 +21,15 @@ const bannerRef = project.data.heroImage ?? project.data.image;
 const heroImage = resolveProjectImage(bannerRef);
 ---
 
-<BaseLayout title={project.data.title} description={project.data.description}>
+<BaseLayout
+	title={`${project.data.title} — Proyecto`}
+	description={project.data.description}
+	image={`/open-graph/projects/${project.id}.png`}
+	type="article"
+	publishedDate={project.data.pubDate}
+	updatedDate={project.data.updatedDate}
+	tags={project.data.tags}
+>
 	<ArticleLayout
 		title={project.data.title}
 		description={project.data.description}

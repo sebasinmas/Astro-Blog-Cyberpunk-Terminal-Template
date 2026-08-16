@@ -3,19 +3,41 @@ import BaseHead from '../components/BaseHead.astro';
 import AppHeader from '../components/AppHeader.astro';
 import AppFooter from '../components/AppFooter.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import type { ImageMetadata } from 'astro';
 
 interface Props {
 	title?: string;
 	description?: string;
+	image?: string | ImageMetadata;
+	type?: 'website' | 'article';
+	publishedDate?: Date;
+	updatedDate?: Date;
+	tags?: readonly string[];
 }
 
-const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
+const {
+	title = SITE_TITLE,
+	description = SITE_DESCRIPTION,
+	image,
+	type = 'website',
+	publishedDate,
+	updatedDate,
+	tags,
+} = Astro.props;
 ---
 
 <!doctype html>
 <html lang="es">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead
+			title={title}
+			description={description}
+			image={image}
+			type={type}
+			publishedDate={publishedDate}
+			updatedDate={updatedDate}
+			tags={tags}
+		/>
 	</head>
 	<body class="crt-grid">
 		<div class="crt-vignette" aria-hidden="true"></div>
@@ -28,4 +50,3 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
 		<AppFooter />
 	</body>
 </html>
-
