@@ -25,5 +25,9 @@
   "allowScripts": {
     "sharp@0.34.5": true,
     "esbuild@0.28.2": true
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^6.0.3"
   }
 }

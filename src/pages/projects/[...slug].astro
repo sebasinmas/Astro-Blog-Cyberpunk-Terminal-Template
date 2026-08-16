@@ -6,7 +6,7 @@ import { resolveProjectImage } from '../../utils/resolveProjectImage';
 
 export async function getStaticPaths() {
 	const entries = await getCollection('projects');
-	return entries.map((entry) => ({
+	return entries.map((entry: CollectionEntry<'projects'>) => ({
 		params: { slug: entry.id },
 		props: entry,
 	}));
