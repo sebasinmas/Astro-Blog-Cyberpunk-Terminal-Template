@@ -200,5 +200,12 @@ export async function generateOgImage(options: OgImageOptions): Promise<Buffer> 
 		</g>
 	</svg>`;
 
-	return await sharp(Buffer.from(svg)).png().toBuffer();
+	return await sharp(Buffer.from(svg))
+		.png({
+			compressionLevel: 9,
+			palette: true,
+			quality: 90,
+			effort: 7,
+		})
+		.toBuffer();
 }
