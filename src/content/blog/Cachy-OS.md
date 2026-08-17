@@ -11,8 +11,6 @@ image: cachyos/cachyos.webp
 pubDate: '2026-08-16'
 order: 0
 ---
-#
 
 ## ¿Por qué Cachy-OS?
-
 

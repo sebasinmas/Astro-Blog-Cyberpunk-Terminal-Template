@@ -114,15 +114,12 @@ const isBlog = variant === 'blog';
 	{
 		hasHero &&
 			(heroIsRemote ? (
-				<img class="hero-img pixel-corners" src={heroImage as string} alt="" loading="eager" />
+				<img class="hero-img pixel-corners" src={heroImage as string} alt={title} loading="eager" />
 			) : (
 				<Image
 					class="hero-img pixel-corners"
 					src={heroImage as ImageMetadata}
-					alt=""
-					width={(heroImage as ImageMetadata).width}
-					height={(heroImage as ImageMetadata).height}
-					sizes="(min-width: 960px) min(100vw, 56rem) 100vw"
+					alt={title}
 					loading="eager"
 				/>
 			))
