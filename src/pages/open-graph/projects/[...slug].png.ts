@@ -12,6 +12,8 @@ export async function getStaticPaths() {
 
 export const GET: APIRoute = async ({ props }) => {
 	const project = props as CollectionEntry<'projects'>;
+	const relImage = project.data.image ?? project.data.heroImage;
+	const imagePath = relImage && !relImage.startsWith('http') ? `src/assets/imgs/projects/${relImage}` : undefined;
 
 	const pngBuffer = await generateOgImage({
 		badge: 'SYS_PROJECT // ARCHIVE',
@@ -19,6 +21,7 @@ export const GET: APIRoute = async ({ props }) => {
 		description: project.data.description,
 		author: 'SebaSinMas',
 		tags: project.data.tags ?? ['Project', 'Dev'],
+		imagePath,
 	});
 
 	return new Response(new Uint8Array(pngBuffer), {

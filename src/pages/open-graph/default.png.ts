@@ -8,7 +8,8 @@ export const GET: APIRoute = async () => {
 		title: SITE_TITLE,
 		description: SITE_DESCRIPTION,
 		author: 'SebaSinMas',
-		tags: ['SoftwareEngineering', 'Astro', 'TypeScript', 'Linux'],
+		tags: ['Software', 'Astro', 'TypeScript', 'Linux'],
+		imagePath: 'src/assets/pfp.jpg',
 	});
 
 	return new Response(new Uint8Array(pngBuffer), {

@@ -21,6 +21,9 @@ export const GET: APIRoute = async ({ props }) => {
 		day: 'numeric',
 	});
 
+	const relImage = post.data.image ?? post.data.heroImage;
+	const imagePath = relImage ? `src/assets/imgs/blog/${relImage}` : undefined;
+
 	const pngBuffer = await generateOgImage({
 		badge: 'SYS_LOG // ENTRY',
 		title: post.data.title,
@@ -29,6 +32,7 @@ export const GET: APIRoute = async ({ props }) => {
 		date: formattedDate,
 		readingTime: `${readingMin} min`,
 		tags: post.data.tags ?? ['Bitacora', 'Linux', 'Dev'],
+		imagePath,
 	});
 
 	return new Response(new Uint8Array(pngBuffer), {
