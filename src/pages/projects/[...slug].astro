@@ -19,6 +19,10 @@ const { Content } = await render(project);
 
 const bannerRef = project.data.heroImage ?? project.data.image;
 const heroImage = resolveProjectImage(bannerRef);
+
+const wordCount = project.body ? project.body.trim().split(/\s+/).filter(Boolean).length : 0;
+const readingMinutes = Math.max(1, Math.ceil(wordCount / 200));
+const readingTime = `${readingMinutes} min`;
 ---
 
 <BaseLayout
@@ -31,6 +35,7 @@ const heroImage = resolveProjectImage(bannerRef);
 	tags={project.data.tags}
 >
 	<ArticleLayout
+		variant="project"
 		title={project.data.title}
 		description={project.data.description}
 		pubDate={project.data.pubDate}
@@ -40,6 +45,7 @@ const heroImage = resolveProjectImage(bannerRef);
 		crumbLabel="Proyectos"
 		backHref="/#projects"
 		backLabel="Volver a proyectos"
+		readingTime={readingTime}
 		tags={project.data.tags}
 	>
 		<Content />

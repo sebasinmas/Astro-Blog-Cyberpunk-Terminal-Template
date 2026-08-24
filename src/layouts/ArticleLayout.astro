@@ -56,7 +56,7 @@ const isBlog = variant === 'blog';
 		<div class="meta-bar">
 			{
 				isBlog ? (
-					<div class="meta-blog">
+					<div class="meta-row">
 						<span class="badge-syslog">SYS_LOG // ENTRY</span>
 						<span class="meta-sep" aria-hidden="true">
 							│
@@ -72,11 +72,27 @@ const isBlog = variant === 'blog';
 						)}
 					</div>
 				) : (
-					<p class="meta-project">
-						<a href={crumbHref}>{crumbLabel}</a>
-						<span aria-hidden="true"> / </span>
+					<div class="meta-row">
+						<span class="badge-syslog badge-project">SYS_PROJECT // SPEC</span>
+						<span class="meta-sep" aria-hidden="true">
+							│
+						</span>
+						<a href={crumbHref} class="meta-crumb">
+							{crumbLabel}
+						</a>
+						<span class="meta-sep" aria-hidden="true">
+							│
+						</span>
 						<FormattedDate date={pubDate} />
-					</p>
+						{readingTime && (
+							<>
+								<span class="meta-sep" aria-hidden="true">
+									│
+								</span>
+								<span class="badge-time">⏱ {readingTime}</span>
+							</>
+						)}
+					</div>
 				)
 			}
 		</div>
@@ -102,13 +118,13 @@ const isBlog = variant === 'blog';
 			)
 		}
 
-		{isBlog && (
-			<div class="article-divider" aria-hidden="true">
-				<span class="divider-line" />
-				<span class="divider-label">TRANSMISSION_START</span>
-				<span class="divider-line" />
-			</div>
-		)}
+		<div class="article-divider" aria-hidden="true">
+			<span class="divider-line" />
+			<span class="divider-label">
+				{isBlog ? 'TRANSMISSION_START' : 'SPECIFICATION_START // ARCHIVE'}
+			</span>
+			<span class="divider-line" />
+		</div>
 	</header>
 
 	{
@@ -133,7 +149,9 @@ const isBlog = variant === 'blog';
 
 	<footer class="article-footer">
 		<div class="eof-banner" aria-hidden="true">
-			<span>::: FIN DE TRANSMISIÓN // EOF :::</span>
+			<span>
+				{isBlog ? '::: FIN DE TRANSMISIÓN // SYSLOG_EOF :::' : '::: FIN DE TRANSMISIÓN // SPEC_EOF :::'}
+			</span>
 		</div>
 		<div class="footer-actions">
 			<a href={backHref ?? crumbHref} class="btn-footer">
@@ -155,14 +173,8 @@ const isBlog = variant === 'blog';
 	}
 
 	.back-row {
-		margin: 0 0 1.25rem;
+		margin: 0 auto 1.25rem;
 		max-width: min(68ch, 100%);
-		margin-inline: auto;
-	}
-
-	.article--project .back-row {
-		max-width: min(72rem, 100%);
-		margin-inline: 0;
 	}
 
 	.back-link {
@@ -213,16 +225,11 @@ const isBlog = variant === 'blog';
 		margin-bottom: 2rem;
 	}
 
-	.article--project .article-head {
-		max-width: min(72rem, 100%);
-		margin-inline: 0;
-	}
-
 	.meta-bar {
 		margin-bottom: 0.75rem;
 	}
 
-	.meta-blog {
+	.meta-row {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
@@ -243,6 +250,13 @@ const isBlog = variant === 'blog';
 		text-shadow: 0 0 8px rgba(57, 255, 20, 0.35);
 	}
 
+	.badge-project {
+		background: rgba(5, 217, 232, 0.1);
+		border: 1px solid color-mix(in srgb, var(--color-primary) 60%, transparent);
+		color: var(--color-primary);
+		text-shadow: 0 0 8px rgba(5, 217, 232, 0.35);
+	}
+
 	.badge-time {
 		color: var(--color-primary);
 		font-size: 0.75rem;
@@ -254,19 +268,18 @@ const isBlog = variant === 'blog';
 		opacity: 0.7;
 	}
 
-	.meta-project {
-		font-family: var(--font-mono);
-		font-size: 0.75rem;
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-		color: var(--color-on-surface-variant);
-		margin: 0;
-	}
-
-	.meta-project a {
+	.meta-crumb {
 		color: var(--color-primary);
 		text-decoration: underline;
 		text-underline-offset: 3px;
+		transition:
+			color 0.15s ease,
+			text-shadow 0.15s ease;
+	}
+
+	.meta-crumb:hover {
+		color: var(--color-secondary);
+		text-shadow: 0 0 8px rgba(57, 255, 20, 0.35);
 	}
 
 	h1 {
@@ -278,6 +291,7 @@ const isBlog = variant === 'blog';
 		flex-wrap: wrap;
 		align-items: baseline;
 		gap: 0.25rem;
+		text-wrap: balance;
 		text-shadow:
 			0 0 10px rgba(5, 217, 232, 0.35),
 			0 0 24px rgba(57, 255, 20, 0.15);
@@ -311,6 +325,7 @@ const isBlog = variant === 'blog';
 		font-size: clamp(1rem, 2.5vw, 1.12rem);
 		line-height: 1.6;
 		color: var(--color-on-surface-variant);
+		text-wrap: pretty;
 	}
 
 	.tags {
@@ -380,10 +395,6 @@ const isBlog = variant === 'blog';
 		box-shadow: 0 0 28px rgba(5, 217, 232, 0.12);
 	}
 
-	.article--project .hero-img {
-		max-width: min(72rem, 100%);
-	}
-
 	.prose-wrapper {
 		width: 100%;
 	}
@@ -396,16 +407,13 @@ const isBlog = variant === 'blog';
 		line-height: 1.75;
 	}
 
-	.article--project .prose {
-		max-width: min(72rem, 100%);
-	}
-
 	.prose :global(h2) {
 		font-family: var(--font-display);
 		color: var(--color-primary);
 		margin: 2.5rem 0 1rem;
 		font-size: clamp(1.45rem, 3.5vw, 1.85rem);
 		letter-spacing: 0.03em;
+		text-wrap: balance;
 		text-shadow: 0 0 12px rgba(5, 217, 232, 0.35);
 		border-bottom: 1px dashed color-mix(in srgb, var(--color-primary) 35%, transparent);
 		padding-bottom: 0.4rem;
@@ -417,12 +425,25 @@ const isBlog = variant === 'blog';
 		margin: 2rem 0 0.75rem;
 		font-size: clamp(1.2rem, 3vw, 1.45rem);
 		letter-spacing: 0.02em;
+		text-wrap: balance;
 		text-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+	}
+
+	.prose :global(h4) {
+		font-family: var(--font-mono);
+		color: var(--color-secondary);
+		margin: 1.5rem 0 0.5rem;
+		font-size: 1rem;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-wrap: balance;
+		text-shadow: 0 0 8px rgba(57, 255, 20, 0.25);
 	}
 
 	.prose :global(p) {
 		margin: 0 0 1.25rem;
 		color: var(--color-on-surface);
+		text-wrap: pretty;
 	}
 
 	.prose :global(ul),
@@ -433,6 +454,7 @@ const isBlog = variant === 'blog';
 
 	.prose :global(li) {
 		margin-bottom: 0.4rem;
+		text-wrap: pretty;
 	}
 
 	.prose :global(code) {
@@ -478,6 +500,7 @@ const isBlog = variant === 'blog';
 		color: var(--color-on-surface);
 		box-shadow: inset 8px 0 24px -16px rgba(5, 217, 232, 0.35);
 		border-radius: 0;
+		text-wrap: pretty;
 	}
 
 	.prose :global(blockquote p:last-child) {
@@ -507,6 +530,85 @@ const isBlog = variant === 'blog';
 		box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 	}
 
+	.prose :global(figure) {
+		margin: 1.75rem 0;
+	}
+
+	.prose :global(figure img) {
+		margin: 0 0 0.5rem;
+	}
+
+	.prose :global(figcaption) {
+		font-family: var(--font-mono);
+		font-size: 0.76rem;
+		color: var(--color-neon-dim);
+		letter-spacing: 0.05em;
+		text-align: center;
+		text-shadow: 0 0 6px rgba(0, 143, 17, 0.25);
+	}
+
+	.prose :global(table) {
+		width: 100%;
+		margin: 1.75rem 0;
+		border-collapse: collapse;
+		font-size: 0.88rem;
+		font-family: var(--font-mono);
+		background: color-mix(in srgb, var(--color-surface-lowest) 92%, transparent);
+		border: 1px solid color-mix(in srgb, var(--color-primary) 35%, var(--color-outline-variant));
+	}
+
+	.prose :global(th) {
+		padding: 0.65rem 0.85rem;
+		background: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface));
+		color: var(--color-primary);
+		font-weight: 700;
+		letter-spacing: 0.05em;
+		text-align: left;
+		border-bottom: 1px solid color-mix(in srgb, var(--color-primary) 40%, transparent);
+	}
+
+	.prose :global(td) {
+		padding: 0.65rem 0.85rem;
+		border-bottom: 1px solid color-mix(in srgb, var(--color-outline-variant) 70%, transparent);
+		color: var(--color-on-surface);
+	}
+
+	.prose :global(tr:last-child td) {
+		border-bottom: none;
+	}
+
+	.prose :global(tr:nth-child(even)) {
+		background: rgba(5, 217, 232, 0.025);
+	}
+
+	.prose :global(kbd) {
+		font-family: var(--font-mono);
+		font-size: 0.8em;
+		padding: 0.15em 0.45em;
+		border: 1px solid var(--color-primary);
+		background: var(--color-surface-lowest);
+		color: var(--color-primary);
+		box-shadow: 0 2px 0 var(--color-primary);
+	}
+
+	.prose :global(dl) {
+		margin: 1.5rem 0;
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: 0.5rem 1rem;
+	}
+
+	.prose :global(dt) {
+		font-family: var(--font-mono);
+		font-weight: 700;
+		color: var(--color-primary);
+	}
+
+	.prose :global(dd) {
+		margin: 0;
+		color: var(--color-on-surface);
+	}
+
 	.prose :global(hr) {
 		border: 0;
 		height: 1px;
@@ -526,11 +628,6 @@ const isBlog = variant === 'blog';
 		margin-top: 3rem;
 		padding-top: 1.5rem;
 		border-top: 1px solid color-mix(in srgb, var(--color-primary) 30%, var(--color-outline-variant));
-	}
-
-	.article--project .article-footer {
-		max-width: min(72rem, 100%);
-		margin-inline: 0;
 	}
 
 	.eof-banner {
