@@ -1,0 +1,157 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import arrowUpRight from '../assets/icons/arrow-up-right-24.svg';
+import SectionHeading from './SectionHeading.astro';
+
+const posts: CollectionEntry<'blog'>[] = (await getCollection('blog'))
+	.sort(
+		(a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+	)
+	.slice(0, 3);
+
+const categoryOf = (post: CollectionEntry<'blog'>) =>
+	(post.data.category ?? (post.data.tags ?? []).slice(0, 2).join(' / ')).toUpperCase();
+---
+
+<section class="journal m-container" id="blog" aria-labelledby="journal-heading">
+	<SectionHeading index="02" title="Bitácora" meta="NOTAS PERSONALES" id="journal-heading" />
+
+	<div class="intro-row">
+		<p class="intro" data-reveal>Un espacio para documentar lo que exploro y aprendo.</p>
+		<ul class="entries">
+			{
+				posts.map((post) => (
+					<li data-reveal>
+						<a class="entry" href={`/blog/${post.id}/`}>
+							<time datetime={post.data.pubDate.toISOString()}>
+								{post.data.pubDate.toLocaleDateString('es-ES', { timeZone: 'UTC' })}
+							</time>
+							<span class="details">
+								<span class="title">{post.data.title}</span>
+								<span class="category">{categoryOf(post)}</span>
+							</span>
+							<img class="arrow" src={arrowUpRight.src} width="24" height="24" alt="" />
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+
+	<div class="rule" role="presentation" data-rule></div>
+</section>
+
+<style>
+	.journal {
+		display: flex;
+		flex-direction: column;
+		gap: 32px;
+		padding-bottom: 80px;
+	}
+
+	.intro-row {
+		display: flex;
+		align-items: center;
+		gap: 80px;
+	}
+
+	.intro {
+		flex: 0 0 290px;
+		margin: 0;
+		font-size: 16px;
+		line-height: 1.7;
+		color: var(--m-muted);
+	}
+
+	.entries {
+		flex: 1 1 0;
+		min-width: 0;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		border-bottom: 1px solid var(--m-line);
+	}
+
+	.entries li {
+		border-top: 1px solid var(--m-line);
+	}
+
+	.entry {
+		display: flex;
+		align-items: center;
+		gap: 32px;
+		padding-block: 28px;
+	}
+
+	time {
+		font-family: var(--m-font-code);
+		font-size: 12px;
+		color: var(--m-dim);
+		white-space: nowrap;
+	}
+
+	.details {
+		display: flex;
+		flex: 1 1 0;
+		flex-direction: column;
+		gap: 8px;
+		min-width: 0;
+	}
+
+	.title {
+		font-size: clamp(1.25rem, 2.2vw, 1.5625rem);
+		font-weight: 500;
+		color: var(--m-text);
+		transition: color 0.2s ease;
+	}
+
+	.category {
+		font-family: var(--m-font-code);
+		font-size: 11px;
+		color: var(--m-accent);
+	}
+
+	.arrow {
+		flex: none;
+		transition: transform 0.25s ease;
+	}
+
+	.entry:hover .title,
+	.entry:focus-visible .title {
+		color: var(--m-accent);
+	}
+
+	.entry:hover .arrow,
+	.entry:focus-visible .arrow {
+		transform: translate(3px, -3px);
+	}
+
+	.rule {
+		height: 1px;
+		background: var(--m-line);
+		transform-origin: left;
+	}
+
+	@media (max-width: 900px) {
+		.intro-row {
+			flex-direction: column;
+			align-items: stretch;
+			gap: 24px;
+		}
+
+		.intro {
+			flex-basis: auto;
+		}
+	}
+
+	@media (max-width: 560px) {
+		.entry {
+			flex-wrap: wrap;
+			gap: 12px 16px;
+		}
+
+		time {
+			width: 100%;
+		}
+	}
+</style>
