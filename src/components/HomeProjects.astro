@@ -1,243 +1,218 @@
 ---
+import Image from 'astro/components/Image.astro';
 import { type CollectionEntry, getCollection } from 'astro:content';
-import HomeProjectCard from './HomeProjectCard.astro';
+import { resolveProjectImage } from '../utils/resolveProjectImage';
+import SectionHeading from './SectionHeading.astro';
 
 const projects: CollectionEntry<'projects'>[] = (await getCollection('projects')).sort(
 	(a: CollectionEntry<'projects'>, b: CollectionEntry<'projects'>) => a.data.order - b.data.order,
 );
 ---
 
-<section class="section container" id="projects" aria-labelledby="projects-heading">
-	<div class="section-head">
-		<h2 id="projects-heading">PROYECTOS<span class="caret-blink" aria-hidden="true"></span></h2>
-		<div class="rule-wrap" role="presentation">
-			<pre class="rule-ascii rule-ascii--narrow" aria-hidden="true">─── SECTOR 7 ───</pre>
-			<pre class="rule-ascii rule-ascii--wide" aria-hidden="true">───[ SECTOR 7 // ARCHIVE ]─────────────────────────────────</pre>
-		</div>
-	</div>
+<section class="projects m-container" id="projects" aria-labelledby="projects-heading">
+	<SectionHeading index="01" title="Proyectos" meta="DESARROLLO / SELECCIÓN" id="projects-heading" />
 
 	{
-		projects.length > 0 && (
-			<div class="carousel-wrap">
-				<div
-					class="carousel-viewport"
-					tabindex="0"
-					role="region"
-					aria-roledescription="carrusel"
-					aria-label="Proyectos destacados. Desliza horizontalmente para ver más."
-					data-carousel
-				>
-					<div class="carousel-track">
-						{projects.map((entry: CollectionEntry<'projects'>) => (
-							<div class="carousel-slide">
-								<HomeProjectCard
-									title={entry.data.title}
-									description={entry.data.description}
-									tags={entry.data.tags}
-									image={entry.data.image}
-									slug={entry.id}
-								/>
-							</div>
-						))}
+		projects.map((entry: CollectionEntry<'projects'>) => {
+			const resolved = resolveProjectImage(entry.data.image);
+			return (
+				<a class="featured" href={`/projects/${entry.id}/`} data-reveal>
+					<div class="preview">
+						<div class="chrome" aria-hidden="true">
+							<span class="controls">
+								<i />
+								<i />
+								<i />
+							</span>
+							<span class="chrome-label">{entry.data.title.toUpperCase()} / VISTA DEL PROYECTO</span>
+						</div>
+						<div class="shot">
+							{typeof resolved === 'string' ? (
+								<Image src={resolved} alt="" loading="lazy" width={1040} height={480} />
+							) : (
+								<Image src={resolved} alt="" loading="lazy" width={1040} />
+							)}
+						</div>
 					</div>
-				</div>
-			</div>
-		)
+					<div class="details">
+						{entry.data.kicker && <p class="kicker">{entry.data.kicker}</p>}
+						<h3>{entry.data.title}</h3>
+						<p class="description">{entry.data.description}</p>
+						<ul class="stack" aria-label="Tecnologías">
+							{entry.data.tags.map((tag) => (
+								<li>{tag}</li>
+							))}
+						</ul>
+					</div>
+				</a>
+			);
+		})
 	}
+
+	<div class="rule" role="presentation" data-rule></div>
 </section>
 
 <style>
-	.section {
+	.projects {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
-		margin-top: 2.5rem;
+		gap: 36px;
+		padding-block: 72px;
 	}
 
-	.section-head {
+	.featured {
 		display: flex;
+		align-items: center;
+		gap: 48px;
+		padding: 32px;
+		background: var(--m-surface);
+		border: 1px solid var(--m-line);
+		border-radius: 8px;
+		transition: border-color 0.25s ease;
+	}
+
+	.featured:hover {
+		border-color: color-mix(in srgb, var(--m-accent) 55%, var(--m-line));
+	}
+
+	.preview {
+		flex: 0 0 520px;
+		width: 520px;
+		overflow: hidden;
+		border: 1px solid var(--m-line);
+		border-radius: 4px;
+	}
+
+	.chrome {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		height: 36px;
+		padding-inline: 14px;
+		background: var(--m-surface-2);
+	}
+
+	.controls {
+		display: flex;
+		gap: 5px;
+	}
+
+	.controls i {
+		width: 5px;
+		height: 5px;
+		border-radius: 3px;
+		background: var(--m-dim);
+	}
+
+	.chrome-label {
+		font-family: var(--m-font-code);
+		font-size: 10px;
+		color: var(--m-muted);
+		white-space: nowrap;
+	}
+
+	.shot {
+		height: 240px;
+		overflow: hidden;
+		background: var(--m-surface);
+	}
+
+	.shot :global(img) {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: top;
+		transition: transform 0.6s ease;
+	}
+
+	.featured:hover .shot :global(img) {
+		transform: scale(1.04);
+	}
+
+	.details {
+		display: flex;
+		flex: 1 1 0;
 		flex-direction: column;
 		align-items: flex-start;
-		gap: 0.5rem;
-		width: 100%;
+		gap: 20px;
 		min-width: 0;
 	}
 
-	@media (min-width: 640px) {
-		.section-head {
-			flex-direction: row;
-			align-items: center;
-			gap: 1rem;
-		}
-	}
-
-	h2 {
-		font-size: clamp(1.5rem, 5vw, 2.15rem);
-		color: var(--color-on-surface);
-		display: inline-flex;
-		align-items: center;
-		gap: 0.35rem;
-		flex-shrink: 0;
-		max-width: 100%;
-		text-shadow:
-			0 0 10px rgba(5, 217, 232, 0.35),
-			0 0 24px rgba(57, 255, 20, 0.15);
-	}
-
-	.caret-blink {
-		display: inline-block;
-		width: 0.35rem;
-		height: 0.85em;
-		background: var(--color-primary);
-		box-shadow: 0 0 10px rgba(5, 217, 232, 0.55);
-		animation: caret-blink 1s steps(1, end) infinite;
-	}
-
-	@keyframes caret-blink {
-		50% {
-			opacity: 0;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.caret-blink {
-			animation: none;
-			opacity: 1;
-		}
-	}
-
-	.rule-wrap {
-		width: 100%;
-		min-width: 0;
-		overflow-x: auto;
-		-webkit-overflow-scrolling: touch;
-		overscroll-behavior-x: contain;
-	}
-
-	.rule-ascii {
+	.kicker {
 		margin: 0;
-		font-family: var(--font-mono);
-		line-height: 1.35;
-		color: var(--color-neon-dim);
-		text-shadow: 0 0 6px rgba(0, 143, 17, 0.3);
-		white-space: pre;
-		width: max-content;
-		max-width: 100%;
-		font-size: clamp(0.62rem, 2.8vw, 0.72rem);
+		font-family: var(--m-font-code);
+		font-size: 11px;
+		color: var(--m-accent);
 	}
 
-	.rule-ascii--wide {
-		display: none;
+	h3 {
+		font-size: clamp(1.75rem, 3vw, 2.25rem);
+		line-height: normal;
+		color: var(--m-text);
 	}
 
-	@media (min-width: 640px) {
-		.rule-ascii--narrow {
-			display: none;
-		}
-
-		.rule-ascii--wide {
-			display: block;
-		}
+	.description {
+		margin: 0;
+		font-size: 16px;
+		line-height: 1.65;
+		color: var(--m-muted);
 	}
 
-	/* ——— Carrusel ——— */
-	.carousel-wrap {
-		position: relative;
-		width: 100%;
-		min-width: 0;
-		container-type: inline-size;
-		container-name: proj-carousel;
-	}
-
-	.carousel-viewport {
-		position: relative;
-		overflow-x: auto;
-		overflow-y: hidden;
-		scroll-snap-type: x mandatory;
-		scroll-padding-inline: 0;
-		-webkit-overflow-scrolling: touch;
-		overscroll-behavior-x: contain;
-		overscroll-behavior-y: auto;
-		outline: none;
-		padding-block: 16px 20px;
-		padding-inline: 4px 6px;
-		scrollbar-width: thin;
-		scrollbar-color: var(--color-primary) color-mix(in srgb, var(--color-surface-lowest) 92%, transparent);
-	}
-
-	/* WebKit: barra con glow neón */
-	.carousel-viewport::-webkit-scrollbar {
-		height: 10px;
-	}
-
-	.carousel-viewport::-webkit-scrollbar-track {
-		background: linear-gradient(
-			180deg,
-			color-mix(in srgb, var(--color-surface-lowest) 95%, transparent),
-			color-mix(in srgb, var(--color-bg) 100%, transparent)
-		);
-		border: 1px solid color-mix(in srgb, var(--color-primary) 25%, var(--color-outline-variant));
-		box-shadow: inset 0 0 10px rgba(5, 217, 232, 0.06);
-	}
-
-	.carousel-viewport::-webkit-scrollbar-thumb {
-		background: linear-gradient(
-			90deg,
-			var(--color-primary),
-			color-mix(in srgb, var(--color-secondary) 85%, var(--color-primary))
-		);
-		border: 1px solid color-mix(in srgb, var(--color-primary) 60%, transparent);
-		box-shadow: 0 0 10px rgba(5, 217, 232, 0.45);
-	}
-
-	.carousel-viewport::-webkit-scrollbar-thumb:hover {
-		box-shadow: 0 0 16px rgba(5, 217, 232, 0.7);
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.carousel-viewport {
-			scroll-snap-type: none;
-		}
-	}
-
-	.carousel-viewport:focus-visible {
-		box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 60%, transparent);
-	}
-
-	.carousel-track {
+	.stack {
 		display: flex;
-		flex-direction: row;
-		align-items: stretch;
-		gap: 1.25rem;
-		padding-inline-end: 0.5rem;
-		width: max-content;
-		min-height: 1px;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
 	}
 
-	.carousel-slide {
-		scroll-snap-align: start;
-		flex-shrink: 0;
+	.stack li {
+		padding: 6px 9px;
+		border: 1px solid var(--m-line);
+		border-radius: 4px;
+		font-family: var(--m-font-code);
+		font-size: 11px;
+		color: var(--m-muted);
 	}
 
-	/* Móvil */
-	@container proj-carousel (max-width: 767px) {
-		.carousel-slide {
-			width: calc(100cqi * 0.9 - 0.5rem);
-			max-width: 22rem;
+	.rule {
+		height: 1px;
+		background: var(--m-line);
+		transform-origin: left;
+	}
+
+	@media (max-width: 1100px) {
+		.featured {
+			flex-direction: column;
+			align-items: stretch;
+			gap: 32px;
+		}
+
+		.preview {
+			flex-basis: auto;
+			width: 100%;
 		}
 	}
 
-	/* Desktop */
-	@container proj-carousel (min-width: 768px) {
-		.carousel-slide {
-			width: calc((100cqi - 2.5rem) / 2.35);
-			min-width: 17rem;
-			max-width: 36rem;
+	@media (max-width: 640px) {
+		.projects {
+			padding-block: 48px;
 		}
-	}
 
-	.carousel-slide :global(.card-wrap),
-	.carousel-slide :global(.card) {
-		height: 100%;
+		.featured {
+			padding: 16px;
+		}
+
+		.shot {
+			height: 200px;
+		}
+
+		.chrome-label {
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
 	}
 </style>
