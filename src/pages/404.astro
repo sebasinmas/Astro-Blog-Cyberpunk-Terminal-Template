@@ -1,354 +1,160 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import arrowRightDark from '../assets/icons/arrow-right-dark.svg';
+import arrowRightLight from '../assets/icons/arrow-right-light.svg';
 import { SITE_TITLE } from '../consts';
 
 const title = `404 — ${SITE_TITLE}`;
-const description = 'Ruta no encontrada — buffer overrun en la matriz de rutas.';
+const description = 'Ruta no encontrada.';
 ---
 
-<BaseLayout {title} {description}>
-	<div class="container">
-		<section class="err-shell pixel-corners" aria-labelledby="err-title">
-			<div class="crt-strip" role="presentation"></div>
-
-			<p class="syslog">
-				<span class="tag">[kern]</span>
-				<span class="lvl crit">CRIT</span>
-				<span class="ts">irq=0x404 · ttyS0</span>
-				<span class="msg">route_mmap(): segmentación — puntero NUL en pathname</span>
+<BaseLayout {title} {description} theme="modern">
+	<div class="m-container">
+		<section class="not-found" aria-labelledby="err-title">
+			<p class="eyebrow" data-reveal>
+				<span class="signal" aria-hidden="true"></span>
+				ERROR 404 / RUTA NO ENCONTRADA
 			</p>
-
-			<div class="hex-row" aria-hidden="true">
-				<span>DE AD BE EF</span>
-				<span class="sep">│</span>
-				<span>CA FE BA BE</span>
-				<span class="sep">│</span>
-				<span>00 00 04 04</span>
-			</div>
-
-			<h1 id="err-title" class="err-heading">
-				<span class="err-code" aria-hidden="true">404</span>
-				<span class="err-glitch" data-text="SECTOR_NOT_FOUND">SECTOR_NOT_FOUND</span>
+			<h1 id="err-title" data-reveal>
+				Esta página no existe<span class="accent">.</span>
 			</h1>
-
-			<p class="deck">
-				La URL solicitada no existe en este volumen. El daemon de routing devolvió <kbd>ENOENT</kbd>.
+			<p class="lead" data-reveal>
+				La URL solicitada no está en este sitio. Puede que el enlace esté roto o que la página se haya movido.
 			</p>
-
-			<pre class="fake-log" aria-hidden="true">
-$ trace_route --verbose
-&gt; GET /requested/path … <span class="blink">█</span>
-! syscall open() → -1 (No such file or directory)
-! stack: router.so+0x404 ← handler_main
+			<pre class="trace" aria-hidden="true" data-reveal>$ GET /requested/path
+! ENOENT: no such file or directory
 $ echo $?
 127</pre>
-
-			<div class="actions">
-				<a class="btn btn-primary" href="/">./home.sh —reload</a>
-				<a class="btn btn-secondary" href="/blog/">./blog/index</a>
+			<div class="actions" data-reveal>
+				<a class="action primary" href="/">
+					Volver al inicio
+					<img src={arrowRightDark.src} width="18" height="18" alt="" />
+				</a>
+				<a class="action secondary" href="/blog/">
+					Ir a la bitácora
+					<img src={arrowRightLight.src} width="18" height="18" alt="" />
+				</a>
 			</div>
-
-			<p class="hint">
-				Si detectas un fallo, copia la URL y abre un issue en el repositorio.
-			</p>
 		</section>
 	</div>
 </BaseLayout>
 
+<script>
+	import '../scripts/page-motion';
+</script>
+
 <style>
-	.err-shell {
-		position: relative;
-		width: 100%;
-		margin-top: clamp(1rem, 4vw, 2rem);
-		padding: clamp(1.25rem, 4vw, 2rem);
-		border: 1px solid color-mix(in srgb, var(--color-primary) 35%, var(--color-outline-variant));
-		background: color-mix(in srgb, var(--color-surface-lowest) 92%, transparent);
-		box-shadow:
-			inset 0 0 48px rgba(5, 217, 232, 0.05),
-			0 0 32px rgba(5, 217, 232, 0.08);
-		overflow: hidden;
-	}
-
-	.crt-strip {
-		position: absolute;
-		inset: 0;
-		background: repeating-linear-gradient(
-			0deg,
-			transparent,
-			transparent 2px,
-			rgba(0, 0, 0, 0.11) 2px,
-			rgba(0, 0, 0, 0.11) 3px
-		);
-		pointer-events: none;
-		opacity: 0.35;
-	}
-
-	.syslog {
-		position: relative;
-		margin: 0 0 1rem;
-		font-family: var(--font-mono);
-		font-size: clamp(0.62rem, 2vw, 0.72rem);
-		line-height: 1.5;
-		color: var(--color-neon-dim);
-		display: flex;
-		flex-wrap: wrap;
-		align-items: baseline;
-		gap: 0.35rem 0.65rem;
-	}
-
-	.tag {
-		color: var(--color-neon-muted);
-	}
-
-	.lvl {
-		padding: 0.08rem 0.35rem;
-		border: 1px solid var(--color-primary);
-		font-weight: 700;
-		font-size: 0.65em;
-		letter-spacing: 0.06em;
-	}
-
-	.lvl.crit {
-		color: var(--color-primary);
-		background: rgba(5, 217, 232, 0.12);
-		box-shadow: 0 0 10px rgba(5, 217, 232, 0.25);
-	}
-
-	.ts {
-		opacity: 0.85;
-	}
-
-	.msg {
-		flex: 1 1 14rem;
-		color: var(--color-on-surface-variant);
-	}
-
-	.hex-row {
-		position: relative;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.35rem 0.75rem;
-		font-family: var(--font-mono);
-		font-size: clamp(0.58rem, 1.8vw, 0.68rem);
-		color: var(--color-neon-green);
-		text-shadow: 0 0 8px rgba(57, 255, 20, 0.35);
-		margin-bottom: 1rem;
-		opacity: 0.85;
-	}
-
-	.sep {
-		color: var(--color-outline-variant);
-	}
-
-	.err-heading {
-		position: relative;
+	.not-found {
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
-		gap: 0.35rem;
-		margin: 0 0 1rem;
-		font-family: var(--font-display);
-		line-height: 1.05;
+		gap: 28px;
+		padding-block: 96px 80px;
 	}
 
-	.err-code {
-		font-size: clamp(3rem, 14vw, 5.5rem);
-		color: var(--color-primary);
-		text-shadow:
-			0 0 14px rgba(5, 217, 232, 0.6),
-			0 0 32px rgba(5, 217, 232, 0.25);
-		animation: err-pulse 2.5s ease-in-out infinite;
+	.eyebrow {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		margin: 0;
+		font-family: var(--m-font-code);
+		font-size: 12px;
+		color: var(--m-accent);
 	}
 
-	@keyframes err-pulse {
-		50% {
-			opacity: 0.82;
-			filter: saturate(1.15);
-		}
+	.signal {
+		width: 6px;
+		height: 6px;
+		background: var(--m-accent);
 	}
 
-	@media (prefers-reduced-motion: reduce) {
-		.err-code {
-			animation: none;
-		}
+	h1 {
+		max-width: 12em;
+		font-size: clamp(2.5rem, 6.2vw + 0.5rem, 4.25rem);
+		line-height: 1.12;
+		color: var(--m-text);
+		text-wrap: balance;
 	}
 
-	.err-glitch {
-		position: relative;
-		font-size: clamp(1.15rem, 4vw, 1.65rem);
-		letter-spacing: 0.06em;
-		color: var(--color-neon-green);
-		text-transform: uppercase;
-		text-shadow: 0 0 10px rgba(57, 255, 20, 0.45);
+	.accent {
+		color: var(--m-accent);
 	}
 
-	.err-glitch::before,
-	.err-glitch::after {
-		content: attr(data-text);
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 100%;
-		overflow: hidden;
-		opacity: 0.65;
-		pointer-events: none;
+	.lead {
+		max-width: 650px;
+		margin: 0;
+		font-size: 17px;
+		line-height: 1.65;
+		color: var(--m-muted);
 	}
 
-	.err-glitch::before {
-		color: var(--color-primary);
-		transform: translate(-1px, 0);
-		clip-path: inset(0 0 55% 0);
-		animation: glitch-a 2.8s infinite linear alternate-reverse;
-	}
-
-	.err-glitch::after {
-		color: var(--color-secondary);
-		transform: translate(1px, 0);
-		clip-path: inset(45% 0 0 0);
-		animation: glitch-b 3.1s infinite linear alternate-reverse;
-	}
-
-	@keyframes glitch-a {
-		0%,
-		90%,
-		100% {
-			opacity: 0;
-		}
-		92% {
-			opacity: 0.55;
-		}
-	}
-
-	@keyframes glitch-b {
-		0%,
-		88%,
-		100% {
-			opacity: 0;
-		}
-		90% {
-			opacity: 0.5;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.err-glitch::before,
-		.err-glitch::after {
-			display: none;
-		}
-	}
-
-	.deck {
-		position: relative;
-		margin: 0 0 1.25rem;
-		max-width: 38rem;
-		font-size: clamp(0.92rem, 2.6vw, 1.02rem);
-		line-height: 1.55;
-		color: var(--color-on-surface-variant);
-	}
-
-	kbd {
-		font-family: var(--font-mono);
-		font-size: 0.85em;
-		padding: 0.12em 0.4em;
-		border: 1px solid color-mix(in srgb, var(--color-secondary) 40%, transparent);
-		background: var(--color-container-high);
-		color: var(--color-neon-green);
-		border-radius: 0;
-	}
-
-	.fake-log {
-		position: relative;
-		margin: 0 0 1.5rem;
-		padding: 1rem;
-		max-width: 100%;
+	.trace {
+		margin: 0;
+		padding: 20px 24px;
+		background: var(--m-surface);
+		border: 1px solid var(--m-line);
+		border-radius: 4px;
+		font-family: var(--m-font-code);
+		font-size: 12px;
+		line-height: 1.7;
+		color: var(--m-dim);
 		overflow-x: auto;
-		font-family: var(--font-mono);
-		font-size: clamp(0.62rem, 2.2vw, 0.74rem);
-		line-height: 1.45;
-		color: var(--color-neon-dim);
-		background: rgba(0, 0, 0, 0.35);
-		border: 1px solid color-mix(in srgb, var(--color-outline-variant) 70%, transparent);
-		white-space: pre;
-		-webkit-overflow-scrolling: touch;
-	}
-
-	.blink {
-		animation: blink-caret 1s steps(1, end) infinite;
-		color: var(--color-neon-green);
-	}
-
-	@keyframes blink-caret {
-		50% {
-			opacity: 0;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.blink {
-			animation: none;
-			opacity: 1;
-		}
 	}
 
 	.actions {
-		position: relative;
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.75rem;
-		margin-bottom: 1rem;
+		gap: 12px;
+		padding-top: 4px;
 	}
 
-	.btn {
+	.action {
 		display: inline-flex;
 		align-items: center;
-		justify-content: center;
-		min-height: 44px;
-		padding: 0.65rem 1.1rem;
-		font-family: var(--font-mono);
-		font-size: clamp(0.72rem, 2.4vw, 0.78rem);
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
-		text-decoration: none;
-		border-radius: 0;
+		gap: 24px;
+		height: 50px;
+		padding-inline: 20px;
+		border: 1px solid var(--m-line);
+		border-radius: 4px;
+		font-size: 14px;
 		transition:
-			background 0.18s ease,
-			color 0.18s ease,
-			box-shadow 0.18s ease,
-			border-color 0.18s ease;
+			background-color 0.2s ease,
+			border-color 0.2s ease;
 	}
 
-	.btn-primary {
-		border: 1px solid var(--color-primary);
-		background: var(--color-primary);
-		color: var(--color-bg);
-		box-shadow: 0 0 18px rgba(5, 217, 232, 0.35);
+	.action img {
+		transition: transform 0.25s ease;
 	}
 
-	.btn-primary:hover {
-		background: #38bdf8;
-		border-color: #38bdf8;
-		box-shadow: 0 0 24px rgba(5, 217, 232, 0.6);
+	.action:hover img,
+	.action:focus-visible img {
+		transform: translateX(4px);
 	}
 
-	.btn-secondary {
-		border: 1px solid var(--color-secondary);
-		color: var(--color-secondary);
-		background: transparent;
+	.primary {
+		background: var(--m-accent);
+		border-color: var(--m-accent);
+		color: var(--m-on-accent);
 	}
 
-	.btn-secondary:hover {
-		background: rgba(57, 255, 20, 0.12);
-		color: var(--color-on-surface);
-		box-shadow: 0 0 20px rgba(57, 255, 20, 0.35);
+	.primary:hover {
+		background: color-mix(in srgb, var(--m-accent) 82%, white);
+		border-color: color-mix(in srgb, var(--m-accent) 82%, white);
+		color: var(--m-on-accent);
 	}
 
-	.hint {
-		position: relative;
-		margin: 0;
-		font-size: clamp(0.78rem, 2.3vw, 0.85rem);
-		color: var(--color-outline);
-		max-width: 36rem;
-		line-height: 1.5;
+	.secondary {
+		color: var(--m-text);
+	}
+
+	.secondary:hover {
+		border-color: var(--m-accent);
+		color: var(--m-text);
+	}
+
+	@media (max-width: 640px) {
+		.not-found {
+			padding-block: 56px;
+		}
 	}
 </style>
