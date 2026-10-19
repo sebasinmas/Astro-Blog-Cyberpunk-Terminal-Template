@@ -1,0 +1,131 @@
+---
+---
+
+<div class="m-container">
+	<header class="site-header">
+		<a class="identity" href="/" aria-label="SebaSinMas — inicio">
+			<span class="mark" aria-hidden="true">[s]</span>
+			<span class="name">SebaSinMas</span>
+		</a>
+		<nav class="links" aria-label="Principal">
+			<a href="/#projects">Proyectos</a>
+			<a href="/blog/">Bitácora</a>
+			<a href="/#contact">Contacto</a>
+			<span class="separator" aria-hidden="true"></span>
+			<span class="lang" lang="es" title="Idioma: español">ES</span>
+		</nav>
+	</header>
+	<div class="rule" role="presentation"></div>
+</div>
+
+<style>
+	.site-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		height: 104px;
+	}
+
+	.identity {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		white-space: nowrap;
+	}
+
+	.mark {
+		font-family: var(--m-font-code);
+		font-size: 21px;
+		color: var(--m-accent);
+	}
+
+	.name {
+		font-size: 18px;
+		font-weight: 600;
+		color: var(--m-text);
+	}
+
+	.links {
+		display: flex;
+		align-items: center;
+		gap: 36px;
+		font-size: 14px;
+		color: var(--m-muted);
+	}
+
+	.links a {
+		position: relative;
+		transition: color 0.2s ease;
+	}
+
+	.links a::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: -4px;
+		height: 1px;
+		background: var(--m-accent);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.25s ease;
+	}
+
+	.links a:hover,
+	.links a:focus-visible {
+		color: var(--m-text);
+	}
+
+	.links a:hover::after,
+	.links a:focus-visible::after {
+		transform: scaleX(1);
+	}
+
+	.separator {
+		width: 1px;
+		height: 18px;
+		background: var(--m-line);
+	}
+
+	.lang {
+		font-family: var(--m-font-code);
+		font-size: 12px;
+		color: var(--m-accent);
+	}
+
+	.rule {
+		height: 1px;
+		background: var(--m-line);
+	}
+
+	@media (max-width: 640px) {
+		.site-header {
+			height: 80px;
+		}
+
+		.links {
+			gap: 16px;
+			font-size: 13px;
+		}
+
+		.separator,
+		.lang {
+			display: none;
+		}
+
+		.mark {
+			font-size: 18px;
+		}
+
+		.name {
+			font-size: 16px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.name {
+			display: none;
+		}
+	}
+</style>
