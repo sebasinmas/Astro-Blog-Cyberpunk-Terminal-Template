@@ -17,6 +17,10 @@ interface Props {
 	tags?: readonly string[];
 	/** `modern`: rediseño de la landing. `terminal`: estilo CRT original. */
 	theme?: 'terminal' | 'modern';
+	/** Solo tema `modern`: variante de cabecera/pie (`home` = landing). */
+	chrome?: 'home' | 'page';
+	/** Solo tema `modern`: destino de navegación activo. */
+	navCurrent?: 'projects' | 'blog' | 'contact';
 }
 
 const {
@@ -28,6 +32,8 @@ const {
 	updatedDate,
 	tags,
 	theme = 'terminal',
+	chrome = 'page',
+	navCurrent,
 } = Astro.props;
 const modern = theme === 'modern';
 ---
@@ -58,11 +64,11 @@ const modern = theme === 'modern';
 		modern ? (
 			<body class="theme-modern">
 				<a class="skip-link" href="#main">Saltar al contenido</a>
-				<SiteHeader />
+				<SiteHeader variant={chrome} current={navCurrent} />
 				<main id="main">
 					<slot />
 				</main>
-				<SiteFooter />
+				<SiteFooter variant={chrome} />
 			</body>
 		) : (
 			<body class="crt-grid">

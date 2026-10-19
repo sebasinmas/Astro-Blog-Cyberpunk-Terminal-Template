@@ -1,11 +1,26 @@
 ---
+interface Props {
+	/** `home`: sign-off al final. `page`: sign-off centrado sobre el divisor. */
+	variant?: 'home' | 'page';
+}
+
+const { variant = 'home' } = Astro.props;
 const year = new Date().getFullYear();
+const copy = variant === 'page' ? `© ${year} SebaSinMas — Portfolio técnico // SYS_OK` : `© ${year} SebaSinMas — Portfolio técnico`;
 ---
 
-<footer class="m-container site-footer">
+<footer class:list={['m-container', 'site-footer', `site-footer--${variant}`]}>
+	{
+		variant === 'page' && (
+			<div class="signoff signoff--top">
+				<p>END OF LINE — Floppy not included. Synthwave batteries not included.</p>
+			</div>
+		)
+	}
+	{variant === 'page' && <div class="rule" role="presentation" />}
 	<div class="bar">
 		<p class="brand">SebaSinMas</p>
-		<p class="copy">&copy; {year} SebaSinMas — Portfolio técnico</p>
+		<p class="copy">{copy}</p>
 		<ul class="links">
 			<li>
 				<a href="https://github.com/sebasinmas" target="_blank" rel="noreferrer" aria-label="GitHub (abre en una pestaña nueva)"
@@ -30,15 +45,31 @@ const year = new Date().getFullYear();
 			</li>
 		</ul>
 	</div>
-	<div class="signoff">
-		<p>END OF LINE — Floppy not included. Synthwave batteries not included.</p>
-		<p>SYS_OK</p>
-	</div>
+	{
+		variant === 'home' && (
+			<div class="signoff">
+				<p>END OF LINE — Floppy not included. Synthwave batteries not included.</p>
+				<p>SYS_OK</p>
+			</div>
+		)
+	}
 </footer>
 
 <style>
-	.site-footer {
-		border-top: 0;
+	.site-footer--page {
+		padding-top: 112px;
+		padding-bottom: 28px;
+	}
+
+	.rule {
+		height: 1px;
+		background: var(--m-line);
+	}
+
+	.signoff--top {
+		justify-content: center;
+		padding-bottom: 24px;
+		text-align: center;
 	}
 
 	.bar {
