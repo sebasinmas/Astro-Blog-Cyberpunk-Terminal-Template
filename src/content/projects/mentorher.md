@@ -4,11 +4,12 @@ description:
   "Desarrollo full stack y migración técnica del MVP de MentorHer. Implementación de arquitectura moderna con Next.js 16 y servidor WebSocket para la gestión de notificaciones en tiempo real."
 tags:
   - Next.js
-  - Postgresql
+  - PostgreSQL
   - Drizzle ORM
   - Tailwind
   - Websockets
 image: mentorher/mentorher-home.png
+kicker: FULL STACK · MIGRACIÓN TÉCNICA
 pubDate: '2026-04-21'
 order: 0
 ---
