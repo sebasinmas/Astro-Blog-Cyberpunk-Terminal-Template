@@ -7,6 +7,7 @@ tags:
 - Opensource
 - CachyOS
 image: cachyos/cachyos.webp
+category: Linux / Sistemas
 pubDate: '2026-08-23'
 order: 0
 ---
