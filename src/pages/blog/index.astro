@@ -1,20 +1,26 @@
 ---
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
+import Icon from '../../components/Icon.astro';
+import clock from '../../assets/icons/clock-14.svg';
+import arrowRead from '../../assets/icons/arrow-right-read.svg';
 import { SITE_TITLE } from '../../consts';
 
 const rawPosts: CollectionEntry<'blog'>[] = (await getCollection('blog')).sort(
-	(a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
-		b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+	(a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
-const posts = rawPosts.map((post) => {
+const posts = rawPosts.map((post, index) => {
 	const words = post.body ? post.body.trim().split(/\s+/).filter(Boolean).length : 0;
 	const readingMin = Math.max(1, Math.ceil(words / 200));
 	return {
-		...post,
-		readingTime: `${readingMin} min`,
+		entry: post,
+		log: `LOG ${String(rawPosts.length - index).padStart(3, '0')}`,
+		date: post.data.pubDate
+			.toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })
+			.replace(/\./g, '')
+			.toUpperCase(),
+		readingTime: `${readingMin} MIN`,
 	};
 });
 ---
@@ -22,53 +28,56 @@ const posts = rawPosts.map((post) => {
 <BaseLayout
 	title={`Bitácora — ${SITE_TITLE}`}
 	description="Notas técnicas, arquitecturas, migraciones y experimentos en desarrollo de software y sistemas."
+	theme="modern"
+	navCurrent="blog"
 >
-	<div class="blog-index container">
-		<header class="page-head">
-			<div class="sys-status" aria-label="Estado del sistema">
-				<span class="status-dot" aria-hidden="true"></span>
-				<span class="status-label">SYS_ARCHIVE // OK</span>
-				<span class="status-sep" aria-hidden="true">│</span>
-				<span>{posts.length} {posts.length === 1 ? 'REGISTRO' : 'REGISTROS'}</span>
-				<span class="status-sep" aria-hidden="true">│</span>
-				<span>FEED: LIVE</span>
-			</div>
-			<h1>BITÁCORA TÉCNICA<span class="caret" aria-hidden="true"></span></h1>
-			<p class="subtitle">
+	<div class="m-container blog-index">
+		<header class="intro">
+			<p class="eyebrow" data-reveal>
+				<span class="signal" aria-hidden="true"></span>
+				BITÁCORA / DATA LOG
+			</p>
+			<h1 data-reveal>Bitácora técnica</h1>
+			<p class="lead" data-reveal>
 				Registro personal de arquitectura, migraciones, optimización de sistemas y reflexiones.
 			</p>
-			<div class="ascii-rule-wrap" role="presentation">
-				<pre class="ascii-rule ascii-rule--narrow" aria-hidden="true">::: TAPE READY :::</pre>
-				<pre class="ascii-rule ascii-rule--wide" aria-hidden="true">::: SYSTEM LOG ARCHIVE // SELECT ENTRY TO MOUNT :::</pre>
-			</div>
 		</header>
 
-		<div class="feed-wrap">
-			<ul class="post-feed" aria-label="Listado de artículos de la bitácora">
+		<section class="archive" aria-labelledby="archive-summary">
+			<p class="summary" id="archive-summary" data-reveal>TOTAL DE ENTRADAS: {posts.length}</p>
+			<ul class="entries" aria-label="Listado de artículos de la bitácora">
 				{
-					posts.map((post, index) => (
-						<li>
-							<a href={`/blog/${post.id}/`} class="log-card pixel-corners">
-								<div class="log-card__head">
-									<span class="log-id">LOG #{String(posts.length - index).padStart(2, '0')}</span>
-									<span class="log-date">
-										<FormattedDate date={post.data.pubDate} />
+					posts.map(({ entry, log, date, readingTime }) => (
+						<li data-reveal>
+							<a class="entry" href={`/blog/${entry.id}/`}>
+								<div class="meta">
+									<span class="reference">
+										<span class="log">{log}</span>
+										<span class="sep" aria-hidden="true" />
+										<time datetime={entry.data.pubDate.toISOString()}>{date}</time>
 									</span>
-									<span class="log-reading">⏱ {post.readingTime}</span>
+									<span class="reading">
+										<Icon src={clock} size={14} />
+										{readingTime}
+									</span>
 								</div>
-								<h2 class="log-title">{post.data.title}</h2>
-								<p class="log-desc">{post.data.description}</p>
-								{post.data.tags && post.data.tags.length > 0 && (
-									<ul class="log-tags">
-										{post.data.tags.map((tag: string) => (
-											<li>#{tag}</li>
-										))}
-									</ul>
-								)}
-								<div class="log-foot">
-									<span class="log-cmd">cat /syslog/{post.id}.md</span>
-									<span class="log-action">
-										LEER REGISTRO <span class="arrow" aria-hidden="true">→</span>
+								<div class="preview">
+									<h2>{entry.data.title}</h2>
+									<p class="excerpt">{entry.data.description}</p>
+									{entry.data.tags && entry.data.tags.length > 0 && (
+										<ul class="topics" aria-label="Temas">
+											{entry.data.tags.map((tag: string) => (
+												<li>{tag}</li>
+											))}
+										</ul>
+									)}
+								</div>
+								<div class="rule" role="presentation" />
+								<div class="destination">
+									<span class="path">/{entry.id.toLowerCase()}</span>
+									<span class="read">
+										Leer registro
+										<Icon src={arrowRead} size={18} inset="-4.17% -5.89% -4.17% -4.17%" />
 									</span>
 								</div>
 							</a>
@@ -76,338 +85,225 @@ const posts = rawPosts.map((post) => {
 					))
 				}
 			</ul>
-		</div>
+		</section>
 	</div>
 </BaseLayout>
 
+<script>
+	import '../../scripts/page-motion';
+</script>
+
 <style>
-	.blog-index {
-		padding-top: clamp(1.5rem, 4vw, 2.5rem);
-		padding-bottom: clamp(2.5rem, 6vw, 4rem);
+	.intro {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 24px;
+		padding-block: 80px 48px;
 	}
 
-	.page-head {
-		margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
-		max-width: min(100%, 46rem);
-	}
-
-	.sys-status {
-		display: inline-flex;
+	.eyebrow {
+		display: flex;
 		align-items: center;
-		gap: 0.5rem;
-		font-family: var(--font-mono);
-		font-size: 0.68rem;
-		letter-spacing: 0.1em;
-		color: var(--color-neon-dim);
-		margin-bottom: 0.75rem;
-		padding: 0.25rem 0.6rem;
-		background: color-mix(in srgb, var(--color-surface-lowest) 90%, transparent);
-		border: 1px solid color-mix(in srgb, var(--color-neon-dim) 50%, transparent);
+		gap: 10px;
+		margin: 0;
+		font-family: var(--m-font-code);
+		font-size: 12px;
+		color: var(--m-accent);
 	}
 
-	.status-dot {
-		display: inline-block;
+	.signal {
 		width: 6px;
 		height: 6px;
-		background: var(--color-secondary);
-		box-shadow: 0 0 8px var(--color-secondary);
-		animation: pulse-dot 1.5s infinite;
-	}
-
-	@keyframes pulse-dot {
-		0%,
-		100% {
-			opacity: 1;
-		}
-		50% {
-			opacity: 0.35;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.status-dot {
-			animation: none;
-		}
-	}
-
-	.status-label {
-		color: var(--color-secondary);
-		font-weight: 700;
-	}
-
-	.status-sep {
-		color: var(--color-outline-variant);
-		opacity: 0.7;
+		background: var(--m-accent);
 	}
 
 	h1 {
-		font-size: clamp(1.85rem, 4.5vw, 2.75rem);
-		margin: 0 0 0.5rem;
-		color: var(--color-on-surface);
-		display: flex;
-		align-items: center;
-		gap: 0.35rem;
-		letter-spacing: 0.02em;
-		text-shadow:
-			0 0 10px rgba(5, 217, 232, 0.35),
-			0 0 24px rgba(57, 255, 20, 0.15);
+		font-size: clamp(2.5rem, 6.2vw + 0.5rem, 4.25rem);
+		line-height: 1.12;
+		color: var(--m-text);
 	}
 
-	.caret {
-		display: inline-block;
-		width: 0.4rem;
-		height: 0.85em;
-		background: var(--color-primary);
-		box-shadow: 0 0 12px rgba(5, 217, 232, 0.55);
-		animation: caret-blink 1s steps(1, end) infinite;
-	}
-
-	@keyframes caret-blink {
-		50% {
-			opacity: 0;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.caret {
-			animation: none;
-			opacity: 1;
-		}
-	}
-
-	.subtitle {
+	.lead {
+		max-width: 760px;
 		margin: 0;
-		color: var(--color-on-surface-variant);
-		font-size: clamp(0.95rem, 2.4vw, 1.05rem);
-		line-height: 1.55;
+		font-size: 17px;
+		line-height: 1.65;
+		color: var(--m-muted);
 	}
 
-	.ascii-rule-wrap {
-		margin-top: 1.25rem;
-		width: 100%;
-		overflow-x: auto;
-		-webkit-overflow-scrolling: touch;
-		overscroll-behavior-x: contain;
-	}
-
-	.ascii-rule {
-		margin: 0;
-		font-family: var(--font-mono);
-		font-size: clamp(0.58rem, 2.4vw, 0.68rem);
-		line-height: 1.35;
-		color: var(--color-neon-dim);
-		text-shadow: 0 0 6px rgba(0, 143, 17, 0.25);
-		white-space: pre;
-		width: max-content;
-		max-width: none;
-	}
-
-	.ascii-rule--wide {
-		display: none;
-	}
-
-	@media (min-width: 640px) {
-		.ascii-rule--narrow {
-			display: none;
-		}
-
-		.ascii-rule--wide {
-			display: block;
-		}
-	}
-
-	.feed-wrap {
-		width: 100%;
-	}
-
-	.post-feed {
-		list-style: none;
-		margin: 0;
-		padding: 0;
+	.archive {
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: 24px;
 	}
 
-	.log-card {
-		position: relative;
+	.summary {
+		margin: 0;
+		padding-bottom: 8px;
+		font-family: var(--m-font-code);
+		font-size: 12px;
+		color: var(--m-dim);
+	}
+
+	.entries {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
-		padding: clamp(1.2rem, 3vw, 1.5rem);
-		min-height: 44px;
-		border: 1px solid color-mix(in srgb, var(--color-primary) 30%, var(--color-outline-variant));
-		background: color-mix(in srgb, var(--color-surface-lowest) 92%, transparent);
-		backdrop-filter: blur(12px);
-		border-radius: 0;
-		text-decoration: none;
-		color: inherit;
-		overflow: hidden;
-		transition:
-			border-color 0.2s ease,
-			box-shadow 0.2s ease,
-			transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-	}
-
-	.log-card::before {
-		content: '';
-		position: absolute;
-		inset: 0;
-		background: repeating-linear-gradient(
-			0deg,
-			transparent,
-			transparent 2px,
-			rgba(0, 0, 0, 0.12) 2px,
-			rgba(0, 0, 0, 0.12) 3px
-		);
-		pointer-events: none;
-		opacity: 0.35;
-	}
-
-	.log-card:hover {
-		border-color: var(--color-primary);
-		box-shadow:
-			0 0 24px rgba(5, 217, 232, 0.2),
-			0 0 40px rgba(5, 217, 232, 0.08);
-		transform: translateY(-2px);
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.log-card:hover {
-			transform: none;
-		}
-	}
-
-	.log-card__head {
-		position: relative;
-		z-index: 1;
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 0.5rem 0.85rem;
-		font-family: var(--font-mono);
-		font-size: 0.72rem;
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
-	}
-
-	.log-id {
-		padding: 0.12rem 0.45rem;
-		background: rgba(57, 255, 20, 0.1);
-		border: 1px solid color-mix(in srgb, var(--color-secondary) 50%, transparent);
-		color: var(--color-secondary);
-		font-weight: 700;
-		font-size: 0.65rem;
-		letter-spacing: 0.08em;
-	}
-
-	.log-date {
-		color: var(--color-outline);
-	}
-
-	.log-reading {
-		margin-left: auto;
-		color: var(--color-primary);
-		font-size: 0.7rem;
-	}
-
-	.log-title {
-		position: relative;
-		z-index: 1;
-		font-family: var(--font-display);
-		font-size: clamp(1.25rem, 3vw, 1.55rem);
-		line-height: 1.25;
-		margin: 0;
-		color: var(--color-primary);
-		transition:
-			color 0.18s ease,
-			text-shadow 0.18s ease;
-	}
-
-	.log-card:hover .log-title {
-		color: var(--color-on-surface);
-		text-shadow:
-			0 0 10px rgba(5, 217, 232, 0.6),
-			0 0 20px rgba(57, 255, 20, 0.25);
-	}
-
-	.log-desc {
-		position: relative;
-		z-index: 1;
-		margin: 0;
-		font-size: 0.94rem;
-		line-height: 1.55;
-		color: var(--color-on-surface-variant);
-	}
-
-	.log-tags {
-		position: relative;
-		z-index: 1;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.4rem;
-		list-style: none;
+		gap: 24px;
 		margin: 0;
 		padding: 0;
+		list-style: none;
 	}
 
-	.log-tags li {
-		font-family: var(--font-mono);
-		font-size: 0.62rem;
-		padding: 0.15rem 0.45rem;
-		border: 1px solid color-mix(in srgb, var(--color-secondary) 30%, var(--color-outline-variant));
-		background: color-mix(in srgb, var(--color-container-high) 80%, transparent);
-		color: var(--color-secondary);
-		border-radius: 0;
-	}
-
-	.log-foot {
-		position: relative;
-		z-index: 1;
+	.entry {
 		display: flex;
-		flex-wrap: wrap;
+		flex-direction: column;
+		gap: 24px;
+		padding: 32px;
+		background: var(--m-surface);
+		border: 1px solid var(--m-line);
+		border-radius: 8px;
+		transition: border-color 0.25s ease;
+	}
+
+	.entry:hover,
+	.entry:focus-visible {
+		border-color: color-mix(in srgb, var(--m-accent) 55%, var(--m-line));
+	}
+
+	.meta {
+		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 0.5rem;
-		margin-top: 0.5rem;
-		padding-top: 0.75rem;
-		border-top: 1px dashed color-mix(in srgb, var(--color-outline-variant) 80%, transparent);
-		font-family: var(--font-mono);
-		font-size: 0.74rem;
+		gap: 1rem;
+		font-family: var(--m-font-code);
 	}
 
-	.log-cmd {
-		color: var(--color-neon-dim);
-		font-size: 0.65rem;
-	}
-
-	.log-action {
-		color: var(--color-primary);
-		font-weight: 600;
-		letter-spacing: 0.08em;
-		display: inline-flex;
+	.reference {
+		display: flex;
 		align-items: center;
-		gap: 0.35rem;
-		transition:
-			color 0.15s ease,
-			transform 0.15s ease;
+		gap: 20px;
 	}
 
-	.log-card:hover .log-action {
-		color: var(--color-secondary);
+	.log {
+		font-size: 11px;
+		color: var(--m-accent);
+		white-space: nowrap;
 	}
 
-	.arrow {
-		transition: transform 0.2s ease;
+	.sep {
+		width: 1px;
+		height: 12px;
+		background: var(--m-line);
 	}
 
-	.log-card:hover .arrow {
+	time {
+		font-size: 12px;
+		color: var(--m-dim);
+		white-space: nowrap;
+	}
+
+	.reading {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-size: 11px;
+		color: var(--m-dim);
+		white-space: nowrap;
+	}
+
+	.preview {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	h2 {
+		font-size: clamp(1.5rem, 2.6vw, 2rem);
+		line-height: normal;
+		color: var(--m-text);
+		transition: color 0.2s ease;
+	}
+
+	.entry:hover h2,
+	.entry:focus-visible h2 {
+		color: var(--m-accent);
+	}
+
+	.excerpt {
+		max-width: 960px;
+		margin: 0;
+		font-size: 16px;
+		line-height: 1.65;
+		color: var(--m-muted);
+	}
+
+	.topics {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin: 0;
+		padding: 4px 0 0;
+		list-style: none;
+	}
+
+	.topics li {
+		padding: 6px 9px;
+		border: 1px solid var(--m-line);
+		border-radius: 4px;
+		font-family: var(--m-font-code);
+		font-size: 11px;
+		color: var(--m-muted);
+	}
+
+	.rule {
+		height: 1px;
+		background: var(--m-line);
+	}
+
+	.destination {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.path {
+		font-family: var(--m-font-code);
+		font-size: 11px;
+		color: var(--m-dim);
+		overflow-wrap: anywhere;
+	}
+
+	.read {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		font-size: 14px;
+		color: var(--m-accent);
+		white-space: nowrap;
+	}
+
+	.read :global(.icon) {
+		transition: transform 0.25s ease;
+	}
+
+	.entry:hover .read :global(.icon),
+	.entry:focus-visible .read :global(.icon) {
 		transform: translateX(4px);
 	}
 
-	@media (prefers-reduced-motion: reduce) {
-		.log-card:hover .arrow {
-			transform: none;
+	@media (max-width: 640px) {
+		.intro {
+			padding-block: 48px 32px;
+		}
+
+		.entry {
+			padding: 20px;
+		}
+
+		.meta {
+			flex-wrap: wrap;
 		}
 	}
 </style>
