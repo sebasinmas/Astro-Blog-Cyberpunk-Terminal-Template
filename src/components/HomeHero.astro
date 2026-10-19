@@ -1,433 +1,274 @@
 ---
-import TypewriterText from './TypewriterText.astro';
-import pfp from '../assets/pfp.jpg';
-import pfp2 from '../assets/pfp2.png';
 import Image from 'astro/components/Image.astro';
-const eyebrow = 'SISTEMA EN LÍNEA // USUARIO: SebaSinMas // CLEARANCE: VHS-1986';
+import pfp from '../assets/pfp.jpg';
+import arrowRightDark from '../assets/icons/arrow-right-dark.svg';
+import arrowRightLight from '../assets/icons/arrow-right-light.svg';
 ---
 
-<section class="hero-wrap container" aria-labelledby="hero-title">
-	<div class="hero glow-shadow pixel-corners">
-		<div class="glow-bg" aria-hidden="true">
-			<div class="glow-blob glow-blob-a"></div>
-			<div class="glow-blob glow-blob-b"></div>
+<div class="m-container">
+<section class="hero" aria-labelledby="hero-title">
+	<div class="narrative">
+		<p class="focus" data-reveal data-hero>
+			<span class="signal" aria-hidden="true"></span>
+			DESARROLLO DE SOFTWARE / CIBERSEGURIDAD
+		</p>
+		<h1 id="hero-title">
+			<span class="line" data-reveal data-hero>Software engineer.</span>
+			<span class="line accent" data-reveal data-hero>Explorando la ciberseguridad.</span>
+		</h1>
+		<div class="bio" data-reveal data-hero>
+			<p>
+				Desarrollador de software, estudiante, gamer y apasionado por construir interfaces rápidas, estéticas y bien
+				estructuradas.
+			</p>
+			<p>Hoy, con interés en la ciberseguridad y en entender cómo funcionan los sistemas.</p>
 		</div>
-		<div class="hero-copy">
-			<p class="eyebrow">
-				<TypewriterText text={eyebrow} durationSec={3.2} />
-			</p>
-			<h1 id="hero-title" class="text-phosphor">
-				Software engineer, estudiante y <span class="accent">gamer</span><span class="heading-caret" aria-hidden="true"></span>
-			</h1>
-			<p class="lead">
-				Desarrollador de software, estudiante, gamer y apasionado por construir interfaces rápidas, estéticas y bien estructuradas.
-			</p>
-			<div class="cta">
-				<a class="btn btn-primary pixel-corners" href="/#projects" data-gag="RUN portfolio.exe /fullscreen"
-					>Ver proyectos</a
-				>
-				<a class="btn btn-secondary pixel-corners" href="/blog/" data-gag="LOAD blog_tape.vhs">Leer bitácora</a>
+		<div class="actions" data-reveal data-hero>
+			<a class="action primary" href="/#projects">
+				Ver proyectos
+				<img src={arrowRightDark.src} width="18" height="18" alt="" />
+			</a>
+			<a class="action secondary" href="/blog/">
+				Leer bitácora
+				<img src={arrowRightLight.src} width="18" height="18" alt="" />
+			</a>
+		</div>
+	</div>
+
+	<aside class="identity" aria-label="Perfil personal" data-reveal data-hero>
+		<div class="frame">
+			<div class="portrait">
+				<Image src={pfp} alt="Retrato de SebaSinMas" width={290} height={290} loading="eager" fetchpriority="high" />
 			</div>
 		</div>
-		<figure class="hero-figure">
-			<Image src={pfp} alt="SebaSinMas" width="256" height="256" loading="eager" fetchpriority="high" />
-			<Image
-				src={pfp2}
-				alt="SebaSinMas pixel art"
-				width="256"
-				height="256"
-				loading="lazy"
-				fetchpriority="low"
-			/>
-		</figure>
-	</div>
+		<p class="caption">
+			<span class="handle">@sebasinmas</span>
+			<span class="tag">PERFIL PERSONAL</span>
+		</p>
+		<p class="roles">Software engineer · Estudiante · Gamer</p>
+	</aside>
 </section>
+<div class="rule" role="presentation" data-rule></div>
+</div>
 
 <style>
-	.hero-wrap {
-		margin-top: clamp(1rem, 3vw, 2rem);
-	}
-
 	.hero {
-		position: relative;
 		display: flex;
+		align-items: center;
+		gap: 100px;
+		padding-block: 88px 80px;
+	}
+
+	.rule {
+		height: 1px;
+		background: var(--m-line);
+		transform-origin: left;
+	}
+
+	.narrative {
+		display: flex;
+		flex: 1 1 0;
 		flex-direction: column;
-		align-items: stretch;
-		gap: clamp(1.25rem, 4vw, 2rem);
-		padding: clamp(1.25rem, 4vw, 2.25rem);
-		padding-bottom: clamp(1.5rem, 5vw, 2.25rem);
-		overflow: visible;
-		border: 1px solid color-mix(in srgb, var(--color-primary) 35%, var(--color-outline-variant));
-		background: color-mix(in srgb, var(--color-surface) 80%, transparent);
-		backdrop-filter: blur(16px);
-		border-radius: 0;
-	}
-
-	/* Solo escritorio: fila */
-	@media (min-width: 900px) {
-		.hero {
-			flex-direction: row;
-			align-items: center;
-		}
-	}
-
-	.glow-bg {
-		position: absolute;
-		inset: 0;
-		overflow: hidden;
-		pointer-events: none;
-		z-index: 0;
-	}
-
-	.glow-blob {
-		position: absolute;
-		border-radius: 50%;
-		filter: blur(72px);
-		pointer-events: none;
-		z-index: 0;
-		mix-blend-mode: screen;
-	}
-
-	.glow-blob-a {
-		top: -2rem;
-		right: -1rem;
-		width: 18rem;
-		height: 18rem;
-		background: rgba(5, 217, 232, 0.16);
-	}
-
-	.glow-blob-b {
-		bottom: -3rem;
-		left: -2rem;
-		width: 14rem;
-		height: 14rem;
-		background: rgba(57, 255, 20, 0.1);
-	}
-
-	.hero-copy {
-		position: relative;
-		z-index: 1;
-		flex: 1;
+		align-items: flex-start;
+		gap: 28px;
 		min-width: 0;
-		width: 100%;
-		max-width: 100%;
-		box-sizing: border-box;
+	}
+
+	.focus {
 		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
-
-	.eyebrow {
+		align-items: center;
+		gap: 10px;
 		margin: 0;
-		font-size: clamp(0.62rem, 1.8vw, 0.72rem);
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
-		color: var(--color-neon-green);
-		min-height: 1.5em;
-		width: 100%;
-		max-width: 100%;
-		overflow-x: auto;
-		overflow-y: visible;
-		-webkit-overflow-scrolling: touch;
-		text-shadow: 0 0 8px rgba(57, 255, 20, 0.35);
+		font-family: var(--m-font-code);
+		font-size: 12px;
+		color: var(--m-accent);
 	}
 
-	@media (max-width: 767px) {
-		.eyebrow {
-			font-size: clamp(0.72rem, 3.4vw, 0.82rem);
-			letter-spacing: 0.08em;
-			line-height: 1.45;
-			min-height: 0;
-			overflow-x: visible;
-			padding-block: 0.15rem;
-		}
+	.signal {
+		width: 6px;
+		height: 6px;
+		background: var(--m-accent);
 	}
 
 	h1 {
-		font-size: clamp(1.85rem, 4vw, 3.1rem);
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		font-size: clamp(2.5rem, 6.2vw + 0.5rem, 4.25rem);
 		line-height: 1.12;
-		color: var(--color-on-surface);
-		overflow-wrap: anywhere;
-		word-break: break-word;
-		max-width: 100%;
+		color: var(--m-text);
+		text-wrap: balance;
 	}
 
-	@media (max-width: 899px) {
-		.hero-figure {
-			align-self: center;
-		}
-	}
-
-	.heading-caret {
-		display: inline-block;
-		width: 0.45rem;
-		height: 0.95em;
-		margin-left: 0.2rem;
-		vertical-align: baseline;
-		background: var(--color-secondary);
-		box-shadow: 0 0 12px rgba(57, 255, 20, 0.55);
-		animation: caret-blink 1.05s steps(1, end) infinite;
-	}
-
-	@keyframes caret-blink {
-		50% {
-			opacity: 0;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.heading-caret {
-			animation: none;
-			opacity: 1;
-		}
+	.line {
+		display: block;
 	}
 
 	.accent {
-		color: var(--color-primary);
-		text-shadow:
-			0 0 10px rgba(5, 217, 232, 0.6),
-			0 0 24px rgba(5, 217, 232, 0.25);
+		color: var(--m-accent);
+		max-width: 11em;
 	}
 
-	.lead {
-		margin: 0;
-		max-width: min(38rem, 100%);
-		font-size: clamp(0.95rem, 2.8vw, 1.02rem);
+	.bio {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		max-width: 650px;
+		font-size: 17px;
 		line-height: 1.65;
-		color: var(--color-on-surface-variant);
-		overflow-wrap: anywhere;
-		word-break: break-word;
+		color: var(--m-muted);
 	}
 
-	.cta {
+	.bio p {
+		margin: 0;
+	}
+
+	.actions {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.85rem;
-		row-gap: 0.85rem;
-		margin-top: 0.5rem;
-		margin-bottom: 0;
-		padding-top: 0.35rem;
-		padding-bottom: 0.35rem;
-		width: 100%;
-		box-sizing: border-box;
+		gap: 12px;
+		padding-top: 4px;
 	}
 
-	@media (max-width: 899px) {
-		.cta {
-			flex-direction: column;
-			align-items: stretch;
-			padding-inline: 0;
-			gap: 1rem;
-			margin-top: 0.75rem;
-		}
-
-		.cta .btn {
-			width: 100%;
-			max-width: 100%;
-			box-sizing: border-box;
-			margin-inline: 0;
-		}
-	}
-
-	.btn {
-		position: relative;
+	.action {
 		display: inline-flex;
 		align-items: center;
-		justify-content: center;
-		padding: 0.7rem 1.35rem;
-		min-height: 44px;
-		font-family: var(--font-mono);
-		font-size: clamp(0.74rem, 2.8vw, 0.82rem);
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-		cursor: pointer;
-		border-radius: 0;
+		gap: 24px;
+		height: 50px;
+		padding-inline: 20px;
+		border: 1px solid var(--m-line);
+		border-radius: 4px;
+		font-size: 14px;
 		transition:
-			background 0.2s ease,
-			color 0.2s ease,
-			box-shadow 0.2s ease,
+			background-color 0.2s ease,
 			border-color 0.2s ease,
-			transform 0.2s ease;
+			color 0.2s ease;
 	}
 
-	.btn-primary {
-		border: 1px solid var(--color-primary);
-		background: var(--color-primary);
-		color: var(--color-bg);
-		box-shadow: 0 0 18px rgba(5, 217, 232, 0.35);
+	.action img {
+		transition: transform 0.25s ease;
 	}
 
-	.btn-secondary {
-		border: 1px solid color-mix(in srgb, var(--color-secondary) 75%, transparent);
-		background: color-mix(in srgb, var(--color-surface-lowest) 75%, transparent);
-		color: var(--color-secondary);
+	.action:hover img,
+	.action:focus-visible img {
+		transform: translateX(4px);
 	}
 
-	@media (hover: hover) and (pointer: fine) {
-		.btn-primary:hover {
-			background: #38bdf8;
-			border-color: #38bdf8;
-			box-shadow:
-				0 0 28px rgba(5, 217, 232, 0.65),
-				inset 0 0 12px rgba(255, 255, 255, 0.3);
-			transform: translateY(-2px);
-		}
-
-		.btn-secondary:hover {
-			border-color: var(--color-secondary);
-			background: rgba(57, 255, 20, 0.12);
-			color: var(--color-on-surface);
-			box-shadow: 0 0 20px rgba(57, 255, 20, 0.35);
-			transform: translateY(-2px);
-		}
-
-		.btn:hover::after {
-			content: attr(data-gag);
-			position: absolute;
-			left: 0;
-			top: calc(100% + 0.45rem);
-			font-size: 0.58rem;
-			font-weight: 400;
-			text-transform: none;
-			letter-spacing: 0.04em;
-			color: var(--color-neon-dim);
-			white-space: nowrap;
-			pointer-events: none;
-		}
+	.primary {
+		background: var(--m-accent);
+		border-color: var(--m-accent);
+		color: var(--m-on-accent);
 	}
 
-	@media (prefers-reduced-motion: reduce) {
-		.btn:hover {
-			transform: none;
-		}
+	.primary:hover {
+		background: color-mix(in srgb, var(--m-accent) 82%, white);
+		border-color: color-mix(in srgb, var(--m-accent) 82%, white);
+		color: var(--m-on-accent);
 	}
 
-	.hero-figure {
-		position: relative;
-		width: min(100%, 256px);
-		max-width: 256px;
-		flex-shrink: 0;
-		transition:
-			transform 0.35s ease,
-			filter 0.35s ease;
+	.secondary {
+		color: var(--m-text);
+	}
+
+	.secondary:hover {
+		border-color: var(--m-accent);
+		color: var(--m-text);
+	}
+
+	.identity {
+		display: flex;
+		flex: 0 0 310px;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 20px;
+		width: 310px;
+	}
+
+	.frame {
+		width: 310px;
+		height: 310px;
+		padding: 10px;
+		border: 1px solid var(--m-line);
+	}
+
+	.portrait {
+		width: 290px;
+		height: 290px;
 		overflow: hidden;
-		z-index: 1;
-		border: 1px solid color-mix(in srgb, var(--color-primary) 40%, var(--color-outline-variant));
-		box-shadow: 0 0 24px rgba(5, 217, 232, 0.15);
-		touch-action: manipulation;
-		-webkit-tap-highlight-color: transparent;
+		background: var(--m-surface);
 	}
 
-	.hero-figure img:first-child {
+	.portrait :global(img) {
 		display: block;
-		box-shadow: 0 50px 50px -48px rgba(0, 0, 0, 0.65);
-		border-radius: 0;
+		width: 100%;
+		height: 100%;
 		object-fit: cover;
-		width: 100%;
-		transition:
-			filter 0.35s ease,
-			transform 0.35s ease;
+		transition: transform 0.6s ease;
 	}
 
-	.hero-figure img:last-child {
-		position: absolute;
-		width: 100%;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		margin: auto;
-		transform: translateY(10%);
-		opacity: 0;
-		transition:
-			opacity 0.35s ease,
-			transform 0.35s ease;
-		border-radius: 0;
+	.frame:hover .portrait :global(img) {
+		transform: scale(1.04);
 	}
 
-	/* Hover 3D / overlay: solo ratón o stylus real */
-	@media (hover: hover) and (pointer: fine) {
-		.hero-figure:hover {
-			transform: perspective(1000px) rotateX(6deg) translateY(-4px) translateZ(0);
-			filter: saturate(1.1) contrast(1.05);
-			box-shadow: 0 0 32px rgba(5, 217, 232, 0.3);
+	.caption {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin: 0;
+		font-family: var(--m-font-code);
+		white-space: nowrap;
+	}
+
+	.handle {
+		font-size: 12px;
+		color: var(--m-text);
+	}
+
+	.tag {
+		font-size: 11px;
+		color: var(--m-dim);
+	}
+
+	.roles {
+		margin: 0;
+		font-size: 14px;
+		line-height: 1.6;
+		color: var(--m-muted);
+	}
+
+	@media (max-width: 1100px) {
+		.hero {
+			gap: 56px;
+		}
+	}
+
+	@media (max-width: 900px) {
+		.hero {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 48px;
+			padding-block: 56px 56px;
 		}
 
-		.hero-figure::before {
-			content: '';
-			position: absolute;
-			bottom: 0;
+		.identity {
+			flex-basis: auto;
+		}
+	}
+
+	@media (max-width: 380px) {
+		.identity,
+		.frame {
+			width: 100%;
+		}
+
+		.frame {
+			height: auto;
+			aspect-ratio: 1;
+		}
+
+		.portrait {
 			width: 100%;
 			height: 100%;
-			background-image: linear-gradient(
-				to bottom,
-				transparent 10%,
-				rgba(5, 217, 232, 0.15) 50%,
-				rgba(4, 7, 10, 0.85) 100%
-			);
-			opacity: 0;
-			transition: opacity 0.35s ease;
-			pointer-events: none;
-			z-index: 2;
-		}
-
-		.hero-figure:hover::before {
-			opacity: 1;
-		}
-
-		.hero-figure:hover img:first-child {
-			filter: hue-rotate(-5deg);
-		}
-
-		.hero-figure:hover img:last-child {
-			opacity: 1;
-			transform: translateY(0%) perspective(0);
-		}
-	}
-
-	/* Táctil */
-	@media (hover: none) {
-		.hero-figure::before {
-			content: '';
-			position: absolute;
-			bottom: 0;
-			width: 100%;
-			height: 100%;
-			background-image: linear-gradient(
-				to bottom,
-				transparent 10%,
-				rgba(5, 217, 232, 0.15) 50%,
-				rgba(4, 7, 10, 0.85) 100%
-			);
-			opacity: 0;
-			transition: opacity 0.2s ease;
-			pointer-events: none;
-			z-index: 2;
-		}
-
-		.hero-figure:active {
-			transform: scale(0.985);
-			transition: transform 0.12s ease;
-		}
-
-		.hero-figure:active::before {
-			opacity: 1;
-		}
-
-		.hero-figure:active img:first-child {
-			filter: hue-rotate(-5deg);
-		}
-
-		.hero-figure:active img:last-child {
-			opacity: 1;
-			transform: translateY(0%) perspective(0);
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.hero-figure:hover,
-		.hero-figure:active {
-			transform: none;
 		}
 	}
 </style>

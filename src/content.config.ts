@@ -16,6 +16,8 @@ const blog = defineCollection({
 			heroImage: z.string().optional(),
 			image: z.string().optional(),
 			tags: z.array(z.string()).optional(),
+			/** Etiqueta corta de categoría para la landing (si falta, se usan los primeros tags). */
+			category: z.string().optional(),
 		}),
 });
 
@@ -33,6 +35,8 @@ const projects = defineCollection({
 			/** Banner distinto al thumbnail de tarjeta (mismas reglas que `image`). */
 			heroImage: z.string().optional(),
 			order: z.number().default(0),
+			/** Etiqueta corta sobre el título en la landing (ej. "FULL STACK · MIGRACIÓN TÉCNICA"). */
+			kicker: z.string().optional(),
 		}),
 });
 

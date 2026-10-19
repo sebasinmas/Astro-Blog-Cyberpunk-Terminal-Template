@@ -1,0 +1,47 @@
+---
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+	src: ImageMetadata;
+	/** Lado del recuadro de diseño, en px. */
+	size: number;
+	/** Compensación del SVG respecto al recuadro (formato `inset` de CSS), para glifos que sobresalen. */
+	inset?: string;
+	class?: string;
+}
+
+const { src, size, inset, class: className } = Astro.props;
+---
+
+<span class:list={['icon', className]} style={`--icon-size: ${size}px`} aria-hidden="true">
+	{
+		inset ? (
+			<span class="bleed" style={`inset: ${inset}`}>
+				<img src={src.src} alt="" />
+			</span>
+		) : (
+			<img src={src.src} alt="" />
+		)
+	}
+</span>
+
+<style>
+	.icon {
+		position: relative;
+		display: inline-block;
+		flex: none;
+		width: var(--icon-size);
+		height: var(--icon-size);
+	}
+
+	.bleed {
+		position: absolute;
+	}
+
+	img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		max-width: none;
+	}
+</style>

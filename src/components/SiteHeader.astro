@@ -1,0 +1,202 @@
+---
+import monitor from '../assets/icons/monitor.svg';
+import github from '../assets/icons/github.svg';
+import Icon from './Icon.astro';
+
+interface Props {
+	/** `home`: etiqueta de idioma. `page`: accesos externos (bitácora y GitHub). */
+	variant?: 'home' | 'page';
+	/** Destino activo: se resalta con color de acento e indicador inferior. */
+	current?: 'projects' | 'blog' | 'contact';
+}
+
+const { variant = 'home', current } = Astro.props;
+const links = [
+	{ key: 'projects', href: '/#projects', label: 'Proyectos' },
+	{ key: 'blog', href: '/blog/', label: 'Bitácora' },
+	{ key: 'contact', href: '/#contact', label: 'Contacto' },
+] as const;
+---
+
+<div class="m-container">
+	<header class="site-header">
+		<a class="identity" href="/" aria-label="SebaSinMas — inicio">
+			<span class="mark" aria-hidden="true">[s]</span>
+			<span class="name">SebaSinMas</span>
+		</a>
+		<nav class="links" aria-label="Principal">
+			{
+				links.map((link) => (
+					<a href={link.href} aria-current={link.key === current ? 'page' : undefined}>
+						{link.label}
+					</a>
+				))
+			}
+			<span class="separator" aria-hidden="true"></span>
+			{
+				variant === 'page' ? (
+					<span class="external">
+						<a href="/blog/" class="icon-link" aria-label="Ir a la bitácora" title="Bitácora">
+							<Icon src={monitor} size={18} />
+						</a>
+						<a
+							href="https://github.com/sebasinmas"
+							class="icon-link"
+							target="_blank"
+							rel="noreferrer"
+							aria-label="Perfil en GitHub (abre en una pestaña nueva)"
+							title="GitHub"
+						>
+							<Icon src={github} size={18} />
+						</a>
+					</span>
+				) : (
+					<span class="lang" lang="es" title="Idioma: español">
+						ES
+					</span>
+				)
+			}
+		</nav>
+	</header>
+	<div class="rule" role="presentation"></div>
+</div>
+
+<style>
+	.site-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		height: 104px;
+	}
+
+	.identity {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		white-space: nowrap;
+	}
+
+	.mark {
+		font-family: var(--m-font-code);
+		font-size: 21px;
+		color: var(--m-accent);
+	}
+
+	.name {
+		font-size: 18px;
+		font-weight: 600;
+		color: var(--m-text);
+	}
+
+	.links {
+		display: flex;
+		align-items: center;
+		align-self: stretch;
+		gap: 36px;
+		font-size: 14px;
+		color: var(--m-muted);
+	}
+
+	.links > a {
+		position: relative;
+		display: flex;
+		align-items: center;
+		align-self: stretch;
+		transition: color 0.2s ease;
+	}
+
+	/* Indicador inferior: 2px pegado al divisor del header */
+	.links > a::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 2px;
+		background: var(--m-accent);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.25s ease;
+	}
+
+	.links > a:hover,
+	.links > a:focus-visible {
+		color: var(--m-text);
+	}
+
+	.links > a[aria-current='page'] {
+		color: var(--m-accent);
+	}
+
+	.links > a:hover::after,
+	.links > a:focus-visible::after,
+	.links > a[aria-current='page']::after {
+		transform: scaleX(1);
+	}
+
+	.external {
+		display: flex;
+		align-items: center;
+		gap: 24px;
+	}
+
+	.icon-link {
+		display: inline-flex;
+		opacity: 0.9;
+		transition: opacity 0.2s ease;
+	}
+
+	.icon-link:hover,
+	.icon-link:focus-visible {
+		opacity: 1;
+	}
+
+	.separator {
+		width: 1px;
+		height: 18px;
+		background: var(--m-line);
+	}
+
+	.lang {
+		font-family: var(--m-font-code);
+		font-size: 12px;
+		color: var(--m-accent);
+	}
+
+	.rule {
+		height: 1px;
+		background: var(--m-line);
+	}
+
+	@media (max-width: 640px) {
+		.site-header {
+			height: 80px;
+		}
+
+		.links {
+			gap: 16px;
+			font-size: 13px;
+		}
+
+		.separator,
+		.lang,
+		.external {
+			display: none;
+		}
+
+		.mark {
+			font-size: 18px;
+		}
+
+		.name {
+			font-size: 16px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.name {
+			display: none;
+		}
+	}
+</style>
