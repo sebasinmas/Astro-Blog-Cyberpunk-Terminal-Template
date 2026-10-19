@@ -1,7 +1,5 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import AppHeader from '../components/AppHeader.astro';
-import AppFooter from '../components/AppFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
@@ -15,11 +13,9 @@ interface Props {
 	publishedDate?: Date;
 	updatedDate?: Date;
 	tags?: readonly string[];
-	/** `modern`: rediseño de la landing. `terminal`: estilo CRT original. */
-	theme?: 'terminal' | 'modern';
-	/** Solo tema `modern`: variante de cabecera/pie (`home` = landing). */
+	/** Variante de cabecera/pie (`home` = landing). */
 	chrome?: 'home' | 'page';
-	/** Solo tema `modern`: destino de navegación activo. */
+	/** Destino de navegación activo. */
 	navCurrent?: 'projects' | 'blog' | 'contact';
 }
 
@@ -31,11 +27,9 @@ const {
 	publishedDate,
 	updatedDate,
 	tags,
-	theme = 'terminal',
 	chrome = 'page',
 	navCurrent,
 } = Astro.props;
-const modern = theme === 'modern';
 ---
 
 <!doctype html>
@@ -50,37 +44,18 @@ const modern = theme === 'modern';
 			updatedDate={updatedDate}
 			tags={tags}
 		/>
-		{
-			modern && (
-				<script is:inline>
-					document.documentElement.classList.add('m-js');
-					// Red de seguridad: si el JS de animación no carga, el contenido no queda oculto.
-					setTimeout(() => document.documentElement.classList.remove('m-js'), 4000);
-				</script>
-			)
-		}
+		<script is:inline>
+			document.documentElement.classList.add('m-js');
+			// Red de seguridad: si el JS de animación no carga, el contenido no queda oculto.
+			setTimeout(() => document.documentElement.classList.remove('m-js'), 4000);
+		</script>
 	</head>
-	{
-		modern ? (
-			<body class="theme-modern">
-				<a class="skip-link" href="#main">Saltar al contenido</a>
-				<SiteHeader variant={chrome} current={navCurrent} />
-				<main id="main">
-					<slot />
-				</main>
-				<SiteFooter variant={chrome} />
-			</body>
-		) : (
-			<body class="crt-grid">
-				<div class="crt-vignette" aria-hidden="true" />
-				<div class="crt-overlay" aria-hidden="true" />
-				<a class="skip-link" href="#main">Saltar al contenido</a>
-				<AppHeader />
-				<main id="main" class="page-main relative z-[1] flex flex-col gap-0 pb-8">
-					<slot />
-				</main>
-				<AppFooter />
-			</body>
-		)
-	}
+	<body class="theme-modern">
+		<a class="skip-link" href="#main">Saltar al contenido</a>
+		<SiteHeader variant={chrome} current={navCurrent} />
+		<main id="main">
+			<slot />
+		</main>
+		<SiteFooter variant={chrome} />
+	</body>
 </html>
