@@ -13,7 +13,7 @@ interface Props {
 	publishedDate?: Date;
 	updatedDate?: Date;
 	tags?: readonly string[];
-	/** Variante de cabecera/pie (`home` = landing). */
+	/** Variante del pie de página (`home` = landing). El header es idéntico en todas las vistas. */
 	chrome?: 'home' | 'page';
 	/** Destino de navegación activo. */
 	navCurrent?: 'projects' | 'blog' | 'contact';
@@ -52,7 +52,7 @@ const {
 	</head>
 	<body class="theme-modern">
 		<a class="skip-link" href="#main">Saltar al contenido</a>
-		<SiteHeader variant={chrome} current={navCurrent} />
+		<SiteHeader current={navCurrent} />
 		<main id="main">
 			<slot />
 		</main>
