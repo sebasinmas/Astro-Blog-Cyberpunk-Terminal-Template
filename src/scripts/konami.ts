@@ -1,19 +1,24 @@
 import { gsap } from 'gsap';
+import spriteUrl from '../assets/claude_sinmas-export.png?url';
 
 /**
  * Easter egg: código Konami (↑ ↑ ↓ ↓ ← → ← → B A).
  *
  * - Al acertar la primera tecla aparece un overlay con las teclas pulsadas, abajo al centro.
  * - Si se falla, el progreso se reinicia y una mini ✕ roja salta y cae con gravedad.
- * - Si se completa, viñeteado verde animado con un tick verde en el centro; el overlay se
- *   desvanece y el tick cae.
+ * - Si se completa, viñeteado verde animado y el pixel art (el cangrejo) aparece en el centro y
+ *   salta; luego el overlay se desvanece y el sprite vuela hasta quedar como un trofeo abajo a la
+ *   derecha. Que se logró se guarda en localStorage y el trofeo reaparece en cada visita.
  *
- * Con `prefers-reduced-motion` no hay saltos ni caídas: solo desvanecimientos.
+ * Con `prefers-reduced-motion` no hay saltos ni vuelos: solo desvanecimientos.
  */
 
 const SEQUENCE = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'] as const;
 const GLYPHS: Record<string, string> = { ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '←', ArrowRight: '→', b: 'B', a: 'A' };
 const MODIFIERS = new Set(['Shift', 'Control', 'Alt', 'AltGraph', 'Meta', 'CapsLock', 'OS']);
+
+/** Clave de localStorage; el valor guardado es el booleano `'true'`. */
+const STORAGE_KEY = 'sinmas:konami-unlocked';
 
 /** Tiempo sin pulsar nada tras el cual se abandona el intento. */
 const IDLE_MS = 3000;
@@ -21,6 +26,13 @@ const IDLE_MS = 3000;
 const GRAVITY = 2600;
 /** Segundos que tarda en desvanecerse una partícula que ya empezó a caer. */
 const FADE_S = 0.6;
+/** El sprite original es una rejilla de 49×28 px (exportada ×10): 196×112 es un ×4 exacto. */
+const SPRITE_W = 196;
+const SPRITE_H = 112;
+/** Opacidad del trofeo en reposo (coincide con la del CSS). */
+const TROPHY_REST_OPACITY = 0.4;
+/** Cuánto se queda expandido el aviso "logro desbloqueado" la primera vez. */
+const ANNOUNCE_MS = 2800;
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 interface Overlay {
@@ -42,10 +54,18 @@ interface Particle {
 	age: number;
 }
 
+interface Sprite {
+	/** Contenedor: posición, escala y vuelo (GSAP). */
+	node: HTMLElement;
+	/** Imagen: aplastamiento y estiramiento al caer de cada salto. */
+	img: HTMLImageElement;
+}
+
 let progress = 0;
 let locked = false;
 let overlay: Overlay | undefined;
 let fxLayer: HTMLElement | undefined;
+let trophy: HTMLElement | undefined;
 let idleTimer: number | undefined;
 const particles = new Set<Particle>();
 
@@ -64,6 +84,25 @@ function svg<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string,
 	const node = document.createElementNS(SVG_NS, tag);
 	for (const [name, value] of Object.entries(attrs)) node.setAttribute(name, value);
 	return node;
+}
+
+/* ───────────────────────────── Logro (localStorage) ───────────────────────────── */
+
+function isUnlocked(): boolean {
+	try {
+		return localStorage.getItem(STORAGE_KEY) === 'true';
+	} catch {
+		// Modo privado o almacenamiento bloqueado: el logro vale solo para esta visita.
+		return false;
+	}
+}
+
+function markUnlocked() {
+	try {
+		localStorage.setItem(STORAGE_KEY, 'true');
+	} catch {
+		/* sin almacenamiento: el trofeo no persistirá, pero la animación funciona igual */
+	}
 }
 
 /* ───────────────────────── Partículas con gravedad ───────────────────────── */
@@ -122,6 +161,9 @@ function ensureOverlay(): Overlay {
 		gsap.set(overlay.root, { opacity: 1 });
 		return overlay;
 	}
+	// El sprite se precarga al empezar el intento para que no aparezca tarde al completarlo.
+	new Image().src = spriteUrl;
+
 	const root = el('div', 'konami');
 	root.setAttribute('aria-hidden', 'true');
 	const vignette = el('div', 'konami__vignette');
@@ -228,26 +270,85 @@ function fail(key: string) {
 	}
 }
 
+/* ───────────────────────────── Trofeo (reposo) ───────────────────────────── */
+
+/** Crea el trofeo (una sola vez por página); en reposo es un cuadrado con el sprite y baja opacidad. */
+function ensureTrophy(): HTMLElement {
+	if (trophy?.isConnected) return trophy;
+
+	const root = el('div', 'konami-trophy');
+	root.tabIndex = 0;
+	root.setAttribute('role', 'note');
+	root.setAttribute('aria-label', 'Logro desbloqueado: Código Konami. +30 vidas.');
+
+	const icon = el('span', 'konami-trophy__icon');
+	const img = el('img', '');
+	img.src = spriteUrl;
+	img.alt = '';
+	img.width = 49;
+	img.height = 28;
+	icon.append(img);
+
+	const text = el('span', 'konami-trophy__text');
+	text.setAttribute('aria-hidden', 'true');
+	text.append(el('span', 'konami-trophy__title', '¡Logro desbloqueado!'), el('span', 'konami-trophy__desc', 'Código Konami · +30 vidas'));
+
+	root.append(icon, text);
+	document.body.append(root);
+	trophy = root;
+	return root;
+}
+
+/** Remate de la animación: el trofeo queda visible; la primera vez se anuncia expandido. */
+function arriveAtTrophy(first: boolean) {
+	const t = ensureTrophy();
+	if (first) {
+		// Sin transición para que el relevo con el sprite que acaba de llegar sea imperceptible.
+		t.style.transition = 'none';
+		t.classList.remove('is-pending');
+		void t.offsetWidth;
+		t.style.transition = '';
+		t.classList.add('is-announcing');
+		window.setTimeout(() => t.classList.remove('is-announcing'), ANNOUNCE_MS);
+	} else if (!prefersReducedMotion()) {
+		gsap.fromTo(t, { scale: 1 }, { scale: 1.18, duration: 0.14, yoyo: true, repeat: 1, ease: 'power1.out', clearProps: 'transform' });
+	}
+}
+
 /* ───────────────────────────────── Éxito ───────────────────────────────── */
 
-function createTick() {
+function createSprite(): Sprite {
 	const node = el('div', 'konami-fx__item');
-	const icon = svg('svg', { viewBox: '0 0 96 96', width: '112', height: '112' });
-	icon.classList.add('konami-fx__tick');
-	const ring = svg('circle', { cx: '48', cy: '48', r: '42', fill: 'none', 'stroke-width': '5' });
-	const check = svg('path', {
-		d: 'M28 50 L43 65 L69 34',
-		fill: 'none',
-		'stroke-width': '7',
-		'stroke-linecap': 'round',
-		'stroke-linejoin': 'round',
-	});
-	// Longitudes de trazo: 2π·42 ≈ 264 y 21,2 + 40,5 ≈ 62.
-	ring.style.strokeDasharray = '264';
-	check.style.strokeDasharray = '62';
-	icon.append(ring, check);
-	node.append(icon);
-	return { node, icon, ring, check };
+	const img = el('img', 'konami-fx__sprite');
+	img.src = spriteUrl;
+	img.alt = '';
+	img.width = SPRITE_W;
+	img.height = SPRITE_H;
+	node.append(img);
+	return { node, img };
+}
+
+/** El sprite vuela del centro a su sitio en el trofeo mientras el overlay se desvanece. */
+function flyToTrophy(sprite: Sprite, first: boolean, o: Overlay, done: () => void) {
+	const target = ensureTrophy().querySelector('img')!.getBoundingClientRect();
+	const k = target.width / SPRITE_W;
+
+	gsap
+		.timeline({
+			onComplete: () => {
+				sprite.node.remove();
+				arriveAtTrophy(first);
+				done();
+			},
+		})
+		.to(o.root, { opacity: 0, duration: 0.5, ease: 'power1.in' }, 0)
+		.to(
+			sprite.node,
+			{ x: target.left + target.width / 2, y: target.top + target.height / 2, scale: k, duration: 0.95, ease: 'power3.inOut' },
+			0,
+		)
+		// Llega con la misma opacidad que el trofeo en reposo, para que el relevo sea continuo.
+		.to(sprite.node, { opacity: TROPHY_REST_OPACITY, duration: 0.3, ease: 'none' }, 0.65);
 }
 
 function succeed() {
@@ -256,14 +357,22 @@ function succeed() {
 
 	const o = ensureOverlay();
 	const reduced = prefersReducedMotion();
-	const tick = createTick();
-	const center = particle(tick.node, window.innerWidth / 2, window.innerHeight / 2);
-	place(center);
-	getFxLayer().append(tick.node);
+
+	// El logro se guarda al completarlo; la primera vez el trofeo nace oculto hasta que llega el sprite.
+	const first = !isUnlocked();
+	markUnlocked();
+	const t = ensureTrophy();
+	if (first) t.classList.add('is-pending');
+
+	const sprite = createSprite();
+	const cx = window.innerWidth / 2;
+	const cy = window.innerHeight / 2;
+	getFxLayer().append(sprite.node);
+	gsap.set(sprite.node, { x: cx, y: cy, xPercent: -50, yPercent: -50, opacity: 0 });
 
 	o.tray.classList.add('is-ok');
 
-	const finish = () => {
+	const settle = () => {
 		o.root.remove();
 		progress = 0;
 		locked = false;
@@ -271,36 +380,41 @@ function succeed() {
 
 	if (reduced) {
 		gsap
-			.timeline({ onComplete: finish })
+			.timeline({
+				onComplete: () => {
+					sprite.node.remove();
+					arriveAtTrophy(first);
+					settle();
+				},
+			})
 			.set(o.vignette, { '--vig': '45%' })
-			.fromTo([o.vignette, tick.icon], { opacity: 0 }, { opacity: 1, duration: 0.25 })
-			.set([tick.ring, tick.check], { strokeDashoffset: 0 })
-			.to([o.root, tick.node], { opacity: 0, duration: 0.4, onComplete: () => tick.node.remove() }, '+=1.1');
+			.fromTo(o.vignette, { opacity: 0 }, { opacity: 1, duration: 0.25 })
+			.to(sprite.node, { opacity: 1, duration: 0.25 }, 0)
+			.to([o.root, sprite.node], { opacity: 0, duration: 0.4 }, '+=1.1');
 		return;
 	}
 
-	// El viñeteado "respira" hacia dentro mientras se dibuja el tick.
+	// El viñeteado "respira" hacia dentro mientras el sprite entra y salta.
 	const vignette = { stop: 82 };
 	const paintVignette = () => o.vignette.style.setProperty('--vig', `${vignette.stop}%`);
 	paintVignette();
 
-	gsap.set(tick.ring, { strokeDashoffset: 264 });
-	gsap.set(tick.check, { strokeDashoffset: 62 });
-
-	gsap
-		.timeline({ onComplete: finish })
-		.to(o.vignette, { opacity: 1, duration: 0.45, ease: 'power2.out' }, 0)
+	const tl = gsap.timeline({ onComplete: () => flyToTrophy(sprite, first, o, settle) });
+	tl.to(o.vignette, { opacity: 1, duration: 0.45, ease: 'power2.out' }, 0)
 		.to(vignette, { stop: 40, duration: 0.8, ease: 'power2.out', onUpdate: paintVignette }, 0)
-		.fromTo(tick.icon, { scale: 0.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(2)' }, 0.1)
-		.to(tick.ring, { strokeDashoffset: 0, duration: 0.45, ease: 'power2.out' }, 0.1)
-		.to(tick.check, { strokeDashoffset: 0, duration: 0.35, ease: 'power2.out' }, 0.4)
-		.to({}, { duration: 0.6 })
-		// El overlay desaparece y el tick, ya suelto, cae.
-		.add(() => {
-			Object.assign(center, { vx: rand(-40, 40), vy: -300, vrot: sign() * rand(40, 90) });
-			launch(center);
-		})
-		.to(o.root, { opacity: 0, duration: 0.5, ease: 'power1.in' }, '<');
+		.fromTo(sprite.node, { scale: 0.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: 'back.out(2.4)' }, 0.1);
+
+	// Tres saltos cada vez más bajos; al caer, el sprite se aplasta y rebota (squash & stretch).
+	const hop = (height: number, air: number, squash: number, at: string | number) => {
+		tl.to(sprite.node, { y: cy - height, duration: air, ease: 'power2.out' }, at)
+			.to(sprite.node, { y: cy, duration: air, ease: 'power2.in' })
+			.to(sprite.img, { scaleY: 1 - squash, scaleX: 1 + squash * 0.7, duration: 0.07, ease: 'power1.out' })
+			.to(sprite.img, { scaleY: 1, scaleX: 1, duration: 0.22, ease: 'elastic.out(1, 0.45)' });
+	};
+	hop(130, 0.3, 0.18, 0.55);
+	hop(70, 0.22, 0.12, '-=0.14');
+	hop(28, 0.14, 0.07, '-=0.14');
+	tl.to({}, { duration: 0.3 });
 }
 
 /* ───────────────────────────────── Teclado ───────────────────────────────── */
@@ -330,3 +444,6 @@ function onKeyDown(event: KeyboardEvent) {
 }
 
 window.addEventListener('keydown', onKeyDown);
+
+// Quien ya consiguió el logro ve su trofeo en cada visita.
+if (isUnlocked()) ensureTrophy();
