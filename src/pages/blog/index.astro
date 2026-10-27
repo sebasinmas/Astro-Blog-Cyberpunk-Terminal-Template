@@ -1,6 +1,7 @@
 ---
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import DateTimeline from '../../components/DateTimeline.astro';
 import Icon from '../../components/Icon.astro';
 import clock from '../../assets/icons/clock-14.svg';
 import arrowRead from '../../assets/icons/arrow-right-read.svg';
@@ -16,10 +17,6 @@ const posts = rawPosts.map((post, index) => {
 	return {
 		entry: post,
 		log: `LOG ${String(rawPosts.length - index).padStart(3, '0')}`,
-		date: post.data.pubDate
-			.toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })
-			.replace(/\./g, '')
-			.toUpperCase(),
 		readingTime: `${readingMin} MIN`,
 	};
 });
@@ -46,14 +43,14 @@ const posts = rawPosts.map((post, index) => {
 			<p class="summary" id="archive-summary" data-reveal>TOTAL DE ENTRADAS: {posts.length}</p>
 			<ul class="entries" aria-label="Listado de artículos de la bitácora">
 				{
-					posts.map(({ entry, log, date, readingTime }) => (
+					posts.map(({ entry, log, readingTime }) => (
 						<li data-reveal>
 							<a class="entry" href={`/blog/${entry.id}/`}>
 								<div class="meta">
 									<span class="reference">
 										<span class="log">{log}</span>
 										<span class="sep" aria-hidden="true" />
-										<time datetime={entry.data.pubDate.toISOString()}>{date}</time>
+										<DateTimeline created={entry.data.pubDate} updated={entry.data.updatedDate} variant="inline" />
 									</span>
 									<span class="reading">
 										<Icon src={clock} size={14} />
@@ -180,8 +177,9 @@ const posts = rawPosts.map((post, index) => {
 
 	.reference {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
-		gap: 20px;
+		gap: 8px 20px;
 	}
 
 	.log {
@@ -194,12 +192,6 @@ const posts = rawPosts.map((post, index) => {
 		width: 1px;
 		height: 12px;
 		background: var(--m-line);
-	}
-
-	time {
-		font-size: 12px;
-		color: var(--m-dim);
-		white-space: nowrap;
 	}
 
 	.reading {

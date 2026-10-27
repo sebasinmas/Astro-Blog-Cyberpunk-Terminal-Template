@@ -1,6 +1,7 @@
 ---
 import { type CollectionEntry, getCollection } from 'astro:content';
 import arrowUpRight from '../assets/icons/arrow-up-right-24.svg';
+import DateTimeline from './DateTimeline.astro';
 import SectionHeading from './SectionHeading.astro';
 
 const posts: CollectionEntry<'blog'>[] = (await getCollection('blog'))
@@ -11,6 +12,9 @@ const posts: CollectionEntry<'blog'>[] = (await getCollection('blog'))
 
 const categoryOf = (post: CollectionEntry<'blog'>) =>
 	(post.data.category ?? (post.data.tags ?? []).slice(0, 2).join(' / ')).toUpperCase();
+
+// Si alguna entrada tiene tag de actualización, la columna de fecha se ensancha para alinear los títulos.
+const hasEdits = posts.some((post) => post.data.updatedDate && post.data.updatedDate > post.data.pubDate);
 ---
 
 <section class="journal m-container" id="blog" aria-labelledby="journal-heading">
@@ -18,14 +22,14 @@ const categoryOf = (post: CollectionEntry<'blog'>) =>
 
 	<div class="intro-row">
 		<p class="intro" data-reveal>Un espacio para documentar lo que exploro y aprendo.</p>
-		<ul class="entries">
+		<ul class:list={['entries', { 'has-edits': hasEdits }]}>
 			{
 				posts.map((post) => (
 					<li data-reveal>
 						<a class="entry" href={`/blog/${post.id}/`}>
-							<time datetime={post.data.pubDate.toISOString()}>
-								{post.data.pubDate.toLocaleDateString('es-ES', { timeZone: 'UTC' })}
-							</time>
+							<span class="when">
+								<DateTimeline created={post.data.pubDate} updated={post.data.updatedDate} variant="stacked" />
+							</span>
 							<span class="details">
 								<span class="title">{post.data.title}</span>
 								<span class="category">{categoryOf(post)}</span>
@@ -83,11 +87,12 @@ const categoryOf = (post: CollectionEntry<'blog'>) =>
 		padding-block: 28px;
 	}
 
-	time {
-		font-family: var(--m-font-code);
-		font-size: 12px;
-		color: var(--m-dim);
-		white-space: nowrap;
+	.when {
+		flex: none;
+	}
+
+	.has-edits .when {
+		flex-basis: 190px;
 	}
 
 	.details {
@@ -150,8 +155,9 @@ const categoryOf = (post: CollectionEntry<'blog'>) =>
 			gap: 12px 16px;
 		}
 
-		time {
-			width: 100%;
+		.when,
+		.has-edits .when {
+			flex-basis: 100%;
 		}
 	}
 </style>

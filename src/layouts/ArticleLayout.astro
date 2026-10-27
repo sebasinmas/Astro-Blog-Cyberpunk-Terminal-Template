@@ -1,7 +1,7 @@
 ---
 import Image from 'astro/components/Image.astro';
 import type { ImageMetadata } from 'astro';
-import FormattedDate from '../components/FormattedDate.astro';
+import DateTimeline from '../components/DateTimeline.astro';
 import Icon from '../components/Icon.astro';
 import clock from '../assets/icons/clock-12.svg';
 import arrowLeftBlog from '../assets/icons/arrow-left-18.svg';
@@ -48,6 +48,11 @@ const backArrow = isBlog
 	: { src: arrowLeftProject, size: 11, inset: '-6.82% -6.82% -6.82% -9.64%' };
 ---
 
+{/* Progreso de lectura: lo anima `scripts/reading-progress.ts` (GSAP + ScrollTrigger). */}
+<div class="reading-progress" aria-hidden="true">
+	<div class="reading-progress__bar" data-reading-progress></div>
+</div>
+
 <article class={`article m-container article--${variant}`}>
 	<header class="article-head">
 		{
@@ -75,7 +80,7 @@ const backArrow = isBlog
 					)
 				}
 				<span class="sep" aria-hidden="true"></span>
-				<FormattedDate date={pubDate} />
+				<DateTimeline created={pubDate} updated={updatedDate} />
 				{
 					readingTime && (
 						<span class="reading">
@@ -99,13 +104,6 @@ const backArrow = isBlog
 				)
 			}
 
-			{
-				updatedDate && (
-					<p class="updated" data-reveal>
-						Actualizado el <FormattedDate date={updatedDate} />
-					</p>
-				)
-			}
 		</div>
 
 		<div class="marker" aria-hidden="true" data-reveal>
@@ -125,7 +123,7 @@ const backArrow = isBlog
 				))
 		}
 
-		<div class="prose">
+		<div class="prose" data-reading-content>
 			<slot />
 		</div>
 
@@ -150,6 +148,7 @@ const backArrow = isBlog
 
 <script>
 	import '../scripts/page-motion';
+	import '../scripts/reading-progress';
 </script>
 
 <style>
@@ -262,11 +261,28 @@ const backArrow = isBlog
 		color: var(--m-muted);
 	}
 
-	.updated {
-		margin: 0;
-		font-family: var(--m-font-code);
-		font-size: 12px;
-		color: var(--m-dim);
+	/* Barra de progreso de lectura: fija arriba, se escala en X desde la izquierda. */
+	.reading-progress {
+		position: fixed;
+		inset: 0 0 auto;
+		z-index: 90;
+		height: 3px;
+		pointer-events: none;
+	}
+
+	.reading-progress__bar {
+		width: 100%;
+		height: 100%;
+		background: var(--m-accent);
+		transform: scaleX(0);
+		transform-origin: left center;
+		will-change: transform;
+	}
+
+	@media print {
+		.reading-progress {
+			display: none;
+		}
 	}
 
 	.marker {
