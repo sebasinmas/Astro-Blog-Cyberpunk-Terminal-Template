@@ -10,6 +10,7 @@ import spriteUrl from '../assets/claude_sinmas-export.png?url';
  *   salta; luego el overlay se desvanece y el sprite vuela hasta quedar como un trofeo abajo a la
  *   derecha. Que se logró se guarda en localStorage y el trofeo reaparece en cada visita.
  *
+ * Mientras el logro no se haya conseguido, una pista en baja opacidad ocupa el lugar del trofeo.
  * Con `prefers-reduced-motion` no hay saltos ni vuelos: solo desvanecimientos.
  */
 
@@ -31,6 +32,11 @@ const SPRITE_W = 196;
 const SPRITE_H = 112;
 /** Opacidad del trofeo en reposo (coincide con la del CSS). */
 const TROPHY_REST_OPACITY = 0.4;
+/** Pista en forma de lengüeta: asoma por el borde derecho y se despliega al pasar el mouse. */
+const HINT_LEAD = 'Sssh…';
+const HINT_TEXT = '¿recuerdas el código Konami?';
+/** Espera antes de mostrar la pista, para que aparezca como un descubrimiento y no con la carga. */
+const HINT_DELAY_MS = 1500;
 /** Cuánto se queda expandido el aviso "logro desbloqueado" la primera vez. */
 const ANNOUNCE_MS = 2800;
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -66,6 +72,7 @@ let locked = false;
 let overlay: Overlay | undefined;
 let fxLayer: HTMLElement | undefined;
 let trophy: HTMLElement | undefined;
+let hint: HTMLElement | undefined;
 let idleTimer: number | undefined;
 const particles = new Set<Particle>();
 
@@ -163,6 +170,7 @@ function ensureOverlay(): Overlay {
 	}
 	// El sprite se precarga al empezar el intento para que no aparezca tarde al completarlo.
 	new Image().src = spriteUrl;
+	muteHint(true);
 
 	const root = el('div', 'konami');
 	root.setAttribute('aria-hidden', 'true');
@@ -182,7 +190,10 @@ function hideOverlay(delay = 0) {
 		duration: 0.3,
 		delay,
 		ease: 'power1.out',
-		onComplete: () => o.root.remove(),
+		onComplete: () => {
+			o.root.remove();
+			muteHint(false);
+		},
 	});
 }
 
@@ -268,6 +279,39 @@ function fail(key: string) {
 		window.clearTimeout(idleTimer);
 		hideOverlay(0.6);
 	}
+}
+
+/* ─────────────────────────── Pista (antes del logro) ─────────────────────────── */
+
+/**
+ * Lengüeta tenue pegada al borde derecho, a la altura donde luego aterriza el trofeo. En reposo solo
+ * asoma el asa (dentro del margen lateral, sin tapar contenido); al pasar el mouse se despliega.
+ * Es decorativa: los lectores de pantalla la ignoran.
+ */
+function ensureHint() {
+	if (hint?.isConnected) return;
+	const node = el('div', 'konami-hint');
+	node.setAttribute('aria-hidden', 'true');
+	const text = el('span', 'konami-hint__text');
+	text.append(el('span', 'konami-hint__lead', HINT_LEAD), el('span', '', HINT_TEXT));
+	node.append(el('span', 'konami-hint__handle', '?'), text);
+	document.body.append(node);
+	hint = node;
+	window.setTimeout(() => node.classList.add('is-visible'), HINT_DELAY_MS);
+}
+
+/** Mientras se teclea el código la pista se aparta para no estorbar. */
+function muteHint(muted: boolean) {
+	hint?.classList.toggle('is-muted', muted);
+}
+
+/** Al conseguir el logro la pista desaparece para siempre: ya no hay nada que recordar. */
+function dismissHint() {
+	const node = hint;
+	if (!node) return;
+	hint = undefined;
+	node.classList.add('is-gone');
+	window.setTimeout(() => node.remove(), 900);
 }
 
 /* ───────────────────────────── Trofeo (reposo) ───────────────────────────── */
@@ -361,6 +405,7 @@ function succeed() {
 	// El logro se guarda al completarlo; la primera vez el trofeo nace oculto hasta que llega el sprite.
 	const first = !isUnlocked();
 	markUnlocked();
+	dismissHint();
 	const t = ensureTrophy();
 	if (first) t.classList.add('is-pending');
 
@@ -445,5 +490,6 @@ function onKeyDown(event: KeyboardEvent) {
 
 window.addEventListener('keydown', onKeyDown);
 
-// Quien ya consiguió el logro ve su trofeo en cada visita.
+// Quien ya consiguió el logro ve su trofeo en cada visita; el resto, una pista discreta.
 if (isUnlocked()) ensureTrophy();
+else ensureHint();
