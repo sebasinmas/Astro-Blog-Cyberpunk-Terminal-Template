@@ -13,7 +13,7 @@ const projects: CollectionEntry<'projects'>[] = (await getCollection('projects')
 	<SectionHeading index="01" title="Proyectos" meta="DESARROLLO / SELECCIÓN" id="projects-heading" />
 
 	{
-		projects.map((entry: CollectionEntry<'projects'>) => {
+		projects.map((entry) => {
 			const resolved = resolveProjectImage(entry.data.image);
 			return (
 				<a class="featured" href={`/projects/${entry.id}/`} data-reveal>
