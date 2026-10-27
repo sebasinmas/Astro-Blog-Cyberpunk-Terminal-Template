@@ -124,9 +124,14 @@ a {
 
 /* Easter egg del código Konami (scripts/konami.ts): overlay encima de todo, sin capturar eventos */
 .konami,
-.konami-fx {
+.konami-fx,
+.konami-trophy {
 	--konami-ok: 74 222 128;
 	--konami-bad: 248 113 113;
+}
+
+.konami,
+.konami-fx {
 	position: fixed;
 	inset: 0;
 	pointer-events: none;
@@ -213,15 +218,203 @@ a {
 	background: rgb(var(--konami-bad));
 }
 
-.konami-fx__tick {
+.konami-fx__sprite {
 	display: block;
-	overflow: visible;
-	filter: drop-shadow(0 0 18px rgb(var(--konami-ok) / 0.6));
+	transform-origin: 50% 100%;
+	/* Pixel art: sin suavizado al escalar */
+	image-rendering: pixelated;
+	filter: drop-shadow(0 0 18px rgb(var(--konami-ok) / 0.35));
 }
 
-.konami-fx__tick circle,
-.konami-fx__tick path {
-	stroke: rgb(var(--konami-ok));
+/* Pista previa al logro: lengüeta de libro desplegable pegada al borde derecho.
+   En reposo solo asoma el asa (--peek); al pasar el mouse se desliza y se muestra entera. */
+.konami-hint {
+	--peek: 30px;
+	position: fixed;
+	right: 0;
+	bottom: 27px;
+	z-index: 2000;
+	display: flex;
+	align-items: center;
+	margin: 0;
+	padding: 8px 14px 8px 0;
+	border: 1px solid var(--m-line);
+	border-right: 0;
+	border-radius: 8px 0 0 8px;
+	background: var(--m-surface);
+	font-family: var(--m-font-code);
+	font-size: 11px;
+	line-height: 1.5;
+	color: var(--m-muted);
+	opacity: 0;
+	transform: translateX(100%);
+	user-select: none;
+	transition:
+		transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1),
+		opacity 0.3s ease;
+}
+
+.konami-hint.is-visible {
+	opacity: 0.4;
+	transform: translateX(calc(100% - var(--peek)));
+}
+
+.konami-hint.is-visible:not(.is-muted):not(.is-gone):hover {
+	opacity: 1;
+	transform: none;
+}
+
+/* Al teclear el código o al conseguir el logro la lengüeta se esconde del todo */
+.konami-hint.is-muted,
+.konami-hint.is-gone {
+	opacity: 0;
+	transform: translateX(100%);
+	pointer-events: none;
+}
+
+.konami-hint__handle {
+	flex: none;
+	width: var(--peek);
+	font-size: 14px;
+	text-align: center;
+	color: var(--m-accent);
+}
+
+.konami-hint__text {
+	display: flex;
+	flex-direction: column;
+	white-space: nowrap;
+}
+
+.konami-hint__lead {
+	color: var(--m-accent);
+}
+
+/* Dispositivos solo táctiles: sin teclado físico no hay código que teclear */
+@media (hover: none) and (pointer: coarse) {
+	.konami-hint {
+		display: none;
+	}
+}
+
+/* Trofeo del logro: cuadrado en reposo, se expande al pasar el mouse o enfocarlo */
+.konami-trophy {
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	z-index: 2000;
+	display: flex;
+	align-items: center;
+	width: 64px;
+	height: 64px;
+	overflow: hidden;
+	border: 1px solid var(--m-line);
+	border-radius: 8px;
+	background: var(--m-surface);
+	opacity: 0.4;
+	outline: none;
+	transform-origin: right bottom;
+	transition:
+		width 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+		opacity 0.25s ease,
+		border-color 0.25s ease,
+		box-shadow 0.25s ease;
+}
+
+.konami-trophy.is-pending {
+	opacity: 0;
+}
+
+.konami-trophy:not(.is-pending):hover,
+.konami-trophy:not(.is-pending):focus,
+.konami-trophy.is-announcing {
+	width: min(330px, calc(100vw - 40px));
+	border-color: rgb(var(--konami-ok) / 0.7);
+	box-shadow: 0 0 22px rgb(var(--konami-ok) / 0.25);
+	opacity: 1;
+}
+
+.konami-trophy__icon {
+	display: grid;
+	flex: none;
+	place-items: center;
+	width: 62px;
+	height: 62px;
+}
+
+.konami-trophy__icon img {
+	display: block;
+	width: 49px;
+	height: 28px;
+	image-rendering: pixelated;
+}
+
+.konami-trophy:hover .konami-trophy__icon img,
+.konami-trophy.is-announcing .konami-trophy__icon img {
+	animation: konami-hop 0.45s steps(4) 1;
+}
+
+@keyframes konami-hop {
+	40% {
+		transform: translateY(-7px);
+	}
+}
+
+.konami-trophy__text {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding-right: 18px;
+	font-family: var(--m-font-code);
+	white-space: nowrap;
+	opacity: 0;
+	transform: translateX(8px);
+	transition:
+		opacity 0.2s ease,
+		transform 0.3s ease;
+}
+
+.konami-trophy:hover .konami-trophy__text,
+.konami-trophy:focus .konami-trophy__text,
+.konami-trophy.is-announcing .konami-trophy__text {
+	opacity: 1;
+	transform: none;
+	transition-delay: 0.12s;
+}
+
+.konami-trophy__title {
+	font-size: 12px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: rgb(var(--konami-ok));
+}
+
+.konami-trophy__desc {
+	font-size: 11px;
+	color: var(--m-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.konami-hint {
+		transition: none;
+	}
+
+	.konami-trophy,
+	.konami-trophy__text {
+		transition: none;
+	}
+
+	.konami-trophy:hover .konami-trophy__icon img,
+	.konami-trophy.is-announcing .konami-trophy__icon img {
+		animation: none;
+	}
+}
+
+@media print {
+	.konami-hint,
+	.konami-trophy {
+		display: none;
+	}
 }
 
 @media (max-width: 480px) {
@@ -234,5 +427,14 @@ a {
 		height: 36px;
 		padding-inline: 4px;
 		font-size: 15px;
+	}
+
+	.konami-trophy {
+		right: 12px;
+		bottom: 12px;
+	}
+
+	.konami-hint {
+		bottom: 19px;
 	}
 }
