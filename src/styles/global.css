@@ -121,3 +121,118 @@ a {
 		opacity: 0;
 	}
 }
+
+/* Easter egg del código Konami (scripts/konami.ts): overlay encima de todo, sin capturar eventos */
+.konami,
+.konami-fx {
+	--konami-ok: 74 222 128;
+	--konami-bad: 248 113 113;
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+}
+
+.konami {
+	z-index: 2147483000;
+}
+
+.konami-fx {
+	z-index: 2147483001;
+}
+
+.konami__vignette {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	background: radial-gradient(
+		ellipse at center,
+		transparent var(--vig, 80%),
+		rgb(var(--konami-ok) / 0.5) 100%
+	);
+	box-shadow: inset 0 0 120px rgb(var(--konami-ok) / 0.3);
+}
+
+.konami__tray {
+	position: fixed;
+	bottom: clamp(24px, 12vh, 112px);
+	left: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	min-height: 44px;
+	transform: translateX(-50%);
+}
+
+.konami__key {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 38px;
+	height: 44px;
+	padding-inline: 8px;
+	border: 1px solid var(--m-line);
+	border-bottom-width: 3px;
+	border-radius: 6px;
+	background: var(--m-surface);
+	box-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
+	font-family: var(--m-font-code);
+	font-size: 18px;
+	line-height: 1;
+	color: var(--m-accent);
+	transition:
+		border-color 0.25s ease,
+		color 0.25s ease,
+		box-shadow 0.25s ease;
+}
+
+.konami__tray.is-ok .konami__key {
+	border-color: rgb(var(--konami-ok));
+	color: rgb(var(--konami-ok));
+	box-shadow: 0 0 14px rgb(var(--konami-ok) / 0.35);
+}
+
+.konami-fx__item {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: block;
+	will-change: transform, opacity;
+}
+
+.konami-fx__cross {
+	display: block;
+	stroke: rgb(var(--konami-bad));
+	filter: drop-shadow(0 0 6px rgb(var(--konami-bad) / 0.6));
+}
+
+.konami-fx__spark {
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: rgb(var(--konami-bad));
+}
+
+.konami-fx__tick {
+	display: block;
+	overflow: visible;
+	filter: drop-shadow(0 0 18px rgb(var(--konami-ok) / 0.6));
+}
+
+.konami-fx__tick circle,
+.konami-fx__tick path {
+	stroke: rgb(var(--konami-ok));
+}
+
+@media (max-width: 480px) {
+	.konami__tray {
+		gap: 4px;
+	}
+
+	.konami__key {
+		min-width: 28px;
+		height: 36px;
+		padding-inline: 4px;
+		font-size: 15px;
+	}
+}

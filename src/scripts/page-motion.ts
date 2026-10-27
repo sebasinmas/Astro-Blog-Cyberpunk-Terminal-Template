@@ -12,7 +12,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
 	gsap.set(targets, { opacity: 0, y: 24 });
 	root.classList.remove('m-js');
 
-	ScrollTrigger.batch(targets, {
+	const reveals = ScrollTrigger.batch(targets, {
 		start: 'top 92%',
 		once: true,
 		onEnter: (batch) =>
@@ -26,7 +26,8 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
 			}),
 	});
 
-	return () => ScrollTrigger.getAll().forEach((t) => t.kill());
+	// Solo los triggers de revelado: otros scripts de la página (p. ej. la barra de lectura) tienen los suyos.
+	return () => reveals.forEach((t) => t.kill());
 });
 
 mm.add('(prefers-reduced-motion: reduce)', () => {

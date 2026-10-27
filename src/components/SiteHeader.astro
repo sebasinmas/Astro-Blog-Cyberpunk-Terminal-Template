@@ -4,13 +4,11 @@ import github from '../assets/icons/github.svg';
 import Icon from './Icon.astro';
 
 interface Props {
-	/** `home`: etiqueta de idioma. `page`: accesos externos (bitácora y GitHub). */
-	variant?: 'home' | 'page';
 	/** Destino activo: se resalta con color de acento e indicador inferior. */
 	current?: 'projects' | 'blog' | 'contact';
 }
 
-const { variant = 'home', current } = Astro.props;
+const { current } = Astro.props;
 const links = [
 	{ key: 'projects', href: '/#projects', label: 'Proyectos' },
 	{ key: 'blog', href: '/blog/', label: 'Bitácora' },
@@ -33,29 +31,24 @@ const links = [
 				))
 			}
 			<span class="separator" aria-hidden="true"></span>
-			{
-				variant === 'page' ? (
-					<span class="external">
-						<a href="/blog/" class="icon-link" aria-label="Ir a la bitácora" title="Bitácora">
-							<Icon src={monitor} size={18} />
-						</a>
-						<a
-							href="https://github.com/sebasinmas"
-							class="icon-link"
-							target="_blank"
-							rel="noreferrer"
-							aria-label="Perfil en GitHub (abre en una pestaña nueva)"
-							title="GitHub"
-						>
-							<Icon src={github} size={18} />
-						</a>
-					</span>
-				) : (
-					<span class="lang" lang="es" title="Idioma: español">
-						ES
-					</span>
-				)
-			}
+			<span class="external">
+				<a href="/blog/" class="icon-link" aria-label="Ir a la bitácora" title="Bitácora">
+					<Icon src={monitor} size={18} />
+				</a>
+				<a
+					href="https://github.com/sebasinmas"
+					class="icon-link"
+					target="_blank"
+					rel="noreferrer"
+					aria-label="Perfil en GitHub (abre en una pestaña nueva)"
+					title="GitHub"
+				>
+					<Icon src={github} size={18} />
+				</a>
+			</span>
+			<span class="lang" lang="es" title="Idioma: español">
+				ES
+			</span>
 		</nav>
 	</header>
 	<div class="rule" role="presentation"></div>
