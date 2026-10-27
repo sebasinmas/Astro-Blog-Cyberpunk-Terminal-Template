@@ -122,42 +122,42 @@ a {
 	}
 }
 
-/* Easter egg del código Konami (scripts/konami.ts): overlay encima de todo, sin capturar eventos */
-.konami,
-.konami-fx,
-.konami-trophy {
-	--konami-ok: 74 222 128;
-	--konami-bad: 248 113 113;
+/* Easter eggs de logros (scripts/achievements.ts): overlay encima de todo, sin capturar eventos */
+.ach,
+.ach-fx,
+.ach-trophy {
+	--ach-ok: 74 222 128;
+	--ach-bad: 248 113 113;
 }
 
-.konami,
-.konami-fx {
+.ach,
+.ach-fx {
 	position: fixed;
 	inset: 0;
 	pointer-events: none;
 }
 
-.konami {
+.ach {
 	z-index: 2147483000;
 }
 
-.konami-fx {
+.ach-fx {
 	z-index: 2147483001;
 }
 
-.konami__vignette {
+.ach__vignette {
 	position: absolute;
 	inset: 0;
 	opacity: 0;
 	background: radial-gradient(
 		ellipse at center,
 		transparent var(--vig, 80%),
-		rgb(var(--konami-ok) / 0.5) 100%
+		rgb(var(--ach-ok) / 0.5) 100%
 	);
-	box-shadow: inset 0 0 120px rgb(var(--konami-ok) / 0.3);
+	box-shadow: inset 0 0 120px rgb(var(--ach-ok) / 0.3);
 }
 
-.konami__tray {
+.ach__tray {
 	position: fixed;
 	bottom: clamp(24px, 12vh, 112px);
 	left: 50%;
@@ -169,7 +169,7 @@ a {
 	transform: translateX(-50%);
 }
 
-.konami__key {
+.ach__key {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -191,13 +191,13 @@ a {
 		box-shadow 0.25s ease;
 }
 
-.konami__tray.is-ok .konami__key {
-	border-color: rgb(var(--konami-ok));
-	color: rgb(var(--konami-ok));
-	box-shadow: 0 0 14px rgb(var(--konami-ok) / 0.35);
+.ach__tray.is-ok .ach__key {
+	border-color: rgb(var(--ach-ok));
+	color: rgb(var(--ach-ok));
+	box-shadow: 0 0 14px rgb(var(--ach-ok) / 0.35);
 }
 
-.konami-fx__item {
+.ach-fx__item {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -205,30 +205,32 @@ a {
 	will-change: transform, opacity;
 }
 
-.konami-fx__cross {
+.ach-fx__cross {
 	display: block;
-	stroke: rgb(var(--konami-bad));
-	filter: drop-shadow(0 0 6px rgb(var(--konami-bad) / 0.6));
+	stroke: rgb(var(--ach-bad));
+	filter: drop-shadow(0 0 6px rgb(var(--ach-bad) / 0.6));
 }
 
-.konami-fx__spark {
+.ach-fx__spark {
 	width: 4px;
 	height: 4px;
 	border-radius: 50%;
-	background: rgb(var(--konami-bad));
+	background: rgb(var(--ach-bad));
 }
 
-.konami-fx__sprite {
+.ach-fx__sprite {
 	display: block;
+	height: auto;
+	max-width: none;
 	transform-origin: 50% 100%;
 	/* Pixel art: sin suavizado al escalar */
 	image-rendering: pixelated;
-	filter: drop-shadow(0 0 18px rgb(var(--konami-ok) / 0.35));
+	filter: drop-shadow(0 0 18px rgb(var(--ach-ok) / 0.35));
 }
 
 /* Pista previa al logro: lengüeta de libro desplegable pegada al borde derecho.
    En reposo solo asoma el asa (--peek); al pasar el mouse se desliza y se muestra entera. */
-.konami-hint {
+.ach-hint {
 	--peek: 30px;
 	position: fixed;
 	right: 0;
@@ -254,25 +256,25 @@ a {
 		opacity 0.3s ease;
 }
 
-.konami-hint.is-visible {
+.ach-hint.is-visible {
 	opacity: 0.4;
 	transform: translateX(calc(100% - var(--peek)));
 }
 
-.konami-hint.is-visible:not(.is-muted):not(.is-gone):hover {
+.ach-hint.is-visible:not(.is-muted):not(.is-gone):hover {
 	opacity: 1;
 	transform: none;
 }
 
 /* Al teclear el código o al conseguir el logro la lengüeta se esconde del todo */
-.konami-hint.is-muted,
-.konami-hint.is-gone {
+.ach-hint.is-muted,
+.ach-hint.is-gone {
 	opacity: 0;
 	transform: translateX(100%);
 	pointer-events: none;
 }
 
-.konami-hint__handle {
+.ach-hint__handle {
 	flex: none;
 	width: var(--peek);
 	font-size: 14px;
@@ -280,28 +282,82 @@ a {
 	color: var(--m-accent);
 }
 
-.konami-hint__text {
+.ach-hint__text {
 	display: flex;
 	flex-direction: column;
 	white-space: nowrap;
 }
 
-.konami-hint__lead {
+.ach-hint__lead {
 	color: var(--m-accent);
 }
 
 /* Dispositivos solo táctiles: sin teclado físico no hay código que teclear */
 @media (hover: none) and (pointer: coarse) {
-	.konami-hint {
+	.ach-hint,
+	.ach-peek {
 		display: none;
 	}
 }
 
+/* Pista sobre un elemento de la página: el texto sube desde detrás de su borde superior.
+   El contenedor recorta la lengüeta, así que parece salir de atrás del elemento. */
+.ach-anchor {
+	position: relative;
+}
+
+.ach-peek {
+	position: absolute;
+	right: 0;
+	bottom: 100%;
+	left: 0;
+	z-index: 1;
+	overflow: hidden;
+	pointer-events: none;
+	user-select: none;
+}
+
+.ach-peek__tab {
+	display: block;
+	margin: 0;
+	padding: 8px 12px;
+	border: 1px solid var(--m-line);
+	border-bottom: 0;
+	border-radius: 8px 8px 0 0;
+	background: var(--m-surface);
+	font-family: var(--m-font-code);
+	font-size: 11px;
+	line-height: 1.5;
+	color: var(--m-muted);
+	opacity: 0;
+	transform: translateY(100%);
+	transition:
+		transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1),
+		opacity 0.3s ease;
+}
+
+.ach-peek__lead {
+	display: block;
+	color: var(--m-accent);
+}
+
+.ach-anchor:hover .ach-peek:not(.is-muted):not(.is-gone) .ach-peek__tab {
+	opacity: 1;
+	transform: none;
+}
+
+.ach-peek.is-muted .ach-peek__tab,
+.ach-peek.is-gone .ach-peek__tab {
+	opacity: 0;
+	transform: translateY(100%);
+}
+
 /* Trofeo del logro: cuadrado en reposo, se expande al pasar el mouse o enfocarlo */
-.konami-trophy {
+.ach-trophy {
 	position: fixed;
 	right: 20px;
-	bottom: 20px;
+	/* Un trofeo por logro, apilados hacia arriba (64px + 10px de separación) */
+	bottom: calc(20px + var(--slot, 0) * 74px);
 	z-index: 2000;
 	display: flex;
 	align-items: center;
@@ -321,20 +377,20 @@ a {
 		box-shadow 0.25s ease;
 }
 
-.konami-trophy.is-pending {
+.ach-trophy.is-pending {
 	opacity: 0;
 }
 
-.konami-trophy:not(.is-pending):hover,
-.konami-trophy:not(.is-pending):focus,
-.konami-trophy.is-announcing {
+.ach-trophy:not(.is-pending):hover,
+.ach-trophy:not(.is-pending):focus,
+.ach-trophy.is-announcing {
 	width: min(330px, calc(100vw - 40px));
-	border-color: rgb(var(--konami-ok) / 0.7);
-	box-shadow: 0 0 22px rgb(var(--konami-ok) / 0.25);
+	border-color: rgb(var(--ach-ok) / 0.7);
+	box-shadow: 0 0 22px rgb(var(--ach-ok) / 0.25);
 	opacity: 1;
 }
 
-.konami-trophy__icon {
+.ach-trophy__icon {
 	display: grid;
 	flex: none;
 	place-items: center;
@@ -342,25 +398,26 @@ a {
 	height: 62px;
 }
 
-.konami-trophy__icon img {
+.ach-trophy__icon img {
 	display: block;
-	width: 49px;
-	height: 28px;
+	/* El ancho viene del atributo `width` (la rejilla del sprite); la altura sigue su proporción */
+	height: auto;
+	max-width: none;
 	image-rendering: pixelated;
 }
 
-.konami-trophy:hover .konami-trophy__icon img,
-.konami-trophy.is-announcing .konami-trophy__icon img {
-	animation: konami-hop 0.45s steps(4) 1;
+.ach-trophy:hover .ach-trophy__icon img,
+.ach-trophy.is-announcing .ach-trophy__icon img {
+	animation: ach-hop 0.45s steps(4) 1;
 }
 
-@keyframes konami-hop {
+@keyframes ach-hop {
 	40% {
 		transform: translateY(-7px);
 	}
 }
 
-.konami-trophy__text {
+.ach-trophy__text {
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
@@ -374,67 +431,73 @@ a {
 		transform 0.3s ease;
 }
 
-.konami-trophy:hover .konami-trophy__text,
-.konami-trophy:focus .konami-trophy__text,
-.konami-trophy.is-announcing .konami-trophy__text {
+.ach-trophy:hover .ach-trophy__text,
+.ach-trophy:focus .ach-trophy__text,
+.ach-trophy.is-announcing .ach-trophy__text {
 	opacity: 1;
 	transform: none;
 	transition-delay: 0.12s;
 }
 
-.konami-trophy__title {
+.ach-trophy__title {
 	font-size: 12px;
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
-	color: rgb(var(--konami-ok));
+	color: rgb(var(--ach-ok));
 }
 
-.konami-trophy__desc {
+.ach-trophy__desc {
 	font-size: 11px;
 	color: var(--m-muted);
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.konami-hint {
+	.ach-hint {
 		transition: none;
 	}
 
-	.konami-trophy,
-	.konami-trophy__text {
+	.ach-peek__tab {
+		transform: none;
+		transition: opacity 0.2s ease;
+	}
+
+	.ach-trophy,
+	.ach-trophy__text {
 		transition: none;
 	}
 
-	.konami-trophy:hover .konami-trophy__icon img,
-	.konami-trophy.is-announcing .konami-trophy__icon img {
+	.ach-trophy:hover .ach-trophy__icon img,
+	.ach-trophy.is-announcing .ach-trophy__icon img {
 		animation: none;
 	}
 }
 
 @media print {
-	.konami-hint,
-	.konami-trophy {
+	.ach-hint,
+	.ach-peek,
+	.ach-trophy {
 		display: none;
 	}
 }
 
 @media (max-width: 480px) {
-	.konami__tray {
+	.ach__tray {
 		gap: 4px;
 	}
 
-	.konami__key {
+	.ach__key {
 		min-width: 28px;
 		height: 36px;
 		padding-inline: 4px;
 		font-size: 15px;
 	}
 
-	.konami-trophy {
+	.ach-trophy {
 		right: 12px;
-		bottom: 12px;
+		bottom: calc(12px + var(--slot, 0) * 74px);
 	}
 
-	.konami-hint {
+	.ach-hint {
 		bottom: 19px;
 	}
 }
